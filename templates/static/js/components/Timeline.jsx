@@ -1,0 +1,32 @@
+import React, { Component } from 'react';
+import TweetItem from './TweetItem';
+
+export default class Timeline extends Component {
+    render() {
+        const getTimeline = this.props.action.getTimeline;
+        const timelineIndex = this.props.timelineIndex;
+        const url = this.props.timeline.url;
+        const loadIcon = this.props.timeline.load ? <div className="spinner-grow"></div> : '';
+        return (
+            <div className="timeline">
+                <nav className="navbar navbar-light border py-0 pl-2" onClick={() => { getTimeline(timelineIndex, url) }}>
+                    <span className="navbar-brand">
+                        <i className={`${this.props.timeline.icon} mr-2`}></i>{this.props.timeline.name}
+                    </span>
+                </nav>
+                <div className="list-group border">
+                    {loadIcon}
+                    {this.props.timeline.tweets.map((tweet, idx) => {
+                        if (loadIcon) return;
+                        return <TweetItem
+                            tweet={tweet}
+                            timelineIndex={timelineIndex}
+                            tweetIndex={idx}
+                            action={this.props.action}
+                        />;
+                    })}
+                </div>
+            </div>
+        );
+    }
+}
