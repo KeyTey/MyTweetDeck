@@ -4,12 +4,11 @@ export default class RetweetButton extends Component {
     constructor(props) {
         super(props);
         this.handleClick = () => {
-            const tweetID = this.props.tweet.id_str;
-            const timelineIndex = this.props.timelineIndex;
-            const tweetIndex = this.props.tweetIndex;
             this.props.action.updateState({
                 modal: {
-                    tweetID: tweetID, timelineIndex: timelineIndex, tweetIndex: tweetIndex
+                    tweet: this.props.tweet,
+                    timelineIndex: this.props.timelineIndex,
+                    tweetIndex: this.props.tweetIndex
                 }
             });
         }

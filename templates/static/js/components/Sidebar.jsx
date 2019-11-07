@@ -10,7 +10,7 @@ export default class Sidebar extends Component {
                 <ul className="sidebar-nav sidebar-top">
                     <li><TweetButton /></li>
                 </ul>
-                <Menu action={this.props.action} />
+                <Menu action={this.props.action} timelines={this.props.timelines} />
                 <ul className="sidebar-nav sidebar-bottom">
                     <li><MyIcon /></li>
                 </ul>

@@ -3,13 +3,12 @@ import TweetItem from './TweetItem';
 
 export default class Timeline extends Component {
     render() {
-        const getTimeline = this.props.action.getTimeline;
+        const updateTimeline = this.props.action.updateTimeline;
         const timelineIndex = this.props.timelineIndex;
-        const url = this.props.timeline.url;
         const loadIcon = this.props.timeline.load ? <div className="spinner-grow"></div> : '';
         return (
             <div className="timeline">
-                <nav className="navbar navbar-light border py-0 pl-2" onClick={() => { getTimeline(timelineIndex, url) }}>
+                <nav className="navbar navbar-light border py-0 pl-2" onClick={() => { updateTimeline(timelineIndex) }}>
                     <span className="navbar-brand">
                         <i className={`${this.props.timeline.icon} mr-2`}></i>{this.props.timeline.name}
                     </span>

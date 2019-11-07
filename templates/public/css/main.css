@@ -135,6 +135,7 @@ a {
 
 .notice-container .alert {
   margin: 0;
+  opacity: 0;
   font-size: 20px;
   animation-name: alert-effect;
   animation-duration: 3.2s;

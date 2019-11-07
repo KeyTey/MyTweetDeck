@@ -4,18 +4,18 @@ export default class RetweetModal extends Component {
     constructor(props) {
         super(props);
         this.handleClick = () => {
+            let tweet = this.props.modal.tweet;
             $.ajax({
                 url: "/api/retweet",
                 dataType: "json",
                 type: "POST",
-                data: { id: this.props.modal.tweetID }
+                data: { id: tweet.id_str }
             })
             .then(
                 data => {
                     if (data.status === 200) {
                         const timelineIndex = this.props.modal.timelineIndex;
                         const tweetIndex = this.props.modal.tweetIndex;
-                        let tweet = this.props.timelines[timelineIndex].tweets[tweetIndex];
                         tweet.retweet_count++;
                         tweet.retweeted = true;
                         this.props.action.updateTweet(timelineIndex, tweetIndex, tweet);
