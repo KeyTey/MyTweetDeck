@@ -1,15 +1,10 @@
+body {
+  overscroll-behavior: none;
+}
+
 a {
   text-decoration: none;
   color: black;
-}
-
-.timeline-container {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  overflow-x: auto;
-  overflow-y: hidden;
-  margin-left: 50px;
 }
 
 .sidebar {
@@ -54,8 +49,15 @@ a {
   bottom: 5px;
 }
 
+.timeline-container {
+  padding: 0;
+  margin: 0 0 0 50px;
+}
+
 .timeline {
+  height: 100%;
   width: 280px;
+  display: inline-block;
 }
 
 .timeline .navbar {
@@ -72,10 +74,15 @@ a {
   font-size: 16px;
 }
 
-.timeline .list-group {
-  height: 95vh;
-  overflow-x: hidden;
+.timeline .tweet-container {
+  height: 100%;
   overflow-y: scroll;
+}
+
+.timeline .spinner-grow {
+  height: 50px;
+  width: 50px;
+  margin: 200px 0 0 100px;
 }
 
 .timeline .list-group-item:hover {
@@ -151,10 +158,4 @@ a {
 .modal img {
   max-height: 90vh;
   max-width: 90vh;
-}
-
-.spinner-grow {
-  height: 50px;
-  width: 50px;
-  margin: auto;
 }

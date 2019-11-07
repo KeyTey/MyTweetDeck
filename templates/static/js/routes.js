@@ -4,8 +4,6 @@ import App from './components/App';
 
 export default (
     <HashRouter history={hashHistory}>
-        <div>
-            <Route path='/' component={App} />
-        </div>
+        <Route path='/' component={App} />
     </HashRouter>
 );

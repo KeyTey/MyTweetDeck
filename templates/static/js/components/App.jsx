@@ -44,6 +44,8 @@ export default class App extends Component {
                 },
                 error => console.log(error)
             );
+            const width = 280 * timelines.filter(timeline => timeline.display).length;
+            $(".timeline-container").css("width", width + "px");
         }
         this.updateTweet = (timelineIndex, tweetIndex, tweet) => {
             let timelines = this.state.timelines;
@@ -105,13 +107,13 @@ export default class App extends Component {
         return (
             <div>
                 <Sidebar action={this.action} timelines={this.state.timelines} />
-                <div className="timeline-container">
+                <ul className="timeline-container">
                     {this.state.timelines.map((timeline, idx) => {
                         if(timeline.display) {
                             return <Timeline timeline={timeline} timelineIndex={idx} action={this.action} />;
                         }
                     })}
-                </div>
+                </ul>
                 <TweetModal action={this.action} />
                 <RetweetModal modal={this.state.modal} action={this.action} />
                 <MediaModal modal={this.state.modal} />
