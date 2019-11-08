@@ -45,6 +45,16 @@ a {
   font-family: "arial black";
 }
 
+.sidebar .timeline-name {
+  position: fixed;
+  display: none;
+  padding: 5px 10px;
+  margin: 0 0 0 5px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(50, 50, 50);
+}
+
 .sidebar .sidebar-bottom {
   bottom: 5px;
 }

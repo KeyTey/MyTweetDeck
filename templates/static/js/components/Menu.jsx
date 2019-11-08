@@ -21,6 +21,12 @@ export default class Menu extends Component {
             const timelines = order.map(id => this.props.timelines.find(timeline => id === timeline.id));
             this.props.action.updateState({timelines: timelines});
         }
+        this.handleMouseEnter = (id) => {
+            $(`#${id} .timeline-name`).css('display', 'inline');
+        }
+        this.handleMouseLeave = (id) => {
+            $(`#${id} .timeline-name`).css('display', 'none');
+        }
     }
     render() {
         return (
@@ -30,10 +36,18 @@ export default class Menu extends Component {
                     const icon = <i className={timeline.icon}></i>;
                     const initial = <span>{timeline.name[0]}</span>;
                     return (
-                        <li key={uniqueId()} data-id={timeline.id}>
-                            <button className={`btn ${btnClass} w-100`} onClick={() => this.handleClick(idx, timeline)}>
+                        <li id={timeline.id} key={uniqueId()} data-id={timeline.id}>
+                            <button
+                                className={`btn ${btnClass} w-100`}
+                                onClick={() => this.handleClick(idx, timeline)}
+                                onMouseEnter={() => this.handleMouseEnter(timeline.id)}
+                                onMouseLeave={() => this.handleMouseLeave(timeline.id)}
+                            >
                                 {(timeline.icon === "fas fa-list") ? initial : icon}
                             </button>
+                            <div className="timeline-name alert">
+                                {timeline.name}
+                            </div>
                         </li>
                     );
                 })}
