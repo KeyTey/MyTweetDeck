@@ -19,35 +19,57 @@ export default class App extends Component {
             this.setState(state);
         }
         this.updateTimeline = (idx) => {
-            let timelines = this.state.timelines;
-            timelines[idx].load = true;
-            this.setState({timelines: timelines});
+            let timeline = this.state.timelines[idx];
+            let tweets = timeline.defaultTweets.concat();
+            if(timeline.setting.sortByLikedCount) {
+                tweets.sort((a, b) => (b.favorite_count - a.favorite_count));
+            }
+            if(timeline.setting.trimLikedTweet) {
+                tweets = tweets.filter((tweet) => (!tweet.favorited));
+            }
+            if(timeline.setting.makeUserUnique) {
+                tweets = tweets.filter((tweet, i, tweets) => (
+                    tweets.map(tweet => tweet.user.id_str).indexOf(tweet.user.id_str) === i
+                ));
+            }
+            timeline.tweets = tweets;
+            this.setTimeline(idx, timeline);
+        }
+        this.loadTimeline = (idx) => {
+            let timeline = this.state.timelines[idx];
+            timeline.load = true;
+            this.setTimeline(idx, timeline);
             $.ajax({
-                url: timelines[idx].url,
+                url: timeline.url,
                 dataType: "json"
             })
             .then(
                 data => {
-                    let tweets = data.tweets;
-                    if (tweets.length === 0) {
+                    let defaultTweets = data.tweets;
+                    if (defaultTweets.length === 0) {
                         this.addNotice("danger", "Load failed.");
                     }
                     else {
-                        const tweetIDs = timelines[idx].tweets.map(tweet => tweet.id_str);
-                        tweets.forEach((tweet, i) => {
-                            tweets[i].new = tweetIDs.includes(tweet.id_str) ? false : true;
+                        const tweetIDs = timeline.defaultTweets.map(tweet => tweet.id_str);
+                        defaultTweets.forEach((tweet, i) => {
+                            defaultTweets[i].new = tweetIDs.includes(tweet.id_str) ? false : true;
                         });
                     }
-                    timelines[idx].tweets = tweets;
-                    timelines[idx].load = false;
-                    this.setState({timelines: timelines});
+                    timeline.defaultTweets = defaultTweets;
+                    timeline.load = false;
+                    this.updateTimeline(idx);
                 },
                 error => console.log(error)
             );
-            const width = 280 * timelines.filter(timeline => timeline.display).length;
+            const width = 280 * this.state.timelines.filter(timeline => timeline.display).length;
             $(".timeline-container").css("width", width + "px");
         }
-        this.updateTweet = (timelineIndex, tweetIndex, tweet) => {
+        this.setTimeline = (timelineIndex, timeline) => {
+            let timelines = this.state.timelines;
+            timelines[timelineIndex] = timeline;
+            this.setState({timelines: timelines});
+        }
+        this.setTweet = (timelineIndex, tweetIndex, tweet) => {
             let timelines = this.state.timelines;
             timelines[timelineIndex][tweetIndex] = tweet;
             this.setState({timelines: timelines});
@@ -68,7 +90,9 @@ export default class App extends Component {
         this.action = {
             updateState: this.updateState,
             updateTimeline: this.updateTimeline,
-            updateTweet: this.updateTweet,
+            loadTimeline: this.loadTimeline,
+            setTimeline: this.setTimeline,
+            setTweet: this.setTweet,
             addNotice: this.addNotice
         };
     }
@@ -81,7 +105,13 @@ export default class App extends Component {
             icon: icon,
             display: display,
             load: false,
-            tweets: []
+            defaultTweets: [],
+            tweets: [],
+            setting: {
+                sortByLikedCount: false,
+                trimLikedTweet: false,
+                makeUserUnique: false
+            }
         });
         timelines.push(createTimeline("Home", "/api/home_timeline", "fas fa-home", true));
         timelines.push(createTimeline("Kawaii", "/api/kawaii", "fas fa-venus-mars", false));
@@ -97,7 +127,7 @@ export default class App extends Component {
                 });
                 this.setState({timelines: timelines});
                 this.state.timelines.forEach((timeline, idx) => {
-                    if (timeline.display) this.updateTimeline(idx);
+                    if(timeline.display) this.loadTimeline(idx);
                 });
             },
             error => console.log(error)

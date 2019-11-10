@@ -13,7 +13,7 @@ export default class Menu extends Component {
             }
             else {
                 timelines[idx].display = true;
-                this.props.action.updateTimeline(idx);
+                this.props.action.loadTimeline(idx);
             }
             this.props.action.updateState({timelines: timelines});
         }

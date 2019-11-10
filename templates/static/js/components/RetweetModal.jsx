@@ -9,16 +9,16 @@ export default class RetweetModal extends Component {
                 url: "/api/retweet",
                 dataType: "json",
                 type: "POST",
-                data: { id: tweet.id_str }
+                data: {id: tweet.id_str}
             })
             .then(
                 data => {
-                    if (data.status === 200) {
+                    if(data.status === 200) {
                         const timelineIndex = this.props.modal.timelineIndex;
                         const tweetIndex = this.props.modal.tweetIndex;
                         tweet.retweet_count++;
                         tweet.retweeted = true;
-                        this.props.action.updateTweet(timelineIndex, tweetIndex, tweet);
+                        this.props.action.setTweet(timelineIndex, tweetIndex, tweet);
                         this.props.action.addNotice("success", "Retweet succeeded.");
                     }
                     else {

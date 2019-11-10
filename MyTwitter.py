@@ -82,7 +82,11 @@ def get_kawaii_timeline(twitter, count):
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
     tweets = [tweet.get('retweeted_status', tweet) for tweet in tweets]
-    tweets = [tweet for tweet in tweets if tweet["entities"].get("media") and tweet["favorite_count"] > 1000 and tweet["favorite_count"] > 2 * tweet["retweet_count"] and not tweet["favorited"] and is_kawaii(tweet["user"])]
+    tweets = [tweet for tweet in tweets \
+    if tweet["entities"].get("media") \
+    and tweet["favorite_count"] > 1000 \
+    and tweet["favorite_count"] > 2 * tweet["retweet_count"] \
+    and is_kawaii(tweet["user"])]
     return tweets
 
 # ユーザーのツイート取得
