@@ -27,17 +27,17 @@ export default class Timeline extends Component {
                 </nav>
                 <div className="tweet-container">
                     {(() => {
+                        if(this.props.timeline.load) {
+                            return <div className="spinner-grow"></div>;
+                        }
+                    })()}
+                    {(() => {
                         if(this.state.open && !this.props.timeline.load) {
                             return <SettingPanel
                                 timeline={this.props.timeline}
                                 timelineIndex={timelineIndex}
                                 action={this.props.action}
                             />;
-                        }
-                    })()}
-                    {(() => {
-                        if(this.props.timeline.load) {
-                            return <div className="spinner-grow"></div>;
                         }
                     })()}
                     {(() => {

@@ -15,8 +15,7 @@ def get_tweet(tweet):
     diff = datetime.datetime.now() - date - datetime.timedelta(hours = 9)
     minute = diff.seconds // 60
     hour = minute // 60
-    day = hour // 24
-    tweet['time'] = f"{day}d" if day else f"{hour}h" if hour else f"{minute}m"
+    tweet['time'] = f"{diff.days}d" if diff.days else f"{hour}h" if hour else f"{minute}m"
     try:
         videos = tweet['extended_entities']['media'][0]['video_info']['variants']
         videos = [video for video in videos if video['content_type'] == "video/mp4"]
