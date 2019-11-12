@@ -29,7 +29,7 @@ def index():
             session['AT'] = AT
             session['AS'] = AS
             session['user_id'] = user_id
-        return redirect(url_for('index'))
+        return redirect(url_for('twitter.index'))
     # 認証画面リダイレクト
     if not session.get('user_id'):
         oauth_callback = os.environ["OAUTH_CALLBACK"]
