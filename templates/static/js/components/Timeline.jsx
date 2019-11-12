@@ -19,11 +19,13 @@ export default class Timeline extends Component {
         const timelineIndex = this.props.timelineIndex;
         return (
             <li className="timeline">
-                <nav className="navbar navbar-light border py-0 pl-2" onClick={() => loadTimeline(timelineIndex)}>
+                <nav className="navbar navbar-light border" onClick={() => loadTimeline(timelineIndex)}>
                     <span className="navbar-brand">
                         <i className={`${this.props.timeline.icon} mr-2`}></i>{this.props.timeline.name}
                     </span>
-                    <i className="fas fa-cog" onClick={this.handleClick}></i>
+                    <button className="setting-btn btn btn-link" onClick={this.handleClick}>
+                        <i className="fas fa-cog"></i>
+                    </button>
                 </nav>
                 <div className="tweet-container">
                     {(() => {
