@@ -5,20 +5,32 @@ import Sortable from 'react-sortablejs';
 export default class Menu extends Component {
     constructor(props) {
         super(props);
+        this.sortTimeline = (timelines) => {
+            timelines.sort((a, b) => {
+                if(a.display && !b.display) return -1;
+                if(!a.display && b.display) return 1;
+                return 0;
+            });
+            return timelines;
+        }
         this.handleClick = (idx, timeline) => {
             let timelines = this.props.timelines;
-            if (timeline.display) {
+            if(timeline.display) {
                 timelines[idx].display = false;
                 timelines[idx].tweets = [];
+                timelines = this.sortTimeline(timelines);
             }
             else {
                 timelines[idx].display = true;
+                timelines = this.sortTimeline(timelines);
+                idx = timelines.findIndex(child => timeline.id === child.id);
                 this.props.action.loadTimeline(idx);
             }
             this.props.action.updateState({timelines: timelines});
         }
         this.handleChange = (order) => {
-            const timelines = order.map(id => this.props.timelines.find(timeline => id === timeline.id));
+            let timelines = order.map(id => this.props.timelines.find(timeline => id === timeline.id));
+            timelines = this.sortTimeline(timelines);
             this.props.action.updateState({timelines: timelines});
         }
         this.handleMouseEnter = (id) => {

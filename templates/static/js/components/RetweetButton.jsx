@@ -17,7 +17,12 @@ export default class RetweetButton extends Component {
         const tweet = this.props.tweet;
         const retweetStyle = tweet.retweeted ? { color: "green" } : { color: "gray" };
         return (
-            <button className="retweet btn btn-light border w-50 p-0" data-toggle="modal" data-target="#retweetModal" onClick={this.handleClick}>
+            <button
+                className="retweet btn btn-light border w-50 p-0"
+                data-toggle="modal"
+                data-target="#retweetModal"
+                onClick={this.handleClick}
+            >
                 <i className="fas fa-retweet mr-1" style={retweetStyle}></i>{tweet.retweet_count}
             </button>
         );

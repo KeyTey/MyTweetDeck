@@ -137,8 +137,13 @@ a {
   border-color: dodgerblue;
 }
 
-.timeline .list-group-item:hover {
+.timeline .tweet-item:hover {
   background-color: rgb(245, 245, 245);
+}
+
+.timeline .tweet-item:focus {
+  outline: none;
+  background-color: rgb(240, 240, 240);
 }
 
 .timeline .new-item {
@@ -149,6 +154,11 @@ a {
 
 .timeline .new-item:hover {
   background-color: rgba(0, 150, 255, 0.1);
+}
+
+.timeline .new-item:focus {
+  outline: none;
+  background-color: rgba(0, 150, 255, 0.15);
 }
 
 @keyframes new-effect {
