@@ -6,13 +6,13 @@ export default class TweetFooter extends Component {
     render() {
         return (
             <div className="d-flex w-100 justify-content-around">
-                <FavoriteButton
+                <RetweetButton
                     tweet={this.props.tweet}
                     timelineIndex={this.props.timelineIndex}
                     tweetIndex={this.props.tweetIndex}
                     action={this.props.action}
                 />
-                <RetweetButton
+                <FavoriteButton
                     tweet={this.props.tweet}
                     timelineIndex={this.props.timelineIndex}
                     tweetIndex={this.props.tweetIndex}
