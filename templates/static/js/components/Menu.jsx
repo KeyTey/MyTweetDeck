@@ -11,6 +11,9 @@ export default class Menu extends Component {
                 if(!a.display && b.display) return 1;
                 return 0;
             });
+            timelines = timelines.filter((timeline, i, timelines) => (
+                timelines.map(timeline => timeline.id).indexOf(timeline.id) === i
+            ));
             return timelines;
         }
         this.handleClick = (idx, timeline) => {
@@ -18,14 +21,12 @@ export default class Menu extends Component {
             if(timeline.display) {
                 timelines[idx].display = false;
                 timelines[idx].tweets = [];
-                timelines = this.sortTimeline(timelines);
             }
             else {
                 timelines[idx].display = true;
-                timelines = this.sortTimeline(timelines);
-                idx = timelines.findIndex(child => timeline.id === child.id);
                 this.props.action.loadTimeline(idx);
             }
+            timelines = this.sortTimeline(timelines);
             this.props.action.updateState({timelines: timelines});
         }
         this.handleChange = (order) => {

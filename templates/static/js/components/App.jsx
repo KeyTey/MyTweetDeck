@@ -57,6 +57,8 @@ export default class App extends Component {
                     }
                     timeline.defaultTweets = defaultTweets;
                     timeline.load = false;
+                    idx = this.state.timelines.findIndex(child => timeline.id === child.id);
+                    this.setTimeline(idx, timeline);
                     this.updateTimeline(idx);
                 },
                 error => console.log(error)
