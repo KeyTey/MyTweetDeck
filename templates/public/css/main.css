@@ -74,6 +74,10 @@ a {
   display: inline-block;
 }
 
+.timeline:focus {
+  outline: none;
+}
+
 .timeline .navbar {
   background-color: rgb(250, 250, 250);
   padding: 0 5px 0 8px;

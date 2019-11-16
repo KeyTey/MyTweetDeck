@@ -13,24 +13,28 @@ export default class TweetItem extends Component {
             const tweetIndex = this.props.tweetIndex;
             const tweetItem = (i, j) => $(`.tweet-item[timelineIndex='${i}'][tweetIndex='${j}']`);
             // 左キー
-            if (e.keyCode == 37) {
+            if (e.keyCode === 37) {
                 tweetItem(timelineIndex - 1, 0).focus();
             }
             // 上キー
-            else if(e.keyCode == 38) {
+            else if(e.keyCode === 38) {
                 tweetItem(timelineIndex, tweetIndex - 1).focus();
             }
             // 右キー
-            else if(e.keyCode == 39) {
+            else if(e.keyCode === 39) {
                 tweetItem(timelineIndex + 1, 0).focus();
             }
             // 下キー
-            else if(e.keyCode == 40) {
+            else if(e.keyCode === 40) {
                 tweetItem(timelineIndex, tweetIndex + 1).focus();
             }
             // Fキー
-            else if(e.keyCode == 70) {
+            else if(e.keyCode === 70) {
                 tweetItem(timelineIndex, tweetIndex).find('button.favorite').click();
+            }
+            // Tキー
+            else if(e.keyCode === 84) {
+                tweetItem(timelineIndex, tweetIndex).find('button.retweet').click();
             }
         }
     }
