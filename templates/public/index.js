@@ -15,7 +15,7 @@ const keyList = new Array(37, 38, 39, 40);
 
 // 矢印スクロール無効化
 $(document).keydown(function(e) {
-    if($.inArray(e.keyCode, keyList) > -1) {
+    if($.inArray(e.keyCode, keyList) > -1 && !$("textarea:focus").length) {
         e.preventDefault();
         if(!$(".tweet-item:focus").length) {
             $(`.tweet-item[timelineIndex='0'][tweetIndex='0']`).focus();
