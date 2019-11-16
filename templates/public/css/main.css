@@ -2,6 +2,10 @@ body {
   overscroll-behavior: none;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 a {
   text-decoration: none;
   color: black;
@@ -103,8 +107,6 @@ a {
 }
 
 .timeline .setting-panel {
-  position: fixed;
-  z-index: 10;
   background-color: white;
   border: 2px solid rgb(200, 200, 200);
   animation-name: setting-effect;
@@ -141,11 +143,6 @@ a {
   background-color: rgb(245, 245, 245);
 }
 
-.timeline .tweet-item:focus {
-  outline: none;
-  background-color: rgb(240, 240, 240);
-}
-
 .timeline .new-item {
   background-color: rgba(0, 150, 255, 0.05);
   animation-name: new-effect;
@@ -156,9 +153,9 @@ a {
   background-color: rgba(0, 150, 255, 0.1);
 }
 
-.timeline .new-item:focus {
+.timeline .tweet-item:focus {
   outline: none;
-  background-color: rgba(0, 150, 255, 0.15);
+  background-color: rgba(0, 150, 255, 0.2);
 }
 
 @keyframes new-effect {

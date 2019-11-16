@@ -11,14 +11,14 @@ $(window).resize(function() {
 });
 
 // 矢印キー
-var keyList = new Array(37, 38, 39, 40);
+const keyList = new Array(37, 38, 39, 40);
 
 // 矢印スクロール無効化
 $(document).keydown(function(e) {
-     var key = e.which;
-      if($.inArray(key, keyList) > -1) {
-          e.preventDefault();
-          return false;
-      }
-      return true;
+    if($.inArray(e.keyCode, keyList) > -1) {
+        e.preventDefault();
+        if(!$(".tweet-item:focus").length) {
+            $(`.tweet-item[timelineIndex='0'][tweetIndex='0']`).focus();
+        }
+    }
 });

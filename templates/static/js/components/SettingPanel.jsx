@@ -18,29 +18,21 @@ export default class SettingPanel extends Component {
             this.props.action.updateTimeline(this.props.timelineIndex);
         }
     }
-    componentDidMount() {
-        const height = $('.setting-panel').height();
-        $('#blank').css('height', height + 'px');
-        $('#blank').css('margin-bottom', '5px');
-    }
     render() {
         return (
-            <div>
-                <div className="setting-panel rounded-lg">
-                    <div>
-                        <label className="setting-label">Sort by liked count</label>
-                        {this.getButton('sortByLikedCount')}
-                    </div>
-                    <div>
-                        <label className="setting-label">Trim liked tweet</label>
-                        {this.getButton('trimLikedTweet')}
-                    </div>
-                    <div>
-                        <label className="setting-label">Make user unique</label>
-                        {this.getButton('makeUserUnique')}
-                    </div>
+            <div className="setting-panel rounded-lg">
+                <div>
+                    <label className="setting-label">Sort by liked count</label>
+                    {this.getButton('sortByLikedCount')}
                 </div>
-                <div id="blank"></div>
+                <div>
+                    <label className="setting-label">Trim liked tweet</label>
+                    {this.getButton('trimLikedTweet')}
+                </div>
+                <div>
+                    <label className="setting-label">Make user unique</label>
+                    {this.getButton('makeUserUnique')}
+                </div>
             </div>
         );
     }
