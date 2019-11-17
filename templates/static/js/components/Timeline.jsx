@@ -27,19 +27,19 @@ export default class Timeline extends Component {
                         <i className="fas fa-cog"></i>
                     </button>
                 </nav>
+                {(() => {
+                    if(this.state.open && !this.props.timeline.load) {
+                        return <SettingPanel
+                            timeline={this.props.timeline}
+                            timelineIndex={timelineIndex}
+                            action={this.props.action}
+                        />;
+                    }
+                })()}
                 <div className="tweet-container">
                     {(() => {
                         if(this.props.timeline.load) {
                             return <div className="spinner-grow"></div>;
-                        }
-                    })()}
-                    {(() => {
-                        if(this.state.open && !this.props.timeline.load) {
-                            return <SettingPanel
-                                timeline={this.props.timeline}
-                                timelineIndex={timelineIndex}
-                                action={this.props.action}
-                            />;
                         }
                     })()}
                     {(() => {

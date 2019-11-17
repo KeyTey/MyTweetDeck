@@ -1,13 +1,13 @@
 // 高さ調整(ロード時)
 $(document).ready(function() {
-    hsize = $(window).height() - 40;
-    $(".timeline-container").css("height", hsize + "px");
+    const height = $(window).height();
+    $(".timeline-container").css("height", height + "px");
 });
 
 // 高さ調整(リサイズ時)
 $(window).resize(function() {
-    hsize = $(window).height() - 40;
-    $(".timeline-container").css("height", hsize + "px");
+    const height = $(window).height();
+    $(".timeline-container").css("height", height + "px");
 });
 
 // キーイベント

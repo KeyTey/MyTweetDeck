@@ -72,6 +72,7 @@ a {
   height: 100%;
   width: 280px;
   display: inline-block;
+  overflow-y: hidden;
 }
 
 .timeline:focus {
@@ -99,7 +100,7 @@ a {
 }
 
 .timeline .tweet-container {
-  height: 100%;
+  height: -webkit-calc(100% - 40px);
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -123,7 +124,7 @@ a {
 }
 
 .timeline .setting-label {
-  width: 185px;
+  width: 200px;
   margin: 10px;
 }
 
