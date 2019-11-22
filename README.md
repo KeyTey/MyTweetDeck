@@ -10,7 +10,9 @@ $ git push heroku master
 
 ### Ubuntu 18.04 LTS with AWS EC2
 
-```
+#### Setup
+
+```shell
 $ sudo apt update
 $ sudo apt install -y nginx gunicorn python3-pip python3-dev supervisor git
 $ git clone https://github.com/KeyTey/MyTweetDeck.git
@@ -19,6 +21,12 @@ $ sudo pip3 install -r requirements.txt
 $ sudo vim /etc/nginx/sites-enabled/default
 $ sudo /etc/init.d/nginx restart
 $ sudo vim /etc/supervisor/conf.d/MyTweetDeck
+```
+
+#### Deploy
+
+```
+$ git pull origin master
 $ sudo supervisorctl reread
 $ sudo supervisorctl reload
 $ sudo supervisorctl update
