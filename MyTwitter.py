@@ -50,9 +50,10 @@ def get_lists(twitter, user_id):
 def get_home_timeline(twitter, count):
     url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
     params = {
-            "exclude_replies": True,
-            "include_rts": False,
-            "count": count
+        "exclude_replies": True,
+        "include_rts": False,
+        "count": count,
+        "tweet_mode": "extended"
     }
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
@@ -78,7 +79,8 @@ def get_kawaii_timeline(twitter, count):
         "list_id": list_id,
         "exclude_replies": True,
         "include_rts": True,
-        "count": count
+        "count": count,
+        "tweet_mode": "extended"
     }
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
@@ -97,7 +99,8 @@ def get_tweets(twitter, user_id, count):
         "user_id": user_id,
         "exclude_replies": True,
         "include_rts": False,
-        "count": count
+        "count": count,
+        "tweet_mode": "extended"
     }
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
@@ -110,7 +113,8 @@ def get_list_timeline(twitter, list_id, count):
         "list_id": list_id,
         "exclude_replies": True,
         "include_rts": False,
-        "count": count
+        "count": count,
+        "tweet_mode": "extended"
     }
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
