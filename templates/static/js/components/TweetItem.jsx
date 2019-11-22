@@ -4,6 +4,7 @@ import TweetContent from './TweetContent';
 import TweetPictures from './TweetPictures';
 import TweetVideo from './TweetVideo';
 import TweetFooter from './TweetFooter';
+import QuotedItem from './QuotedItem';
 
 export default class TweetItem extends Component {
     constructor(props) {
@@ -50,6 +51,14 @@ export default class TweetItem extends Component {
             >
                 <TweetHeader tweet={this.props.tweet} />
                 <TweetContent tweet={this.props.tweet} />
+                {(() => {
+                    if('quoted_status' in this.props.tweet) {
+                        return <QuotedItem
+                            tweet={this.props.tweet.quoted_status}
+                            action={this.props.action}
+                        />;
+                    }
+                })()}
                 <TweetPictures tweet={this.props.tweet} action={this.props.action} />
                 <TweetVideo tweet={this.props.tweet} />
                 <TweetFooter

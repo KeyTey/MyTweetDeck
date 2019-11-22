@@ -26,6 +26,8 @@ def get_tweet(tweet):
         tweet['media_links'] = [] if tweet['video_link'] else [media['media_url'] for media in tweet['extended_entities']['media']]
     except:
         tweet['media_links'] = []
+    if tweet.get('quoted_status'):
+        tweet['quoted_status'] = get_tweet(tweet['quoted_status'])
     return tweet
 
 # ユーザー取得
