@@ -25,7 +25,8 @@ $ sudo vim /etc/supervisor/conf.d/MyTweetDeck
 
 #### Deploy
 
-```
+```shell
+$ cd ~/MyTweetDeck
 $ git pull origin master
 $ sudo supervisorctl reread
 $ sudo supervisorctl reload
