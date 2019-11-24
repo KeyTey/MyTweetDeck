@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import FavoriteButton from './FavoriteButton';
+import LikeButton from './LikeButton';
 import RetweetButton from './RetweetButton';
 
 export default class TweetFooter extends Component {
@@ -12,7 +12,7 @@ export default class TweetFooter extends Component {
                     tweetIndex={this.props.tweetIndex}
                     action={this.props.action}
                 />
-                <FavoriteButton
+                <LikeButton
                     tweet={this.props.tweet}
                     timelineIndex={this.props.timelineIndex}
                     tweetIndex={this.props.tweetIndex}

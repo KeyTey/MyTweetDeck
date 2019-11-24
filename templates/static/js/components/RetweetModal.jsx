@@ -20,6 +20,12 @@ export default class RetweetModal extends Component {
                         tweet.retweeted = true;
                         this.props.action.setTweet(timelineIndex, tweetIndex, tweet);
                         this.props.action.addNotice("success", "Retweet succeeded.");
+                        $.ajax({
+                            url: "/api/log",
+                            dataType: "json",
+                            type: "POST",
+                            data: {status: `Retweet: ${tweet.id_str}`}
+                        });
                     }
                     else {
                         this.props.action.addNotice("danger", "Retweet failed.");

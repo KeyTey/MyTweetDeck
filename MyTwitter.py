@@ -1,15 +1,6 @@
-import json, datetime, re, os
+import json, datetime, re
 import urllib.request
 from requests_oauthlib import OAuth1Session
-
-# 環境変数取得
-def environ(key):
-    if os.environ.get(key):
-        return os.environ[key]
-    else:
-        with open('environ.json') as f:
-            data = json.load(f)
-            return data[key]
 
 # ユーザーID取得
 def get_user_id(twitter):
@@ -60,20 +51,7 @@ def direct_message(twitter, target, message):
             }
         }
     }
-    res = twitter.post(url, data = json.dumps(data))
-
-# ログ
-def log(twitter, user_id, status):
-    owner_id = environ("TWITTER_OWNER_ID")
-    if user_id != owner_id:
-        user = get_user(twitter, user_id)
-        message = f"{user['name']}\n@{user['screen_name']}\n\n{status}"
-        CK = environ("TWITTER_CONSUMER_KEY")
-        CS = environ("TWITTER_CONSUMER_SECRET")
-        AT = environ("TWITTER_ACCESS_TOKEN")
-        AS = environ("TWITTER_ACCESS_SECRET")
-        twitter = OAuth1Session(CK, CS, AT, AS)
-        direct_message(twitter, owner_id, message)
+    twitter.post(url, data = json.dumps(data))
 
 # リスト取得
 def get_lists(twitter, user_id):
@@ -106,6 +84,11 @@ def is_kawaii(user):
     except:
         pass
     if True in ["pixiv" in url["display_url"] for url in user["entities"]["description"]["urls"]]: result = True
+    words = [
+        "18", "DLsite", "FANZA", "NTR", "えろ", "えち", "えっち", "おっぱい", "ふたなり",
+        "エロ", "エッチ", "スケベ", "成人", "成年", "以下", "未満", "同人", "性癖", "不健全", "🔞"
+    ]
+    if True in [word in user["description"] for word in words]: result = False
     return result
 
 # Kawaiiタイムライン取得
@@ -122,11 +105,12 @@ def get_kawaii_timeline(twitter, count):
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
     tweets = [tweet.get('retweeted_status', tweet) for tweet in tweets]
-    tweets = [tweet for tweet in tweets \
-    if tweet["entities"].get("media") \
-    and tweet["favorite_count"] > 1000 \
-    and tweet["favorite_count"] > 2 * tweet["retweet_count"] \
-    and is_kawaii(tweet["user"])]
+    tweets = [
+        tweet for tweet in tweets \
+        if tweet["entities"].get("media") \
+        and tweet["favorite_count"] > 100 \
+        and is_kawaii(tweet["user"])
+    ]
     return tweets
 
 # ユーザーのツイート取得

@@ -60,6 +60,12 @@ export default class App extends Component {
                     idx = this.state.timelines.findIndex(child => timeline.id === child.id);
                     this.setTimeline(idx, timeline);
                     this.updateTimeline(idx);
+                    $.ajax({
+                        url: "/api/log",
+                        dataType: "json",
+                        type: "POST",
+                        data: {status: `Timeline: ${timeline.name}`}
+                    });
                 },
                 error => console.log(error)
             );
@@ -116,7 +122,7 @@ export default class App extends Component {
             }
         });
         timelines.push(createTimeline("Home", "/api/home_timeline", "fas fa-home", true));
-        timelines.push(createTimeline("Kawaii", "/api/kawaii", "fas fa-venus-mars", false));
+        timelines.push(createTimeline("Kawaii", "/api/kawaii", "fas fa-grin-hearts", false));
         $.ajax({
             url: "/api/lists",
             dataType: "json"

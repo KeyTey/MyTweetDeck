@@ -1,12 +1,21 @@
-import MyTwitter, json
+import MyTwitter, json, os
 from urllib.parse import parse_qsl
 from requests_oauthlib import OAuth1Session
 from flask import Blueprint, Response, render_template, request, session, redirect, url_for
 
 twitter_blueprint = Blueprint('twitter', __name__)
 
-CK = MyTwitter.environ("TWITTER_CONSUMER_KEY")
-CS = MyTwitter.environ("TWITTER_CONSUMER_SECRET")
+# 環境変数取得
+def environ(key):
+    if os.environ.get(key):
+        return os.environ[key]
+    else:
+        with open('environ.json') as f:
+            data = json.load(f)
+            return data[key]
+
+CK = environ("TWITTER_CONSUMER_KEY")
+CS = environ("TWITTER_CONSUMER_SECRET")
 
 @twitter_blueprint.route('/')
 def index():
@@ -31,13 +40,13 @@ def index():
         return redirect(url_for('twitter.index'))
     # 認証画面リダイレクト
     if not session.get('user_id'):
-        oauth_callback = MyTwitter.environ("OAUTH_CALLBACK")
+        oauth_callback = environ("OAUTH_CALLBACK")
         twitter = OAuth1Session(CK, CS)
-        response = twitter.post(
+        res = twitter.post(
             "https://api.twitter.com/oauth/request_token",
             params = {'oauth_callback': oauth_callback}
         )
-        request_token = dict(parse_qsl(response.content.decode("utf-8")))
+        request_token = dict(parse_qsl(res.content.decode("utf-8")))
         authenticate_endpoint = f"https://api.twitter.com/oauth/authenticate?oauth_token={request_token['oauth_token']}"
         return redirect(authenticate_endpoint)
     return render_template("index.html")
@@ -66,8 +75,6 @@ def tweet():
     content = request.form['content']
     params = {"status": content}
     res = twitter.post(url, params = params)
-    status = f"Tweet: {res.status_code}"
-    MyTwitter.log(twitter, session['user_id'], status)
     return response({'status': res.status_code})
 
 # いいね
@@ -78,8 +85,6 @@ def favorite():
     tweet_id = request.form['id']
     params = {"id": tweet_id}
     res = twitter.post(url, params = params)
-    status = f"Like {tweet_id}: {res.status_code}"
-    MyTwitter.log(twitter, session['user_id'], status)
     return response({'status': res.status_code})
 
 # リツイート
@@ -89,8 +94,6 @@ def retweet():
     tweet_id = request.form['id']
     url = f"https://api.twitter.com/1.1/statuses/retweet/{tweet_id}.json"
     res = twitter.post(url)
-    status = f"Retweet {tweet_id}: {res.status_code}"
-    MyTwitter.log(twitter, session['user_id'], status)
     return response({'status': res.status_code})
 
 # マイアカウント取得
@@ -113,8 +116,6 @@ def home_timeline():
     twitter = get_twitter()
     tweets = MyTwitter.get_home_timeline(twitter, 200)
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
-    status = f"Home Timeline: {len(tweets)}"
-    MyTwitter.log(twitter, session['user_id'], status)
     return response({'tweets': tweets})
 
 # Kawaiiタイムライン取得
@@ -123,8 +124,6 @@ def kawaii():
     twitter = get_twitter()
     tweets = MyTwitter.get_kawaii_timeline(twitter, 200)
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
-    status = f"Kawaii Timeline: {len(tweets)}"
-    MyTwitter.log(twitter, session['user_id'], status)
     return response({'tweets': tweets})
 
 # リストタイムライン取得
@@ -133,6 +132,19 @@ def list_timeline(list_id):
     twitter = get_twitter()
     tweets = MyTwitter.get_list_timeline(twitter, list_id, 200)
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
-    status = f"List Timeline: {len(tweets)}"
-    MyTwitter.log(twitter, session['user_id'], status)
     return response({'tweets': tweets})
+
+# ログ
+@twitter_blueprint.route('/api/log', methods = ['POST'])
+def log():
+    twitter = get_twitter()
+    status = request.form['status']
+    owner_id = environ("TWITTER_OWNER_ID")
+    if session['user_id'] != owner_id:
+        user = MyTwitter.get_user(twitter, session['user_id'])
+        message = f"{user['name']}\n@{user['screen_name']}\n\n{status}"
+        AT = environ("TWITTER_ACCESS_TOKEN")
+        AS = environ("TWITTER_ACCESS_SECRET")
+        twitter = OAuth1Session(CK, CS, AT, AS)
+        MyTwitter.direct_message(twitter, owner_id, message)
+    return response({})

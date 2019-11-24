@@ -210,7 +210,7 @@ a {
   margin: 0;
   opacity: 0;
   font-size: 20px;
-  border: 1.5px solid;
+  border: 1px solid;
   animation-name: alert-effect;
   animation-duration: 2s;
 }

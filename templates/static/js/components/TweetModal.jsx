@@ -19,7 +19,13 @@ export default class TweetModal extends Component {
                     const addNotice = this.props.action.addNotice;
                     if(data.status === 200) addNotice("success", "Tweet succeeded.");
                     else addNotice("danger", "Tweet failed.");
-                    this.setState({ content: '' });
+                    this.setState({content: ''});
+                    $.ajax({
+                        url: "/api/log",
+                        dataType: "json",
+                        type: "POST",
+                        data: {status: `Tweet: ${data.status}`}
+                    });
                 },
                 error => console.log(error)
             );
