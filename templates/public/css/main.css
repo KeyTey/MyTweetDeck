@@ -210,8 +210,9 @@ a {
   margin: 0;
   opacity: 0;
   font-size: 20px;
+  border: 1.5px solid;
   animation-name: alert-effect;
-  animation-duration: 3.2s;
+  animation-duration: 2s;
 }
 
 @keyframes alert-effect {
