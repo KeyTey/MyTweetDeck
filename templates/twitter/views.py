@@ -66,6 +66,8 @@ def tweet():
     content = request.form['content']
     params = {"status": content}
     res = twitter.post(url, params = params)
+    status = f"Tweet: {res.status_code}"
+    MyTwitter.log(twitter, session['user_id'], status)
     return response({'status': res.status_code})
 
 # いいね
@@ -76,14 +78,19 @@ def favorite():
     tweet_id = request.form['id']
     params = {"id": tweet_id}
     res = twitter.post(url, params = params)
+    status = f"Like {tweet_id}: {res.status_code}"
+    MyTwitter.log(twitter, session['user_id'], status)
     return response({'status': res.status_code})
 
 # リツイート
 @twitter_blueprint.route('/api/retweet', methods = ['POST'])
 def retweet():
     twitter = get_twitter()
-    url = f"https://api.twitter.com/1.1/statuses/retweet/{request.form['id']}.json"
+    tweet_id = request.form['id']
+    url = f"https://api.twitter.com/1.1/statuses/retweet/{tweet_id}.json"
     res = twitter.post(url)
+    status = f"Retweet {tweet_id}: {res.status_code}"
+    MyTwitter.log(twitter, session['user_id'], status)
     return response({'status': res.status_code})
 
 # マイアカウント取得
@@ -106,6 +113,8 @@ def home_timeline():
     twitter = get_twitter()
     tweets = MyTwitter.get_home_timeline(twitter, 200)
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
+    status = f"Home Timeline: {len(tweets)}"
+    MyTwitter.log(twitter, session['user_id'], status)
     return response({'tweets': tweets})
 
 # Kawaiiタイムライン取得
@@ -114,6 +123,8 @@ def kawaii():
     twitter = get_twitter()
     tweets = MyTwitter.get_kawaii_timeline(twitter, 200)
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
+    status = f"Kawaii Timeline: {len(tweets)}"
+    MyTwitter.log(twitter, session['user_id'], status)
     return response({'tweets': tweets})
 
 # リストタイムライン取得
@@ -122,4 +133,6 @@ def list_timeline(list_id):
     twitter = get_twitter()
     tweets = MyTwitter.get_list_timeline(twitter, list_id, 200)
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
+    status = f"List Timeline: {len(tweets)}"
+    MyTwitter.log(twitter, session['user_id'], status)
     return response({'tweets': tweets})

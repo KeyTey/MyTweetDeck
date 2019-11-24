@@ -1,5 +1,6 @@
 import json, datetime, re, os
 import urllib.request
+from requests_oauthlib import OAuth1Session
 
 # 環境変数取得
 def environ(key):
@@ -46,6 +47,33 @@ def get_user(twitter, user_id):
     res = twitter.get(url, params = params)
     user = json.loads(res.text)[0] if res.status_code == 200 else {}
     return user
+
+# ダイレクトメッセージ
+def direct_message(twitter, target, message):
+    url = "https://api.twitter.com/1.1/direct_messages/events/new.json"
+    data = {
+        "event": {
+            "type": "message_create",
+            "message_create": {
+                "target": { "recipient_id": target },
+                "message_data": { "text": message }
+            }
+        }
+    }
+    res = twitter.post(url, data = json.dumps(data))
+
+# ログ
+def log(twitter, user_id, status):
+    owner_id = environ("TWITTER_OWNER_ID")
+    if user_id != owner_id:
+        user = get_user(twitter, user_id)
+        message = f"{user['name']}\n@{user['screen_name']}\n\n{status}"
+        CK = environ("TWITTER_CONSUMER_KEY")
+        CS = environ("TWITTER_CONSUMER_SECRET")
+        AT = environ("TWITTER_ACCESS_TOKEN")
+        AS = environ("TWITTER_ACCESS_SECRET")
+        twitter = OAuth1Session(CK, CS, AT, AS)
+        direct_message(twitter, owner_id, message)
 
 # リスト取得
 def get_lists(twitter, user_id):
