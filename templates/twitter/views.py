@@ -1,14 +1,15 @@
-import MyTwitter, os, json
+import MyTwitter, json
 from urllib.parse import parse_qsl
 from requests_oauthlib import OAuth1Session
 from flask import Blueprint, Response, render_template, request, session, redirect, url_for
 
 twitter_blueprint = Blueprint('twitter', __name__)
 
+CK = MyTwitter.environ("TWITTER_CONSUMER_KEY")
+CS = MyTwitter.environ("TWITTER_CONSUMER_SECRET")
+
 @twitter_blueprint.route('/')
 def index():
-    CK = os.environ["TWITTER_CONSUMER_KEY"]
-    CS = os.environ["TWITTER_CONSUMER_SECRET"]
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
     # アクセストークン取得
@@ -24,15 +25,13 @@ def index():
         twitter = OAuth1Session(CK, CS, AT, AS)
         user_id = MyTwitter.get_user_id(twitter)
         if user_id:
-            session['CK'] = CK
-            session['CS'] = CS
             session['AT'] = AT
             session['AS'] = AS
             session['user_id'] = user_id
         return redirect(url_for('twitter.index'))
     # 認証画面リダイレクト
     if not session.get('user_id'):
-        oauth_callback = os.environ["OAUTH_CALLBACK"]
+        oauth_callback = MyTwitter.environ("OAUTH_CALLBACK")
         twitter = OAuth1Session(CK, CS)
         response = twitter.post(
             "https://api.twitter.com/oauth/request_token",
@@ -45,7 +44,7 @@ def index():
 
 # Twitter認証
 def get_twitter():
-    twitter = OAuth1Session(session['CK'], session['CS'], session['AT'], session['AS'])
+    twitter = OAuth1Session(CK, CS, session['AT'], session['AS'])
     return twitter
 
 # レスポンス

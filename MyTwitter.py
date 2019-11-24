@@ -1,5 +1,14 @@
-import json, datetime, re
+import json, datetime, re, os
 import urllib.request
+
+# 環境変数取得
+def environ(key):
+    if os.environ.get(key):
+        return os.environ[key]
+    else:
+        with open('environ.json') as f:
+            data = json.load(f)
+            return data[key]
 
 # ユーザーID取得
 def get_user_id(twitter):
