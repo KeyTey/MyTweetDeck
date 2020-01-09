@@ -1,14 +1,34 @@
 # MyTweetDeck
 
+## Development
+
+#### ~/MyTweetDeck
+
+```shell
+$ python3 server.py
+```
+
+#### ~/MyTweetDeck/templates/static
+
+```shell
+$ npm run watch
+```
+
 ## Deployment
 
 ### Heroku
 
-```
+```shell
 $ git push heroku master
 ```
 
 ### Ubuntu 18.04 LTS with AWS EC2
+
+#### Login
+
+```shell
+$ ssh -i ~/.ssh/MyTweetDeck.pem ubuntu@18.176.104.124
+```
 
 #### Setup
 
