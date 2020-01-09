@@ -7,7 +7,7 @@ export default class QuotedItem extends Component {
     render() {
         const style = {'margin-bottom': '5px'};
         return (
-            <div className={`tweet-item list-group-item p-1`} style={style}>
+            <div className={`tweet-item list-group-item p-1`} style={style} onClick="event.cancelBubble=true">
                 <TweetHeader tweet={this.props.tweet} />
                 <TweetContent tweet={this.props.tweet} />
                 <TweetPictures tweet={this.props.tweet} action={this.props.action} />

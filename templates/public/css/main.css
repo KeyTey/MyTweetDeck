@@ -12,6 +12,31 @@ a {
   color: black;
 }
 
+.text-like-keyboard-key {
+  padding: 2px 5px;
+  background-color: #e1e8ed;
+  color: #10171e;
+  border: 1px solid #e1e8ed;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px #e1e8ed, inset 0 1px 2px #fff;
+}
+
+.btn-on {
+  width: 45px;
+  margin-right: 10px;
+  color: white;
+  background-color: dodgerblue;
+  border-color: dodgerblue;
+}
+
+.btn-off {
+  width: 45px;
+  margin-right: 10px;
+  color: dodgerblue;
+  background-color: white;
+  border-color: dodgerblue;
+}
+
 .sidebar {
   position: fixed;
   min-height: 100%;
@@ -128,22 +153,6 @@ a {
 .timeline .setting-label {
   width: 200px;
   margin: 10px;
-}
-
-.timeline .btn-on {
-  width: 45px;
-  margin-right: 10px;
-  color: white;
-  background-color: dodgerblue;
-  border-color: dodgerblue;
-}
-
-.timeline .btn-off {
-  width: 45px;
-  margin-right: 10px;
-  color: dodgerblue;
-  background-color: white;
-  border-color: dodgerblue;
 }
 
 .timeline .tweet-item:hover {

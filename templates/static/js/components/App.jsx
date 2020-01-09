@@ -5,6 +5,7 @@ import Timeline from './Timeline';
 import TweetModal from './TweetModal';
 import RetweetModal from './RetweetModal';
 import MediaModal from './MediaModal';
+import SettingModal from './SettingModal';
 import Alert from './Alert';
 
 export default class App extends Component {
@@ -13,7 +14,10 @@ export default class App extends Component {
         this.state = {
             timelines: [],
             notices: [],
-            modal: {}
+            modal: {},
+            setting: {
+                likeByClickTweetPanel: false
+            }
         };
         this.updateState = (state) => {
             this.setState(state);
@@ -84,7 +88,8 @@ export default class App extends Component {
         }
         this.addNotice = (status, text) => {
             let notices = this.state.notices;
-            if (!notices.find(notice => notice.display)) notices = [];
+            if(!notices.find(notice => notice.display)) notices = [];
+            if(notices.length >= 10) notices = [];
             this.setState({notices: notices});
             notices.push({status: status, text: text, display: true});
             const idx = notices.length - 1;
@@ -148,13 +153,19 @@ export default class App extends Component {
                 <ul className="timeline-container">
                     {this.state.timelines.map((timeline, idx) => {
                         if(timeline.display) {
-                            return <Timeline timeline={timeline} timelineIndex={idx} action={this.action} />;
+                            return <Timeline
+                                timeline={timeline}
+                                timelineIndex={idx}
+                                setting={this.state.setting}
+                                action={this.action}
+                            />;
                         }
                     })}
                 </ul>
                 <TweetModal action={this.action} />
                 <RetweetModal modal={this.state.modal} action={this.action} />
                 <MediaModal modal={this.state.modal} />
+                <SettingModal setting={this.state.setting} action={this.action} />
                 <div className="notice-container">
                     {this.state.notices.map(notice => <Alert notice={notice} />)}
                 </div>

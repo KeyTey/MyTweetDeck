@@ -9,33 +9,46 @@ import QuotedItem from './QuotedItem';
 export default class TweetItem extends Component {
     constructor(props) {
         super(props);
-        this.handleKeyDown = (e) => {
+        this.handleKeyCode = (keyCode) => {
             const timelineIndex = this.props.timelineIndex;
             const tweetIndex = this.props.tweetIndex;
             const tweetItem = (i, j) => $(`.tweet-item[timelineIndex='${i}'][tweetIndex='${j}']`);
-            // 左キー
-            if (e.keyCode === 37) {
+            // 左キー (左のタイムラインに移動)
+            if (keyCode === 37) {
                 tweetItem(timelineIndex - 1, 0).focus();
             }
-            // 上キー
-            else if(e.keyCode === 38) {
+            // 上キー (上のツイートに移動)
+            else if(keyCode === 38) {
                 tweetItem(timelineIndex, tweetIndex - 1).focus();
             }
-            // 右キー
-            else if(e.keyCode === 39) {
+            // 右キー (右のタイムラインに移動)
+            else if(keyCode === 39) {
                 tweetItem(timelineIndex + 1, 0).focus();
             }
-            // 下キー
-            else if(e.keyCode === 40) {
+            // 下キー (下のツイートに移動)
+            else if(keyCode === 40) {
                 tweetItem(timelineIndex, tweetIndex + 1).focus();
             }
-            // Fキー
-            else if(e.keyCode === 70) {
+            // Fキー (いいね)
+            else if(keyCode === 70) {
                 tweetItem(timelineIndex, tweetIndex).find('button.favorite').click();
             }
-            // Tキー
-            else if(e.keyCode === 84) {
+            // Tキー (リツイート)
+            else if(keyCode === 84) {
                 tweetItem(timelineIndex, tweetIndex).find('button.retweet').click();
+            }
+            // Escキー (フォーカス解除)
+            else if(keyCode === 27) {
+                tweetItem(timelineIndex, 0).focus();
+                document.activeElement.blur();
+            }
+        }
+        this.handleKeyDown = (e) => {
+            this.handleKeyCode(e.keyCode);
+        }
+        this.handleClick = () => {
+            if(this.props.setting.likeByClickTweetPanel) {
+                this.handleKeyCode(70);
             }
         }
     }
@@ -48,9 +61,12 @@ export default class TweetItem extends Component {
                 tweetIndex={this.props.tweetIndex}
                 tabindex="0"
                 onKeyDown={this.handleKeyDown}
+                onClick={this.handleClick}
             >
                 <TweetHeader tweet={this.props.tweet} />
                 <TweetContent tweet={this.props.tweet} />
+                <TweetPictures tweet={this.props.tweet} action={this.props.action} />
+                <TweetVideo tweet={this.props.tweet} />
                 {(() => {
                     if('quoted_status' in this.props.tweet) {
                         return <QuotedItem
@@ -59,8 +75,6 @@ export default class TweetItem extends Component {
                         />;
                     }
                 })()}
-                <TweetPictures tweet={this.props.tweet} action={this.props.action} />
-                <TweetVideo tweet={this.props.tweet} />
                 <TweetFooter
                     tweet={this.props.tweet}
                     timelineIndex={this.props.timelineIndex}

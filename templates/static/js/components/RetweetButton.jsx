@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 export default class RetweetButton extends Component {
     constructor(props) {
         super(props);
-        this.handleClick = () => {
+        this.handleClick = (e) => {
+            e.stopPropagation();
             this.props.action.updateState({
                 modal: {
                     tweet: this.props.tweet,

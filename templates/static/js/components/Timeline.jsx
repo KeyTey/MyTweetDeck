@@ -49,6 +49,7 @@ export default class Timeline extends Component {
                                     tweet={tweet}
                                     timelineIndex={timelineIndex}
                                     tweetIndex={idx}
+                                    setting={this.props.setting}
                                     action={this.props.action}
                                 />;
                             });

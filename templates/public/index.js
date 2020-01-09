@@ -13,20 +13,24 @@ $(window).resize(function() {
 // キーイベント
 $(document).keydown(function(e) {
     if($("textarea:focus").length) return;
-    // 矢印キー
+    // 矢印キー (ツイートへのフォーカス)
     if([37, 38, 39, 40].includes(e.keyCode)) {
         e.preventDefault();
         if(!$(".tweet-item:focus").length) {
             $(".tweet-item[timelineIndex='0'][tweetIndex='0']").focus();
         }
     }
-    // 数字キー
+    // 数字キー (タイムラインへのフォーカス)
     if(48 <= e.keyCode && e.keyCode <= 57) {
         const num = e.keyCode === 48 ? $(".timeline").length - 1 : e.keyCode - 49;
         $(`.tweet-item[timelineIndex='${num}'][tweetIndex='0']`).focus();
     }
-    // Nキー
+    // Nキー (ツイート画面)
     if(e.keyCode === 78) {
         $(".tweet-btn").click();
+    }
+    // Escキー (フォーカス解除)
+    if(e.keyCode === 27) {
+        document.activeElement.blur();
     }
 });

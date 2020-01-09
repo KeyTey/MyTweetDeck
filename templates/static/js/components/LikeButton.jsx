@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 export default class FavoriteButton extends Component {
     constructor(props) {
         super(props);
-        this.handleClick = () => {
+        this.handleClick = (e) => {
+            e.stopPropagation();
             $.ajax({
                 url: "/api/favorite",
                 dataType: "json",

@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 export default class TweetPictures extends Component {
     constructor(props) {
         super(props);
-        this.handleClick = (mediaLink) => {
+        this.handleClick = (e, mediaLink) => {
+            e.stopPropagation();
             this.props.action.updateState({ modal: { mediaLink: mediaLink } });
         }
     }
@@ -18,7 +19,7 @@ export default class TweetPictures extends Component {
                                 className="picture border mb-1"
                                 data-toggle="modal"
                                 data-target="#mediaModal"
-                                onClick={() => { this.handleClick(mediaLink) }}
+                                onClick={(e) => { this.handleClick(e, mediaLink) }}
                             />
                         </div>
                     );
