@@ -21,6 +21,9 @@ export default class Menu extends Component {
             if(timeline.display) {
                 timelines[idx].display = false;
                 timelines[idx].tweets = [];
+                for(let key of Object.keys(timelines[idx].setting)) {
+                    timelines[idx].setting[key] = false;
+                }
             }
             else {
                 timelines[idx].display = true;

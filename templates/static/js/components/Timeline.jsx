@@ -6,12 +6,12 @@ export default class Timeline extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false
+            openSetting: false
         };
         this.handleClick = (e) => {
             e.stopPropagation();
-            const open = Boolean(this.state.open ^ true);
-            this.setState({open: open});
+            const openSetting = Boolean(this.state.openSetting ^ true);
+            this.setState({openSetting: openSetting});
         }
     }
     render() {
@@ -21,14 +21,15 @@ export default class Timeline extends Component {
             <li className="timeline">
                 <nav className="navbar navbar-light border" onClick={() => loadTimeline(timelineIndex)}>
                     <span className="navbar-brand">
-                        <i className={`${this.props.timeline.icon} mr-2`}></i>{this.props.timeline.name}
+                        <i className={`${this.props.timeline.icon} mr-2`}></i>
+                        <span className="header">{this.props.timeline.name}</span>
                     </span>
                     <button className="setting-btn btn btn-link" onClick={this.handleClick}>
                         <i className="fas fa-cog"></i>
                     </button>
                 </nav>
                 {(() => {
-                    if(this.state.open && !this.props.timeline.load) {
+                    if(this.state.openSetting && !this.props.timeline.load) {
                         return <SettingPanel
                             timeline={this.props.timeline}
                             timelineIndex={timelineIndex}

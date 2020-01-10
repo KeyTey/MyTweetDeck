@@ -35,32 +35,32 @@ export default class SettingModal extends Component {
                                     Like by clicking on Tweet panel
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-2">N</kbd>New Tweet
+                                    <kbd className="keyboard mr-2">N</kbd>New Tweet
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-2">F</kbd>Like
+                                    <kbd className="keyboard mr-2">F</kbd>Like
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-2">T</kbd>Retweet
+                                    <kbd className="keyboard mr-2">T</kbd>Retweet
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-1">←</kbd>
-                                    <kbd className="text-like-keyboard-key mr-1">→</kbd>
-                                    <kbd className="text-like-keyboard-key mr-1">↑</kbd>
-                                    <kbd className="text-like-keyboard-key mr-2">↓</kbd>
+                                    <kbd className="keyboard mr-1">←</kbd>
+                                    <kbd className="keyboard mr-1">→</kbd>
+                                    <kbd className="keyboard mr-1">↑</kbd>
+                                    <kbd className="keyboard mr-2">↓</kbd>
                                     Move focus to Tweet
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-1">1</kbd>
+                                    <kbd className="keyboard mr-1">1</kbd>
                                     ...
-                                    <kbd className="text-like-keyboard-key ml-1 mr-2">9</kbd>
+                                    <kbd className="keyboard ml-1 mr-2">9</kbd>
                                     Column 1 - 9
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-2">0</kbd>Final column
+                                    <kbd className="keyboard mr-2">0</kbd>Final column
                                 </li>
                                 <li class="list-group-item">
-                                    <kbd className="text-like-keyboard-key mr-2">Esc</kbd>Release focus
+                                    <kbd className="keyboard mr-2">Esc</kbd>Release focus
                                 </li>
                             </ul>
                         </div>

@@ -1,5 +1,6 @@
 body {
   overscroll-behavior: none;
+  color: #38444d;
   background-color: rgb(225, 232, 237);
 }
 
@@ -9,10 +10,9 @@ body::-webkit-scrollbar {
 
 a {
   text-decoration: none;
-  color: black;
 }
 
-.text-like-keyboard-key {
+.keyboard {
   padding: 2px 5px;
   background-color: #e1e8ed;
   color: #10171e;
@@ -45,7 +45,7 @@ a {
   z-index: 10;
 }
 
-.sidebar .sidebar-nav {
+.sidebar-nav {
   position: absolute;
   display: block;
   width: 40px;
@@ -56,26 +56,26 @@ a {
   padding: 0;
 }
 
-.sidebar .sidebar-top {
+.sidebar-top {
   top: 5px;
 }
 
-.sidebar .sidebar-middle {
+.sidebar-middle {
   top: 80px;
   bottom: 80px;
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-.sidebar .sidebar-middle::-webkit-scrollbar {
+.sidebar-middle::-webkit-scrollbar {
   display: none;
 }
 
-.sidebar .sidebar-middle span {
+.sidebar-middle span {
   font-family: "arial black";
 }
 
-.sidebar .timeline-name {
+.timeline-name {
   position: fixed;
   display: none;
   padding: 5px 10px;
@@ -85,7 +85,7 @@ a {
   background-color: rgb(50, 50, 50);
 }
 
-.sidebar .sidebar-bottom {
+.sidebar-bottom {
   bottom: 5px;
 }
 
@@ -116,8 +116,15 @@ a {
   background-color: rgb(240, 240, 240);
 }
 
-.timeline .setting-btn {
-  color: black;
+.timeline .navbar i {
+  color: #657786;
+}
+
+.header {
+  color: #38444d;
+}
+
+.setting-btn {
   padding: 4px 10px;
 }
 
@@ -126,7 +133,7 @@ a {
   font-size: 16px;
 }
 
-.timeline .tweet-container {
+.tweet-container {
   height: -webkit-calc(100% - 40px);
   overflow-x: hidden;
   overflow-y: scroll;
@@ -138,40 +145,31 @@ a {
   margin: 200px 0 0 100px;
 }
 
-.timeline .setting-panel {
+.setting-panel {
   background-color: white;
   border: 2px solid rgb(200, 200, 200);
   animation-name: setting-effect;
-  animation-duration: 0.3s;
+  animation-duration: 0.2s;
 }
 
 @keyframes setting-effect {
-  0% {opacity: 0; transform: translate3d(0, -30px, 0);}
+  0% {opacity: 0; transform: translate3d(0, -20px, 0);}
   100% {opacity: 1; transform: translate3d(0, 0, 0);}
 }
 
-.timeline .setting-label {
+.setting-label {
   width: 200px;
   margin: 10px;
 }
 
-.timeline .tweet-item:hover {
+.tweet-item:hover {
   background-color: rgb(245, 245, 245);
 }
 
-.timeline .new-item {
+.new-item {
   background-color: rgba(0, 150, 255, 0.05);
   animation-name: new-effect;
   animation-duration: 1.5s;
-}
-
-.timeline .new-item:hover {
-  background-color: rgba(0, 150, 255, 0.1);
-}
-
-.timeline .tweet-item:focus {
-  outline: none;
-  background-color: rgba(0, 150, 255, 0.2);
 }
 
 @keyframes new-effect {
@@ -179,32 +177,49 @@ a {
   100% {background-color: rgba(0, 150, 255, 0.05);}
 }
 
-.timeline .tweet-content {
+.new-item:hover {
+  background-color: rgba(0, 150, 255, 0.1);
+}
+
+.tweet-item:focus {
+  outline: none;
+  background-color: rgba(0, 150, 255, 0.2);
+}
+
+.tweet-content {
   font-size: 14px;
 }
 
-.timeline .icon {
+.icon {
   height: 30px;
 }
 
-.timeline .picture {
+.username {
+  color: #38444d;
+}
+
+.text-mute {
+  color: #8899a6;
+}
+
+.picture {
   height: 70px;
   width: 100%;
   object-fit: cover;
   cursor: pointer;
 }
 
-.timeline .video {
+.video {
   max-height: 200px;
   max-width: 100%;
 }
 
-.timeline .favorite {
+.favorite {
   height: 20px;
   font-size: 13px;
 }
 
-.timeline .retweet {
+.retweet {
   height: 20px;
   font-size: 13px;
 }

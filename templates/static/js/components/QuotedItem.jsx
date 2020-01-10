@@ -28,12 +28,12 @@ class TweetHeader extends Component {
                     <img src={tweet.user.profile_image_url} className="rounded-circle border" style={iconStyle} />
                 </a>
                 <p className="ml-1 my-auto text-truncate w-100" style={nameStyle}>
-                    <a href={`https://twitter.com/${tweet.user.screen_name}`} target="_blank">
+                    <a className="username" href={`https://twitter.com/${tweet.user.screen_name}`} target="_blank">
                         {tweet.user.name}
                     </a>
                 </p>
                 <small>
-                    <a href={`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`} target="_blank">
+                    <a className="text-mute" href={`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`} target="_blank">
                         {tweet.time}
                     </a>
                 </small>
