@@ -187,15 +187,16 @@ a {
 }
 
 .tweet-content {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .icon {
-  height: 30px;
+  height: 25px;
 }
 
 .username {
   color: #38444d;
+  font-size: 14px;
 }
 
 .text-mute {
