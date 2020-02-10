@@ -76,20 +76,20 @@ def get_home_timeline(twitter, count):
 
 # Kawaiiチェック
 def is_kawaii(user):
-    result = False
-    words = ["アニメーター", "イラスト", "絵描き", "pixiv"]
-    if True in [word in user["description"] for word in words]: result = True
+    accept = False
+    NEED_words = ["アニメーター", "イラスト", "絵描き", "pixiv"]
+    if True in [word in user["description"] for word in NEED_words]: accept = True
     try:
-        if "pixiv" in user["entities"]["url"]["urls"][0]["display_url"]: result = True
+        if "pixiv" in user["entities"]["url"]["urls"][0]["display_url"]: accept = True
     except:
         pass
-    if True in ["pixiv" in url["display_url"] for url in user["entities"]["description"]["urls"]]: result = True
-    words = [
+    if True in ["pixiv" in url["display_url"] for url in user["entities"]["description"]["urls"]]: accept = True
+    BAN_words = [
         "18", "DLsite", "FANZA", "NTR", "えろ", "えち", "えっち", "おっぱい", "ふたなり",
         "エロ", "エッチ", "スケベ", "成人", "成年", "以下", "未満", "同人", "性癖", "不健全", "🔞"
     ]
-    if True in [word in user["description"] for word in words]: result = False
-    return result
+    if True in [word in user["description"] for word in BAN_words]: accept = False
+    return accept
 
 # Kawaiiタイムライン取得
 def get_kawaii_timeline(twitter, count):
