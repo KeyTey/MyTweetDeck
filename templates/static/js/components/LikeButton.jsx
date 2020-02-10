@@ -21,12 +21,6 @@ export default class FavoriteButton extends Component {
                         tweet.favorited = true;
                         this.props.action.setTweet(timelineIndex, tweetIndex, tweet);
                         this.props.action.addNotice("success", "Like succeeded.");
-                        $.ajax({
-                            url: "/api/log",
-                            dataType: "json",
-                            type: "POST",
-                            data: {status: `Like: ${tweet.id_str}`}
-                        });
                     }
                     else {
                         this.props.action.addNotice("danger", "Like failed.");

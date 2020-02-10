@@ -64,12 +64,6 @@ export default class App extends Component {
                     idx = this.state.timelines.findIndex(child => timeline.id === child.id);
                     this.setTimeline(idx, timeline);
                     this.updateTimeline(idx);
-                    $.ajax({
-                        url: "/api/log",
-                        dataType: "json",
-                        type: "POST",
-                        data: {status: `Timeline: ${timeline.name}`}
-                    });
                 },
                 error => console.log(error)
             );
@@ -145,6 +139,12 @@ export default class App extends Component {
             },
             error => console.log(error)
         );
+        $.ajax({
+            url: "/api/log",
+            dataType: "json",
+            type: "POST",
+            data: {status: "Access to MyTweetDeck."}
+        });
     }
     render() {
         return (
