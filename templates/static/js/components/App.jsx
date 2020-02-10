@@ -143,7 +143,7 @@ export default class App extends Component {
             url: "/api/log",
             dataType: "json",
             type: "POST",
-            data: {status: "Access to MyTweetDeck."}
+            data: {status: "Access to MyTweetDeck"}
         });
     }
     render() {
