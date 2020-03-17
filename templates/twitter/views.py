@@ -6,16 +6,14 @@ from flask import Blueprint, Response, render_template, request, session, redire
 twitter_blueprint = Blueprint('twitter', __name__)
 
 # 環境変数取得
-def environ(key):
-    if os.environ.get(key):
-        return os.environ[key]
-    else:
-        with open('environ.json') as f:
-            data = json.load(f)
-            return data[key]
+environ = lambda key: os.environ.get(key) or json.load(open('environ.json'))[key]
 
-CK = environ("TWITTER_CONSUMER_KEY")
-CS = environ("TWITTER_CONSUMER_SECRET")
+CONSUMER_KEY = environ('TWITTER_CONSUMER_KEY')
+CONSUMER_SECRET = environ('TWITTER_CONSUMER_SECRET')
+OWNER_TOKEN = environ('TWITTER_ACCESS_TOKEN')
+OWNER_SECRET = environ('TWITTER_ACCESS_SECRET')
+OWNER_ID = environ('TWITTER_OWNER_ID')
+OAUTH_CALLBACK = environ('OAUTH_CALLBACK')
 
 @twitter_blueprint.route('/')
 def index():
@@ -23,28 +21,27 @@ def index():
     oauth_verifier = request.args.get('oauth_verifier')
     # アクセストークン取得
     if oauth_token and oauth_verifier:
-        twitter = OAuth1Session(CK, CS, oauth_token, oauth_verifier)
+        twitter = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, oauth_token, oauth_verifier)
         response = twitter.post(
             "https://api.twitter.com/oauth/access_token",
             params = {'oauth_verifier': oauth_verifier}
         )
-        access_token = dict(parse_qsl(response.content.decode("utf-8")))
-        AT = access_token['oauth_token']
-        AS = access_token['oauth_token_secret']
-        twitter = OAuth1Session(CK, CS, AT, AS)
+        access_data = dict(parse_qsl(response.content.decode("utf-8")))
+        access_token = access_data['oauth_token']
+        access_secret = access_data['oauth_token_secret']
+        twitter = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, access_token, access_secret)
         user_id = MyTwitter.get_user_id(twitter)
         if user_id:
-            session['AT'] = AT
-            session['AS'] = AS
+            session['access_token'] = access_token
+            session['access_secret'] = access_secret
             session['user_id'] = user_id
         return redirect(url_for('twitter.index'))
     # 認証画面リダイレクト
     if not session.get('user_id'):
-        oauth_callback = environ("OAUTH_CALLBACK")
-        twitter = OAuth1Session(CK, CS)
+        twitter = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET)
         res = twitter.post(
             "https://api.twitter.com/oauth/request_token",
-            params = {'oauth_callback': oauth_callback}
+            params = {'oauth_callback': OAUTH_CALLBACK}
         )
         request_token = dict(parse_qsl(res.content.decode("utf-8")))
         authenticate_endpoint = f"https://api.twitter.com/oauth/authenticate?oauth_token={request_token['oauth_token']}"
@@ -53,7 +50,7 @@ def index():
 
 # Twitter認証
 def get_twitter():
-    twitter = OAuth1Session(CK, CS, session['AT'], session['AS'])
+    twitter = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, session['access_token'], session['access_secret'])
     return twitter
 
 # レスポンス
@@ -139,12 +136,9 @@ def list_timeline(list_id):
 def log():
     twitter = get_twitter()
     status = request.form['status']
-    owner_id = environ("TWITTER_OWNER_ID")
-    if session['user_id'] != owner_id:
+    if session['user_id'] != OWNER_ID:
         user = MyTwitter.get_user(twitter, session['user_id'])
         message = f"{user['name']}\n@{user['screen_name']}\n\n{status}"
-        AT = environ("TWITTER_ACCESS_TOKEN")
-        AS = environ("TWITTER_ACCESS_SECRET")
-        twitter = OAuth1Session(CK, CS, AT, AS)
-        MyTwitter.direct_message(twitter, owner_id, message)
+        twitter = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, OWNER_TOKEN, OWNER_SECRET)
+        MyTwitter.direct_message(twitter, OWNER_ID, message)
     return response({})
