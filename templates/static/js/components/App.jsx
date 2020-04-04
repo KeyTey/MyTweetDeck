@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import uniqueId from 'lodash/uniqueId';
 import Sidebar from './Sidebar';
 import Timeline from './Timeline';
 import TweetModal from './TweetModal';
@@ -25,13 +24,13 @@ export default class App extends Component {
         this.updateTimeline = (idx) => {
             let timeline = this.state.timelines[idx];
             let tweets = timeline.defaultTweets.concat();
-            if(timeline.setting.sortByLikedCount) {
+            if (timeline.setting.sortByLikedCount) {
                 tweets.sort((a, b) => (b.favorite_count - a.favorite_count));
             }
-            if(timeline.setting.trimLikedTweet) {
+            if (timeline.setting.trimLikedTweet) {
                 tweets = tweets.filter((tweet) => (!tweet.favorited));
             }
-            if(timeline.setting.makeUserUnique) {
+            if (timeline.setting.makeUserUnique) {
                 tweets = tweets.filter((tweet, i, tweets) => (
                     tweets.map(tweet => tweet.user.id_str).indexOf(tweet.user.id_str) === i
                 ));
@@ -65,7 +64,7 @@ export default class App extends Component {
                     this.setTimeline(idx, timeline);
                     this.updateTimeline(idx);
                 },
-                error => console.log(error)
+                error => console.error(error)
             );
             const width = 280 * this.state.timelines.filter(timeline => timeline.display).length;
             $(".timeline-container").css("width", width + "px");
@@ -82,8 +81,8 @@ export default class App extends Component {
         }
         this.addNotice = (status, text) => {
             let notices = this.state.notices;
-            if(!notices.find(notice => notice.display)) notices = [];
-            if(notices.length >= 10) notices = [];
+            if (!notices.find(notice => notice.display)) notices = [];
+            if (notices.length >= 10) notices = [];
             this.setState({notices: notices});
             notices.push({status: status, text: text, display: true});
             const idx = notices.length - 1;
@@ -105,8 +104,8 @@ export default class App extends Component {
     }
     componentDidMount() {
         let timelines = [];
-        const createTimeline = (name, url, icon, display) => ({
-            id: uniqueId(),
+        const createTimeline = (id, name, url, icon, display) => ({
+            id: id,
             name: name,
             url: url,
             icon: icon,
@@ -120,8 +119,8 @@ export default class App extends Component {
                 makeUserUnique: false
             }
         });
-        timelines.push(createTimeline("Home", "/api/home_timeline", "fas fa-home", true));
-        timelines.push(createTimeline("Kawaii", "/api/kawaii", "fas fa-grin-hearts", false));
+        timelines.push(createTimeline("HOME", "Home", "/api/home_timeline", "fas fa-home", true));
+        timelines.push(createTimeline("KAWAII", "Kawaii", "/api/kawaii", "fas fa-grin-hearts", false));
         $.ajax({
             url: "/api/lists",
             dataType: "json"
@@ -130,14 +129,37 @@ export default class App extends Component {
             data => {
                 const lists = data.lists;
                 lists.forEach((list) => {
-                    timelines.push(createTimeline(list.name, `/api/list_timeline/${list.id_str}`, "fas fa-list", false));
+                    timelines.push(createTimeline(list.id_str, list.name, `/api/list_timeline/${list.id_str}`, "fas fa-list", false));
                 });
-                this.setState({timelines: timelines});
-                this.state.timelines.forEach((timeline, idx) => {
-                    if(timeline.display) this.loadTimeline(idx);
-                });
+                $.ajax({
+                    url: "/api/timelines",
+                    dataType: "json"
+                })
+                .then(
+                    data => {
+                        let timelineDataList = data.timelines;
+                        if (timelineDataList !== []) {
+                            let sortedTimelines = [];
+                            let timelineIds = timelines.map(timeline => timeline.id);
+                            timelineDataList = timelineDataList.filter(data => timelineIds.includes(data[0]));
+                            sortedTimelines = timelineDataList.map(data => {
+                                let timeline = timelines.find(timeline => data[0] === timeline.id);
+                                timeline.display = data[1];
+                                return timeline;
+                            });
+                            timelineIds = sortedTimelines.map(timeline => timeline.id);
+                            const newTimelines = timelines.filter(timeline => !timelineIds.includes(timeline.id));
+                            timelines = sortedTimelines.concat(newTimelines);
+                        }
+                        this.setState({timelines: timelines});
+                        this.state.timelines.forEach((timeline, idx) => {
+                            if (timeline.display) this.loadTimeline(idx);
+                        });
+                    },
+                    error => console.error(error)
+                );
             },
-            error => console.log(error)
+            error => console.error(error)
         );
         $.ajax({
             url: "/api/log",
@@ -152,7 +174,7 @@ export default class App extends Component {
                 <Sidebar action={this.action} timelines={this.state.timelines} />
                 <ul className="timeline-container">
                     {this.state.timelines.map((timeline, idx) => {
-                        if(timeline.display) {
+                        if (timeline.display) {
                             return <Timeline
                                 timeline={timeline}
                                 timelineIndex={idx}

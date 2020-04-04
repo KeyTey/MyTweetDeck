@@ -21,7 +21,7 @@ export default class TweetModal extends Component {
                     else addNotice("danger", "Tweet failed.");
                     this.setState({content: ''});
                 },
-                error => console.log(error)
+                error => console.error(error)
             );
         }
     }

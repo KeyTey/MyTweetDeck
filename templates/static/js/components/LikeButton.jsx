@@ -26,7 +26,7 @@ export default class FavoriteButton extends Component {
                         this.props.action.addNotice("danger", "Like failed.");
                     }
                 },
-                error => console.log(error)
+                error => console.error(error)
             );
         }
     }

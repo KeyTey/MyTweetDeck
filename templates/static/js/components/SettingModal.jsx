@@ -23,7 +23,7 @@ export default class SettingModal extends Component {
             })
             .then(
                 data => location.reload(),
-                error => console.log(error)
+                error => console.error(error)
             );
         }
     }

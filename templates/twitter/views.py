@@ -131,6 +131,19 @@ def list_timeline(list_id):
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
+# タイムラインの状態取得
+@twitter_blueprint.route('/api/timelines', methods = ['GET'])
+def get_timelines():
+    timelines = session.get('timelines', [])
+    return response({'timelines': timelines})
+
+# タイムラインの状態更新
+@twitter_blueprint.route('/api/timelines', methods = ['POST'])
+def post_timelines():
+    timelines = json.loads(request.form['timelines'])
+    session['timelines'] = timelines
+    return response({})
+
 # ログ
 @twitter_blueprint.route('/api/log', methods = ['POST'])
 def log():
@@ -147,4 +160,9 @@ def log():
 @twitter_blueprint.route('/api/logout', methods = ['POST'])
 def logout():
     session.clear()
+    return response({})
+
+# スリープ防止
+@twitter_blueprint.route('/api/interval', methods = ['GET'])
+def interval():
     return response({})

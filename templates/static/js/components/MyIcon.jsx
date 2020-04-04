@@ -12,7 +12,7 @@ export default class MyIcon extends Component {
         })
         .then(
             data => this.setState({ user: data }),
-            error => console.log(error)
+            error => console.error(error)
         );
     }
     render() {

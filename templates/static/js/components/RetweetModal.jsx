@@ -25,7 +25,7 @@ export default class RetweetModal extends Component {
                         this.props.action.addNotice("danger", "Retweet failed.");
                     }
                 },
-                error => console.log(error)
+                error => console.error(error)
             );
         }
     }
