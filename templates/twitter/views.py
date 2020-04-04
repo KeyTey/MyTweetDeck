@@ -142,3 +142,9 @@ def log():
         twitter = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, OWNER_TOKEN, OWNER_SECRET)
         MyTwitter.direct_message(twitter, OWNER_ID, message)
     return response({})
+
+# ログアウト
+@twitter_blueprint.route('/api/logout', methods = ['POST'])
+def logout():
+    session.clear()
+    return response({})

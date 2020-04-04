@@ -7,12 +7,14 @@ https://mytweetdeck.herokuapp.com
 #### ~/MyTweetDeck
 
 ```shell
+$ pip install -r requirements.txt
 $ python3 server.py
 ```
 
 #### ~/MyTweetDeck/templates/static
 
 ```shell
+$ npm install
 $ npm run watch
 ```
 

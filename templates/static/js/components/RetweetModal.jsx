@@ -31,7 +31,7 @@ export default class RetweetModal extends Component {
     }
     render() {
         return (
-            <div className="modal fade" id="retweetModal" tabindex="-1" role="dialog">
+            <div className="modal" id="retweetModal" tabindex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">

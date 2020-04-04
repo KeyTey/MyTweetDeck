@@ -16,10 +16,20 @@ export default class SettingModal extends Component {
             setting[key] = Boolean(setting[key] ^ true);
             this.props.action.updateState({setting: setting});
         }
+        this.logout = () => {
+            $.ajax({
+                url: "/api/logout",
+                type: "POST"
+            })
+            .then(
+                data => location.reload(),
+                error => console.log(error)
+            );
+        }
     }
     render() {
         return (
-            <div className="modal fade" id="settingModal" tabindex="-1" role="dialog">
+            <div className="modal" id="settingModal" tabindex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -65,6 +75,7 @@ export default class SettingModal extends Component {
                             </ul>
                         </div>
                         <div className="modal-footer">
+                            <button className="btn btn-danger" data-dismiss="modal" onClick={this.logout}>Logout</button>
                             <button className="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
