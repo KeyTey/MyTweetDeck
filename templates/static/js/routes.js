@@ -46,4 +46,4 @@ $(document).keydown(function(e) {
 });
 
 // スリープ防止
-setInterval(() => $.ajax("/api/interval"), 1000 * 60 * 10);
+// setInterval(() => $.ajax("/api/interval"), 1000 * 60 * 10);
