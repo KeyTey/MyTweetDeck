@@ -5,15 +5,24 @@ from flask import Blueprint, Response, render_template, request, session, redire
 
 twitter_blueprint = Blueprint('twitter', __name__)
 
-# 環境変数取得
-environ = lambda key: os.environ.get(key) or json.load(open('environ.json'))[key]
+# 環境変数
+# {
+#     "TWITTER_CONSUMER_KEY": "",
+#     "TWITTER_CONSUMER_SECRET": "",
+#     "TWITTER_ACCESS_TOKEN": "",
+#     "TWITTER_ACCESS_SECRET": "",
+#     "TWITTER_OWNER_ID": "",
+#     "OAUTH_CALLBACK": ""
+# }
+ENVIRON_PATH = './environ.json'
+ENVIRON = json.load(open(ENVIRON_PATH)) if os.path.exists(ENVIRON_PATH) else os.environ
 
-CONSUMER_KEY = environ('TWITTER_CONSUMER_KEY')
-CONSUMER_SECRET = environ('TWITTER_CONSUMER_SECRET')
-OWNER_TOKEN = environ('TWITTER_ACCESS_TOKEN')
-OWNER_SECRET = environ('TWITTER_ACCESS_SECRET')
-OWNER_ID = environ('TWITTER_OWNER_ID')
-OAUTH_CALLBACK = environ('OAUTH_CALLBACK')
+CONSUMER_KEY = ENVIRON['TWITTER_CONSUMER_KEY']
+CONSUMER_SECRET = ENVIRON['TWITTER_CONSUMER_SECRET']
+OWNER_TOKEN = ENVIRON['TWITTER_ACCESS_TOKEN']
+OWNER_SECRET = ENVIRON['TWITTER_ACCESS_SECRET']
+OWNER_ID = ENVIRON['TWITTER_OWNER_ID']
+OAUTH_CALLBACK = ENVIRON['OAUTH_CALLBACK']
 
 @twitter_blueprint.route('/')
 def index():
@@ -160,9 +169,4 @@ def log():
 @twitter_blueprint.route('/api/logout', methods = ['POST'])
 def logout():
     session.clear()
-    return response({})
-
-# スリープ防止
-@twitter_blueprint.route('/api/interval', methods = ['GET'])
-def interval():
     return response({})

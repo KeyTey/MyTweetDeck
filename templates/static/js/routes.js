@@ -44,6 +44,3 @@ $(document).keydown(function(e) {
         document.activeElement.blur();
     }
 });
-
-// スリープ防止
-// setInterval(() => $.ajax("/api/interval"), 1000 * 60 * 10);
