@@ -31,7 +31,7 @@ $ git push heroku master
 #### Login
 
 ```shell
-$ ssh -i ~/.ssh/MyTweetDeck.pem ubuntu@18.176.104.124
+$ ssh -i ~/.ssh/MyTweetDeck.pem ubuntu@[Elastic IP]
 ```
 
 #### Setup
