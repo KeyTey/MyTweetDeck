@@ -20,9 +20,29 @@ $ npm run watch
 
 ## Deployment
 
+### Docker
+
+```shell
+# Start
+$ docker-compose up -d
+
+# Stop
+$ docker-compose stop
+
+# Remove
+$ docker-compose down (--rmi all)
+```
+
 ### Heroku
 
 ```shell
+$ heroku config:set TWITTER_CONSUMER_KEY="<YOUR CONSUMER KEY>"
+$ heroku config:set TWITTER_CONSUMER_SECRET="<YOUR CONSUMER SECRET>"
+$ heroku config:set TWITTER_ACCESS_TOKEN="<YOUR ACCESS TOKEN>"
+$ heroku config:set TWITTER_ACCESS_SECRET="<YOUR ACCESS SECRET>"
+$ heroku config:set TWITTER_OWNER_ID="<YOUR ID>"
+$ heroku config:set OAUTH_CALLBACK="<CALLBACK URL>"
+$ heroku config:add TZ=Asia/Tokyo
 $ git push heroku master
 ```
 
