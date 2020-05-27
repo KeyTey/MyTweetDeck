@@ -23,11 +23,14 @@ $ npm run watch
 ### Docker
 
 ```shell
-# Start
+# Create and Start
 $ docker-compose up -d
 
 # Stop
 $ docker-compose stop
+
+# Start
+$ docker-compose start
 
 # Remove
 $ docker-compose down (--rmi all)
