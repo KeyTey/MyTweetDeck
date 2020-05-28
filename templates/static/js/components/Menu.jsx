@@ -16,15 +16,6 @@ export default class Menu extends Component {
             ));
             return timelines;
         }
-        this.saveTimelineState = () => {
-            const timelines = this.props.timelines.map(timeline => [timeline.id, timeline.display]);
-            $.ajax({
-                url: "/api/timelines",
-                dataType: "json",
-                type: "POST",
-                data: {timelines: JSON.stringify(timelines)}
-            });
-        }
         this.handleClick = (idx, timeline) => {
             let timelines = this.props.timelines;
             if(timeline.display) {
@@ -40,13 +31,13 @@ export default class Menu extends Component {
             }
             timelines = this.sortTimeline(timelines);
             this.props.action.updateState({timelines: timelines});
-            this.saveTimelineState();
+            this.props.action.saveTimelineState();
         }
         this.handleChange = (order) => {
             let timelines = order.map(id => this.props.timelines.find(timeline => id === timeline.id));
             timelines = this.sortTimeline(timelines);
             this.props.action.updateState({timelines: timelines});
-            this.saveTimelineState();
+            this.props.action.saveTimelineState();
         }
         this.handleMouseEnter = (id) => {
             $(`#${id} .timeline-name`).css('display', 'inline');

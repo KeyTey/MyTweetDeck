@@ -16,6 +16,7 @@ export default class SettingPanel extends Component {
             timeline.setting[key] = Boolean(timeline.setting[key] ^ true);
             this.props.action.setTimeline(this.props.timelineIndex, timeline);
             this.props.action.updateTimeline(this.props.timelineIndex);
+            this.props.action.saveTimelineState();
         }
     }
     render() {
@@ -28,6 +29,10 @@ export default class SettingPanel extends Component {
                 <div>
                     <label className="setting-label">Trim liked tweet</label>
                     {this.getButton('trimLikedTweet')}
+                </div>
+                <div>
+                    <label className="setting-label">Show media tweet</label>
+                    {this.getButton('showMediaTweet')}
                 </div>
                 <div>
                     <label className="setting-label">Make user unique</label>

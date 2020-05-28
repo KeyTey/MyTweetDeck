@@ -30,6 +30,9 @@ export default class App extends Component {
             if (timeline.setting.trimLikedTweet) {
                 tweets = tweets.filter((tweet) => (!tweet.favorited));
             }
+            if (timeline.setting.showMediaTweet) {
+                tweets = tweets.filter((tweet) => (tweet.media_links.length > 0));
+            }
             if (timeline.setting.makeUserUnique) {
                 tweets = tweets.filter((tweet, i, tweets) => (
                     tweets.map(tweet => tweet.user.id_str).indexOf(tweet.user.id_str) === i
@@ -74,6 +77,17 @@ export default class App extends Component {
             timelines[timelineIndex] = timeline;
             this.setState({timelines: timelines});
         }
+        this.saveTimelineState = () => {
+            const timelines = this.state.timelines.map(timeline => (
+                {id: timeline.id, display: timeline.display, setting: timeline.setting}
+            ));
+            $.ajax({
+                url: "/api/timelines",
+                dataType: "json",
+                type: "POST",
+                data: {timelines: JSON.stringify(timelines)}
+            });
+        }
         this.setTweet = (timelineIndex, tweetIndex, tweet) => {
             let timelines = this.state.timelines;
             timelines[timelineIndex][tweetIndex] = tweet;
@@ -98,6 +112,7 @@ export default class App extends Component {
             updateTimeline: this.updateTimeline,
             loadTimeline: this.loadTimeline,
             setTimeline: this.setTimeline,
+            saveTimelineState: this.saveTimelineState,
             setTweet: this.setTweet,
             addNotice: this.addNotice
         };
@@ -116,6 +131,7 @@ export default class App extends Component {
             setting: {
                 sortByLikedCount: false,
                 trimLikedTweet: false,
+                showMediaTweet: false,
                 makeUserUnique: false
             }
         });
@@ -141,10 +157,11 @@ export default class App extends Component {
                         if (timelineDataList !== []) {
                             let sortedTimelines = [];
                             let timelineIds = timelines.map(timeline => timeline.id);
-                            timelineDataList = timelineDataList.filter(data => timelineIds.includes(data[0]));
+                            timelineDataList = timelineDataList.filter(data => timelineIds.includes(data.id));
                             sortedTimelines = timelineDataList.map(data => {
-                                let timeline = timelines.find(timeline => data[0] === timeline.id);
-                                timeline.display = data[1];
+                                let timeline = timelines.find(timeline => data.id === timeline.id);
+                                timeline.display = data.display;
+                                timeline.setting = data.setting;
                                 return timeline;
                             });
                             timelineIds = sortedTimelines.map(timeline => timeline.id);

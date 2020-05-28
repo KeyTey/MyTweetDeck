@@ -9,24 +9,24 @@ export default (
 );
 
 // 高さ調整(ロード時)
-$(document).ready(function() {
+$(document).ready(() => {
     const height = $(window).height();
     $(".timeline-container").css("height", height + "px");
 });
 
 // 高さ調整(リサイズ時)
-$(window).resize(function() {
+$(window).resize(() => {
     const height = $(window).height();
     $(".timeline-container").css("height", height + "px");
 });
 
 // キーイベント
-$(document).keydown(function(e) {
+$(document).keydown((e) => {
     if($("textarea:focus").length) return;
     // 矢印キー (ツイートへのフォーカス)
     if([37, 38, 39, 40].includes(e.keyCode)) {
         e.preventDefault();
-        if(!$(".tweet-item:focus").length) {
+        if($(".tweet-item:focus").length === 0) {
             $(".tweet-item[timelineIndex='0'][tweetIndex='0']").focus();
         }
     }
@@ -41,6 +41,12 @@ $(document).keydown(function(e) {
     }
     // Escキー (フォーカス解除)
     if(e.keyCode === 27) {
-        document.activeElement.blur();
+        // フォーカスが存在しない場合 -> スクロール位置リセット
+        if ($(":focus").length === 0) {
+            $(".tweet-container").each((_, container) => {
+                $(container).scrollTop(0);
+            });
+        }
+        $(":focus").blur();
     }
 });

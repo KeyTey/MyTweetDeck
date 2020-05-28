@@ -40,7 +40,7 @@ export default class TweetItem extends Component {
             // Escキー (フォーカス解除)
             else if(keyCode === 27) {
                 tweetItem(timelineIndex, 0).focus();
-                document.activeElement.blur();
+                $(":focus").blur();
             }
         }
         this.handleKeyDown = (e) => {
