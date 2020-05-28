@@ -31,7 +31,7 @@ export default class App extends Component {
                 tweets = tweets.filter((tweet) => (!tweet.favorited));
             }
             if (timeline.setting.showMediaTweet) {
-                tweets = tweets.filter((tweet) => (tweet.media_links.length > 0));
+                tweets = tweets.filter((tweet) => (tweet.media_links.length || tweet.video_link));
             }
             if (timeline.setting.makeUserUnique) {
                 tweets = tweets.filter((tweet, i, tweets) => (
