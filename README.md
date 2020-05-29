@@ -49,74 +49,36 @@ $ heroku config:add TZ=Asia/Tokyo
 $ git push heroku master
 ```
 
-### Ubuntu 18.04 LTS with AWS EC2
+### Amazon Linux 2 AMI
 
-#### Login
+#### Local
 
 ```shell
-$ ssh -i ~/.ssh/MyTweetDeck.pem ubuntu@{ELASTIC_IP}
+# Login
+$ ssh -i ~/.ssh/MyTweetDeck.pem ec2-user@{ELASTIC_IP}
 ```
 
-#### Setup
+#### EC2
 
 ```shell
-$ sudo apt update
-$ sudo apt install -y nginx gunicorn python3-pip python3-dev supervisor git
+# Update
+$ sudo yum update -y
+
+# Install Docker
+$ sudo amazon-linux-extras install docker
+$ sudo service docker start
+$ sudo usermod -a -G docker ec2-user
+
+# Install Docker Compose
+$ sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+$ sudo chmod +x /usr/local/bin/docker-compose
+
+# Install Git
+$ sudo yum install git
+
+# Deploy
 $ git clone https://github.com/KeyTey/MyTweetDeck.git
 $ cd ~/MyTweetDeck
-$ sudo pip3 install -r requirements.txt
-$ sudo vim /etc/nginx/sites-enabled/default
-$ sudo /etc/init.d/nginx restart
-$ sudo vim /etc/supervisor/conf.d/MyTweetDeck
-```
-
-#### Deploy
-
-```shell
-$ cd ~/MyTweetDeck
-$ git pull origin master
-$ sudo supervisorctl reread
-$ sudo supervisorctl reload
-$ sudo supervisorctl update
-$ sudo supervisorctl restart MyTweetDeck
-```
-
-#### /etc/nginx/sites-enabled/default
-
-```
-upstream MyTweetDeckServer {
-    server unix:/tmp/MyTweetDeck.sock fail_timeout=0;
-}
-
-server {
-    server_name [server_name];
-    charset utf-8;
-    client_max_body_size 75M;
-
-    error_log /var/log/nginx/error.log;
-    access_log /var/log/nginx/access.log;
-
-    location / {
-        try_files $uri @MyTweetDeck;
-    }
-
-    location @MyTweetDeck {
-
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_redirect off;
-
-        proxy_pass http://MyTweetDeckServer;
-    }
-
-}
-```
-
-#### /etc/supervisor/conf.d/MyTweetDeck.conf
-
-```
-[program:MyTweetDeck]
-command = gunicorn server:app --config /home/ubuntu/MyTweetDeck/gunicorn_conf.py
-directory = /home/ubuntu/MyTweetDeck
-user = ubuntu
+$ vim environ.json
+$ docker-compose up -d
 ```
