@@ -6,6 +6,7 @@ import RetweetModal from './RetweetModal';
 import MediaModal from './MediaModal';
 import SettingModal from './SettingModal';
 import Alert from './Alert';
+import TopButton from './TopButton';
 
 export default class App extends Component {
     constructor(props) {
@@ -208,6 +209,7 @@ export default class App extends Component {
                 <div className="notice-container">
                     {this.state.notices.map(notice => <Alert notice={notice} />)}
                 </div>
+                <TopButton />
             </div>
         );
     }
