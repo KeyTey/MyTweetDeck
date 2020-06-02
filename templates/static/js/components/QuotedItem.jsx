@@ -4,7 +4,7 @@ import TweetVideo from './TweetVideo';
 
 export default class QuotedItem extends Component {
     render() {
-        const style = {'margin-bottom': '5px'};
+        const style = {'marginBottom': '5px'};
         return (
             <div className={`tweet-item list-group-item p-1`} style={style} onClick={e => e.stopPropagation()}>
                 <TweetHeader tweet={this.props.tweet} />
@@ -20,8 +20,8 @@ class TweetHeader extends Component {
     render() {
         const tweet = this.props.tweet;
         const iconStyle = {'height': '20px'};
-        const nameStyle = {'font-weight': 'bold', 'font-size': '14px'};
-        const timeStyle = {'font-size': '11px'};
+        const nameStyle = {'fontWeight': 'bold', 'fontSize': '14px'};
+        const timeStyle = {'fontSize': '11px'};
         return (
             <div className="d-flex w-100 mb-1">
                 <a href={`https://twitter.com/${tweet.user.screen_name}`} target="_blank">
@@ -44,7 +44,7 @@ class TweetHeader extends Component {
 
 class TweetContent extends Component {
     render() {
-        const style = {'color': '#657786', 'font-size': '12px'};
+        const style = {'color': '#657786', 'fontSize': '12px'};
         return <p className="tweet-content text-mute mb-1" style={style}>{this.props.tweet.full_text}</p>;
     }
 }

@@ -9,11 +9,13 @@ export default class TweetPictures extends Component {
         }
     }
     render() {
+        const tweet = this.props.tweet;
         return (
             <div className="row mb-0 no-gutters">
-                {this.props.tweet.media_links.map((mediaLink) => {
+                {tweet.media_links.map((mediaLink, idx) => {
+                    const key = `${tweet.id_str}-${idx}`;
                     return (
-                        <div className="col-6">
+                        <div className="col-6" key={key}>
                             <img
                                 src={mediaLink}
                                 className="picture border mb-1"

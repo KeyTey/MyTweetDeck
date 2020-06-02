@@ -12,7 +12,7 @@ export default class TweetItem extends Component {
         this.handleKeyCode = (keyCode) => {
             const timelineIndex = this.props.timelineIndex;
             const tweetIndex = this.props.tweetIndex;
-            const tweetItem = (i, j) => $(`.tweet-item[timelineIndex='${i}'][tweetIndex='${j}']`);
+            const tweetItem = (i, j) => $(`.tweet-item[timeline-index='${i}'][tweet-index='${j}']`);
             // 左キー (左のタイムラインに移動)
             if (keyCode === 37) {
                 tweetItem(timelineIndex - 1, 0).focus();
@@ -57,9 +57,9 @@ export default class TweetItem extends Component {
         return (
             <div
                 className={`tweet-item list-group-item p-1 ${newItem}`}
-                timelineIndex={this.props.timelineIndex}
-                tweetIndex={this.props.tweetIndex}
-                tabindex="0"
+                timeline-index={this.props.timelineIndex}
+                tweet-index={this.props.tweetIndex}
+                tabIndex="0"
                 onKeyDown={this.handleKeyDown}
                 onClick={this.handleClick}
             >

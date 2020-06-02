@@ -47,6 +47,7 @@ export default class Timeline extends Component {
                         if(!this.props.timeline.load) {
                             return this.props.timeline.tweets.map((tweet, idx) => {
                                 return <TweetItem
+                                    key={tweet.id_str}
                                     tweet={tweet}
                                     timelineIndex={timelineIndex}
                                     tweetIndex={idx}

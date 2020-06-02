@@ -27,7 +27,7 @@ export default class TweetModal extends Component {
     }
     render() {
         return (
-            <div className="modal" id="tweetModal" tabindex="-1" role="dialog">
+            <div className="modal" id="tweetModal" tabIndex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">

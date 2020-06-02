@@ -6,7 +6,6 @@ import RetweetModal from './RetweetModal';
 import MediaModal from './MediaModal';
 import SettingModal from './SettingModal';
 import Alert from './Alert';
-import TopButton from './TopButton';
 
 export default class App extends Component {
     constructor(props) {
@@ -16,7 +15,8 @@ export default class App extends Component {
             notices: [],
             modal: {},
             setting: {
-                likeByClickTweetPanel: false
+                likeByClickTweetPanel: false,
+                resetScrollByClickOuter: false
             }
         };
         this.updateState = (state) => {
@@ -108,6 +108,13 @@ export default class App extends Component {
                 this.setState({notices: notices});
             }, 3000);
         }
+        this.handleClick = (e) => {
+            if (e.target !== e.currentTarget) return;
+            if (!this.state.setting.resetScrollByClickOuter) return;
+            $(".tweet-container").each((_, container) => {
+                $(container).scrollTop(0);
+            });
+        }
         this.action = {
             updateState: this.updateState,
             updateTimeline: this.updateTimeline,
@@ -188,12 +195,13 @@ export default class App extends Component {
     }
     render() {
         return (
-            <div>
+            <div onClick={this.handleClick}>
                 <Sidebar action={this.action} timelines={this.state.timelines} />
                 <ul className="timeline-container">
                     {this.state.timelines.map((timeline, idx) => {
                         if (timeline.display) {
                             return <Timeline
+                                key={timeline.id}
                                 timeline={timeline}
                                 timelineIndex={idx}
                                 setting={this.state.setting}
@@ -209,7 +217,6 @@ export default class App extends Component {
                 <div className="notice-container">
                     {this.state.notices.map(notice => <Alert notice={notice} />)}
                 </div>
-                <TopButton />
             </div>
         );
     }
