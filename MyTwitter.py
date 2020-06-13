@@ -140,3 +140,17 @@ def get_list_timeline(twitter, list_id, count):
     res = twitter.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
     return tweets
+
+# ユーザータイムライン取得
+def get_user_timeline(twitter, user_id, count):
+    url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+    params = {
+        "user_id": user_id,
+        "exclude_replies": True,
+        "include_rts": False,
+        "count": count,
+        "tweet_mode": "extended"
+    }
+    res = twitter.get(url, params = params)
+    tweets = json.loads(res.text) if res.status_code == 200 else []
+    return tweets

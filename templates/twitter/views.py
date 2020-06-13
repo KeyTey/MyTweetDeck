@@ -140,6 +140,14 @@ def list_timeline(list_id):
     tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
+# ユーザータイムライン取得
+@twitter_blueprint.route('/api/user_timeline/<user_id>', methods = ['GET'])
+def user_timeline(user_id):
+    twitter = get_twitter()
+    tweets = MyTwitter.get_user_timeline(twitter, user_id, 200)
+    tweets = [MyTwitter.get_tweet(tweet) for tweet in tweets]
+    return response({'tweets': tweets})
+
 # タイムラインの状態取得
 @twitter_blueprint.route('/api/timelines', methods = ['GET'])
 def get_timelines():

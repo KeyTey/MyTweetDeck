@@ -176,6 +176,11 @@ a {
   margin: 10px;
 }
 
+.btn-remove {
+  margin: 10px 0;
+  width: 90%;
+}
+
 .tweet-item:hover {
   background-color: rgb(245, 245, 245);
 }

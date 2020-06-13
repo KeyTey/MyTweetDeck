@@ -23,19 +23,11 @@ export default class AddTimelineModal extends Component {
         this.handleClick = (id) => {
             let timelines = this.props.timelines;
             if (timelines.find(timeline => id === timeline.id)) {
-                timelines = timelines.filter(timeline => id !== timeline.id)
-                this.props.action.updateState({timelines: timelines}, () => {
-                    this.props.action.saveTimelineState();
-                });
+                this.props.action.removeTimeline(id);
             }
             else {
                 const { name, url, icon } = this.timelines.find(timeline => id === timeline.id);
-                const timeline = this.props.action.createTimeline(id, name, url, icon);
-                timelines.push(timeline);
-                this.props.action.updateState({timelines: timelines}, () => {
-                    this.props.action.loadTimeline(timelines.length - 1);
-                    this.props.action.saveTimelineState();
-                });
+                this.props.action.addTimeline(id, name, url, icon);
             }
         }
     }

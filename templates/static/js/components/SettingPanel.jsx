@@ -12,11 +12,15 @@ export default class SettingPanel extends Component {
             }
         }
         this.handleClick = (key) => {
-            let timeline = this.props.timeline;
+            const timeline = this.props.timeline;
             timeline.setting[key] = Boolean(timeline.setting[key] ^ true);
             this.props.action.setTimeline(this.props.timelineIndex, timeline);
             this.props.action.updateTimeline(this.props.timelineIndex);
             this.props.action.saveTimelineState();
+        }
+        this.removeTimeline = () => {
+            const timeline = this.props.timeline;
+            this.props.action.removeTimeline(timeline.id);
         }
     }
     render() {
@@ -37,6 +41,9 @@ export default class SettingPanel extends Component {
                 <div>
                     <label className="setting-label">Make user unique</label>
                     {this.getButton('makeUserUnique')}
+                </div>
+                <div className="text-center">
+                    <button className="btn-remove btn-sm btn-outline-danger" onClick={this.removeTimeline}>Remove</button>
                 </div>
             </div>
         );

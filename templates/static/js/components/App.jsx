@@ -71,8 +71,7 @@ export default class App extends Component {
                 },
                 error => console.error(error)
             );
-            const width = 280 * this.state.timelines.length;
-            $(".timeline-container").css("width", width + "px");
+            $(".timeline-container").css("width", 280 * this.state.timelines.length);
         }
         this.setTimeline = (timelineIndex, timeline) => {
             const timelines = this.state.timelines;
@@ -95,6 +94,23 @@ export default class App extends Component {
             const timelines = this.state.timelines;
             timelines[timelineIndex][tweetIndex] = tweet;
             this.setState({timelines: timelines});
+        }
+        this.addTimeline = (id, name, url, icon) => {
+            const timelines = this.state.timelines;
+            const timeline = this.createTimeline(id, name, url, icon);
+            timelines.push(timeline);
+            this.setState({timelines: timelines}, () => {
+                this.loadTimeline(timelines.length - 1);
+                this.saveTimelineState();
+            });
+        }
+        this.removeTimeline = (id) => {
+            const timelines = this.state.timelines;
+            this.setState({
+                timelines: timelines.filter(timeline => id !== timeline.id)
+            }, () => {
+                this.saveTimelineState();
+            });
         }
         this.createTimeline = (id, name, url, icon) => ({
             id: id,
@@ -137,6 +153,8 @@ export default class App extends Component {
             updateTimeline: this.updateTimeline,
             loadTimeline: this.loadTimeline,
             setTimeline: this.setTimeline,
+            addTimeline: this.addTimeline,
+            removeTimeline: this.removeTimeline,
             createTimeline: this.createTimeline,
             saveTimelineState: this.saveTimelineState,
             setTweet: this.setTweet,

@@ -20,7 +20,7 @@ export default class Timeline extends Component {
         return (
             <li className="timeline">
                 <nav className="navbar navbar-light border" onClick={() => loadTimeline(timelineIndex)}>
-                    <span className="navbar-brand">
+                    <span className="navbar-brand text-truncate w-75">
                         <i className={`${this.props.timeline.icon} mr-2`}></i>
                         <span className="header">{this.props.timeline.name}</span>
                     </span>

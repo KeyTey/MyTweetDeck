@@ -63,7 +63,7 @@ export default class TweetItem extends Component {
                 onKeyDown={this.handleKeyDown}
                 onClick={this.handleClick}
             >
-                <TweetHeader tweet={this.props.tweet} />
+                <TweetHeader tweet={this.props.tweet} action={this.props.action} />
                 <TweetContent tweet={this.props.tweet} />
                 <TweetPictures tweet={this.props.tweet} action={this.props.action} />
                 <TweetVideo tweet={this.props.tweet} />
