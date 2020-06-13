@@ -4,7 +4,7 @@ export default class SettingPanel extends Component {
     constructor(props) {
         super(props);
         this.getButton = (key) => {
-            if(this.props.timeline.setting[key]) {
+            if (this.props.timeline.setting[key]) {
                 return <button className="btn-on btn-sm" onClick={() => this.handleClick(key)}>ON</button>;
             }
             else {

@@ -4,6 +4,7 @@ import Timeline from './Timeline';
 import TweetModal from './TweetModal';
 import RetweetModal from './RetweetModal';
 import MediaModal from './MediaModal';
+import AddTimelineModal from './AddTimelineModal';
 import SettingModal from './SettingModal';
 import Alert from './Alert';
 
@@ -19,11 +20,11 @@ export default class App extends Component {
                 resetScrollByClickOuter: false
             }
         };
-        this.updateState = (state) => {
-            this.setState(state);
+        this.updateState = (state, callback = () => {}) => {
+            this.setState(state, callback);
         }
         this.updateTimeline = (idx) => {
-            let timeline = this.state.timelines[idx];
+            const timeline = this.state.timelines[idx];
             let tweets = timeline.defaultTweets.concat();
             if (timeline.setting.sortByLikedCount) {
                 tweets.sort((a, b) => (b.favorite_count - a.favorite_count));
@@ -43,7 +44,7 @@ export default class App extends Component {
             this.setTimeline(idx, timeline);
         }
         this.loadTimeline = (idx) => {
-            let timeline = this.state.timelines[idx];
+            const timeline = this.state.timelines[idx];
             timeline.load = true;
             this.setTimeline(idx, timeline);
             $.ajax({
@@ -52,7 +53,7 @@ export default class App extends Component {
             })
             .then(
                 data => {
-                    let defaultTweets = data.tweets;
+                    const defaultTweets = data.tweets;
                     if (defaultTweets.length === 0) {
                         this.addNotice("danger", "Load failed.");
                     }
@@ -70,18 +71,19 @@ export default class App extends Component {
                 },
                 error => console.error(error)
             );
-            const width = 280 * this.state.timelines.filter(timeline => timeline.display).length;
+            const width = 280 * this.state.timelines.length;
             $(".timeline-container").css("width", width + "px");
         }
         this.setTimeline = (timelineIndex, timeline) => {
-            let timelines = this.state.timelines;
+            const timelines = this.state.timelines;
             timelines[timelineIndex] = timeline;
             this.setState({timelines: timelines});
         }
         this.saveTimelineState = () => {
-            const timelines = this.state.timelines.map(timeline => (
-                {id: timeline.id, display: timeline.display, setting: timeline.setting}
-            ));
+            const timelines = this.state.timelines.map(timeline => {
+                const { id, name, url, icon, setting } = timeline;
+                return { id, name, url, icon, setting };
+            });
             $.ajax({
                 url: "/api/timelines",
                 dataType: "json",
@@ -90,10 +92,25 @@ export default class App extends Component {
             });
         }
         this.setTweet = (timelineIndex, tweetIndex, tweet) => {
-            let timelines = this.state.timelines;
+            const timelines = this.state.timelines;
             timelines[timelineIndex][tweetIndex] = tweet;
             this.setState({timelines: timelines});
         }
+        this.createTimeline = (id, name, url, icon) => ({
+            id: id,
+            name: name,
+            url: url,
+            icon: icon,
+            load: false,
+            defaultTweets: [],
+            tweets: [],
+            setting: {
+                sortByLikedCount: false,
+                trimLikedTweet: false,
+                showMediaTweet: false,
+                makeUserUnique: false
+            }
+        });
         this.addNotice = (status, text) => {
             let notices = this.state.notices;
             if (!notices.find(notice => notice.display)) notices = [];
@@ -103,7 +120,7 @@ export default class App extends Component {
             const idx = notices.length - 1;
             this.setState({notices: notices});
             setTimeout(() => {
-                let notices = this.state.notices;
+                const notices = this.state.notices;
                 notices[idx].display = false;
                 this.setState({notices: notices});
             }, 3000);
@@ -120,69 +137,32 @@ export default class App extends Component {
             updateTimeline: this.updateTimeline,
             loadTimeline: this.loadTimeline,
             setTimeline: this.setTimeline,
+            createTimeline: this.createTimeline,
             saveTimelineState: this.saveTimelineState,
             setTweet: this.setTweet,
             addNotice: this.addNotice
         };
     }
     componentDidMount() {
-        let timelines = [];
-        const createTimeline = (id, name, url, icon, display) => ({
-            id: id,
-            name: name,
-            url: url,
-            icon: icon,
-            display: display,
-            load: false,
-            defaultTweets: [],
-            tweets: [],
-            setting: {
-                sortByLikedCount: false,
-                trimLikedTweet: false,
-                showMediaTweet: false,
-                makeUserUnique: false
-            }
-        });
-        timelines.push(createTimeline("HOME", "Home", "/api/home_timeline", "fas fa-home", true));
-        timelines.push(createTimeline("KAWAII", "Kawaii", "/api/kawaii", "fas fa-grin-hearts", false));
         $.ajax({
-            url: "/api/lists",
+            url: "/api/timelines",
             dataType: "json"
         })
         .then(
             data => {
-                const lists = data.lists;
-                lists.forEach((list) => {
-                    timelines.push(createTimeline(list.id_str, list.name, `/api/list_timeline/${list.id_str}`, "fas fa-list", false));
+                const timelines = data.timelines.map(data => {
+                    const { id, name, url, icon, setting } = data;
+                    const timeline = this.createTimeline(id, name, url, icon);
+                    timeline.setting = setting;
+                    return timeline;
                 });
-                $.ajax({
-                    url: "/api/timelines",
-                    dataType: "json"
-                })
-                .then(
-                    data => {
-                        let timelineDataList = data.timelines;
-                        if (timelineDataList !== []) {
-                            let sortedTimelines = [];
-                            let timelineIds = timelines.map(timeline => timeline.id);
-                            timelineDataList = timelineDataList.filter(data => timelineIds.includes(data.id));
-                            sortedTimelines = timelineDataList.map(data => {
-                                let timeline = timelines.find(timeline => data.id === timeline.id);
-                                timeline.display = data.display;
-                                timeline.setting = data.setting;
-                                return timeline;
-                            });
-                            timelineIds = sortedTimelines.map(timeline => timeline.id);
-                            const newTimelines = timelines.filter(timeline => !timelineIds.includes(timeline.id));
-                            timelines = sortedTimelines.concat(newTimelines);
-                        }
-                        this.setState({timelines: timelines});
-                        this.state.timelines.forEach((timeline, idx) => {
-                            if (timeline.display) this.loadTimeline(idx);
-                        });
-                    },
-                    error => console.error(error)
-                );
+                if (timelines.length === 0) {
+                    timelines.push(this.createTimeline("HOME", "Home", "/api/home_timeline", "fas fa-home"));
+                    timelines.push(this.createTimeline("KAWAII", "Kawaii", "/api/kawaii", "fas fa-grin-hearts"));
+                }
+                this.setState({timelines: timelines}, () => {
+                    this.state.timelines.forEach((_, idx) => this.loadTimeline(idx));
+                });
             },
             error => console.error(error)
         );
@@ -199,23 +179,16 @@ export default class App extends Component {
                 <Sidebar action={this.action} timelines={this.state.timelines} />
                 <ul className="timeline-container">
                     {this.state.timelines.map((timeline, idx) => {
-                        if (timeline.display) {
-                            return <Timeline
-                                key={timeline.id}
-                                timeline={timeline}
-                                timelineIndex={idx}
-                                setting={this.state.setting}
-                                action={this.action}
-                            />;
-                        }
+                        return <Timeline key={timeline.id} timeline={timeline} timelineIndex={idx} setting={this.state.setting} action={this.action} />;
                     })}
                 </ul>
                 <TweetModal action={this.action} />
                 <RetweetModal modal={this.state.modal} action={this.action} />
                 <MediaModal modal={this.state.modal} />
+                <AddTimelineModal timelines={this.state.timelines} action={this.action} />
                 <SettingModal setting={this.state.setting} action={this.action} />
                 <div className="notice-container">
-                    {this.state.notices.map(notice => <Alert notice={notice} />)}
+                    {this.state.notices.map((notice, idx) => <Alert notice={notice} key={idx} />)}
                 </div>
             </div>
         );

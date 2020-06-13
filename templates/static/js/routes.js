@@ -1,11 +1,11 @@
 import React from 'react';
-import { HashRouter, Route, hashHistory } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import App from './components/App';
 
 export default (
-    <HashRouter history={hashHistory}>
+    <BrowserRouter>
         <Route path='/' component={App} />
-    </HashRouter>
+    </BrowserRouter>
 );
 
 // 高さ調整(ロード時)

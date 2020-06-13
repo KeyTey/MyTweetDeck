@@ -22,7 +22,6 @@ a {
 }
 
 .btn-on {
-  width: 45px;
   margin-right: 10px;
   color: white;
   background-color: dodgerblue;
@@ -30,11 +29,26 @@ a {
 }
 
 .btn-off {
-  width: 45px;
   margin-right: 10px;
   color: dodgerblue;
   background-color: white;
   border-color: dodgerblue;
+}
+
+#settingModal .btn-on {
+  width: 45px;
+}
+
+#settingModal .btn-off {
+  width: 45px;
+}
+
+.setting-panel .btn-on {
+  width: 45px;
+}
+
+.setting-panel .btn-off {
+  width: 45px;
 }
 
 .sidebar {

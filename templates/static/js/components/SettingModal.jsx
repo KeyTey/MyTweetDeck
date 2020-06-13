@@ -4,11 +4,11 @@ export default class SettingModal extends Component {
     constructor(props) {
         super(props);
         this.getButton = (key) => {
-            if(this.props.setting[key]) {
-                return <button className="btn-on btn-sm mr-2" onClick={() => this.handleClick(key)}>ON</button>;
+            if (this.props.setting[key]) {
+                return <button className="btn-on btn-sm" onClick={() => this.handleClick(key)}>ON</button>;
             }
             else {
-                return <button className="btn-off btn-sm mr-2" onClick={() => this.handleClick(key)}>OFF</button>;
+                return <button className="btn-off btn-sm" onClick={() => this.handleClick(key)}>OFF</button>;
             }
         }
         this.handleClick = (key) => {
