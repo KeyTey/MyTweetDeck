@@ -110,6 +110,7 @@ export default class App extends Component {
                 timelines: timelines.filter(timeline => id !== timeline.id)
             }, () => {
                 this.saveTimelineState();
+                $(".timeline-container").css("width", 280 * this.state.timelines.length);
             });
         }
         this.createTimeline = (id, name, url, icon) => ({
