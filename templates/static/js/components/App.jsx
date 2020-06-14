@@ -97,6 +97,7 @@ export default class App extends Component {
         }
         this.addTimeline = (id, name, url, icon) => {
             const timelines = this.state.timelines;
+            if (timelines.find(timeline => id === timeline.id)) return;
             const timeline = this.createTimeline(id, name, url, icon);
             timelines.push(timeline);
             this.setState({timelines: timelines}, () => {
