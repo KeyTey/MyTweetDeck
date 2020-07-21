@@ -1,4 +1,4 @@
 node_modules/
+virtualenv/
 __pycache__/
-Python/
 environ.json
