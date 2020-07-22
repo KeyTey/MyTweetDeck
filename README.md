@@ -1,5 +1,7 @@
 # MyTweetDeck
 
+http://mytweetdeck.tk
+
 https://mytweetdeck.herokuapp.com
 
 ## Development
