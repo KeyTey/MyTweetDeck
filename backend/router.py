@@ -11,52 +11,15 @@ load_dotenv()
 
 CONSUMER_KEY = os.getenv('TWITTER_CONSUMER_KEY')
 CONSUMER_SECRET = os.getenv('TWITTER_CONSUMER_SECRET')
-OWNER_TOKEN = os.getenv('TWITTER_ACCESS_TOKEN')
-OWNER_SECRET = os.getenv('TWITTER_ACCESS_SECRET')
-OWNER_ID = os.getenv('TWITTER_OWNER_ID')
 OAUTH_CALLBACK = os.getenv('OAUTH_CALLBACK')
 
-@twitter_blueprint.route('/')
-def index():
-    oauth_token = request.args.get('oauth_token')
-    oauth_verifier = request.args.get('oauth_verifier')
-    # アクセストークン取得
-    if oauth_token and oauth_verifier:
-        oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, oauth_token, oauth_verifier)
-        response = oauth.post(
-            "https://api.twitter.com/oauth/access_token",
-            params = {'oauth_verifier': oauth_verifier}
-        )
-        access_data = dict(parse_qsl(response.content.decode('utf-8')))
-        access_token = access_data['oauth_token']
-        access_secret = access_data['oauth_token_secret']
-        oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, access_token, access_secret)
-        user_id = twitter.get_user_id(oauth)
-        if user_id:
-            session['access_token'] = access_token
-            session['access_secret'] = access_secret
-            session['user_id'] = user_id
-        return redirect(url_for('twitter.index'))
-    # 認証画面リダイレクト
-    if not session.get('user_id'):
-        oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET)
-        res = oauth.post(
-            "https://api.twitter.com/oauth/request_token",
-            params = {'oauth_callback': OAUTH_CALLBACK}
-        )
-        request_token = dict(parse_qsl(res.content.decode('utf-8')))
-        oauth_token = request_token['oauth_token']
-        authenticate_endpoint = f"https://api.twitter.com/oauth/authenticate?oauth_token={oauth_token}"
-        return redirect(authenticate_endpoint)
-    return render_template('index.html')
-
-# Twitter認証
-def get_oauth():
-    oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, session['access_token'], session['access_secret'])
-    return oauth
+# Twitterクラス
+class Twitter:
+    oauth = None
+    user = None
 
 # レスポンス
-def response(data = {}):
+def response(data = None):
     return Response(
         json.dumps(data),
         mimetype = 'application/json',
@@ -66,78 +29,117 @@ def response(data = {}):
         }
     )
 
+@twitter_blueprint.route('/')
+def index():
+    # アクセストークン取得
+    oauth_token = request.args.get('oauth_token')
+    oauth_verifier = request.args.get('oauth_verifier')
+    if oauth_token and oauth_verifier:
+        oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, oauth_token, oauth_verifier)
+        url = "https://api.twitter.com/oauth/access_token"
+        res = oauth.post(url, params = {'oauth_verifier': oauth_verifier})
+        access_data = dict(parse_qsl(res.content.decode('utf-8')))
+        access_token = access_data['oauth_token']
+        access_secret = access_data['oauth_token_secret']
+        oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, access_token, access_secret)
+        user_id = twitter.get_user_id(oauth)
+        if user_id:
+            session['access_token'] = access_token
+            session['access_secret'] = access_secret
+            session['user_id'] = user_id
+        return redirect(url_for('twitter.index'))
+    # ユーザー情報取得
+    user_id = session.get('user_id')
+    access_token = session.get('access_token')
+    access_secret = session.get('access_secret')
+    if user_id and access_token and access_secret:
+        Twitter.oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, access_token, access_secret)
+        Twitter.user = twitter.get_user(Twitter.oauth, user_id)
+    return render_template('index.html')
+
+# 認証用URL取得
+@twitter_blueprint.route('/api/auth', methods = ['GET'])
+def auth():
+    oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET)
+    url = "https://api.twitter.com/oauth/request_token"
+    res = oauth.post(url, params = {'oauth_callback': OAUTH_CALLBACK})
+    request_token = dict(parse_qsl(res.content.decode('utf-8')))
+    oauth_token = request_token['oauth_token']
+    authenticate_endpoint = f"https://api.twitter.com/oauth/authenticate?oauth_token={oauth_token}"
+    return response(authenticate_endpoint)
+
 # ツイート
 @twitter_blueprint.route('/api/tweet', methods = ['POST'])
 def tweet():
-    oauth = get_oauth()
+    if Twitter.oauth is None: return response({'status': 400})
     url = "https://api.twitter.com/1.1/statuses/update.json"
     content = request.form['content']
     params = {'status': content}
-    res = oauth.post(url, params = params)
+    res = Twitter.oauth.post(url, params = params)
     return response({'status': res.status_code})
 
 # いいね
 @twitter_blueprint.route('/api/favorite', methods = ['POST'])
 def favorite():
-    oauth = get_oauth()
+    if Twitter.oauth is None: return response({'status': 400})
     url = "https://api.twitter.com/1.1/favorites/create.json"
     tweet_id = request.form['id']
     params = {'id': tweet_id}
-    res = oauth.post(url, params = params)
+    res = Twitter.oauth.post(url, params = params)
     return response({'status': res.status_code})
 
 # リツイート
 @twitter_blueprint.route('/api/retweet', methods = ['POST'])
 def retweet():
-    oauth = get_oauth()
+    if Twitter.oauth is None: return response({'status': 400})
     tweet_id = request.form['id']
     url = f"https://api.twitter.com/1.1/statuses/retweet/{tweet_id}.json"
-    res = oauth.post(url)
+    res = Twitter.oauth.post(url)
     return response({'status': res.status_code})
 
 # マイアカウント取得
 @twitter_blueprint.route('/api/myself', methods = ['GET'])
 def myself():
-    oauth = get_oauth()
-    user = twitter.get_user(oauth, session['user_id'])
+    user = Twitter.user
+    if user is None: return response()
     return response(user)
 
 # リスト取得
 @twitter_blueprint.route('/api/lists', methods = ['GET'])
 def lists():
-    oauth = get_oauth()
-    lists = twitter.get_lists(oauth, session['user_id'])
+    if Twitter.oauth is None: return response({'lists': []})
+    lists = twitter.get_lists(Twitter.oauth, session['user_id'])
     return response({'lists': lists})
 
 # ホームタイムライン取得
 @twitter_blueprint.route('/api/home_timeline', methods = ['GET'])
 def home_timeline():
-    oauth = get_oauth()
-    tweets = twitter.get_home_timeline(oauth, 200)
+    if Twitter.oauth is None: return response({'tweets': []})
+    tweets = twitter.get_home_timeline(Twitter.oauth, 200)
     tweets = [twitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
 # Kawaiiタイムライン取得
 @twitter_blueprint.route('/api/kawaii', methods = ['GET'])
 def kawaii():
-    oauth = get_oauth()
-    tweets = twitter.get_kawaii_timeline(oauth, 200)
+    if Twitter.oauth is None: return response({'tweets': []})
+    tweets = twitter.get_kawaii_timeline(Twitter.oauth, 200)
     tweets = [twitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
 # リストタイムライン取得
 @twitter_blueprint.route('/api/list_timeline/<list_id>', methods = ['GET'])
 def list_timeline(list_id):
-    oauth = get_oauth()
-    tweets = twitter.get_list_timeline(oauth, list_id, 200)
+    if Twitter.oauth is None: return response({'tweets': []})
+    tweets = twitter.get_list_timeline(Twitter.oauth, list_id, 200)
     tweets = [twitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
 # ユーザータイムライン取得
 @twitter_blueprint.route('/api/user_timeline/<user_id>', methods = ['GET'])
 def user_timeline(user_id):
-    oauth = get_oauth()
-    tweets = twitter.get_user_timeline(oauth, user_id, 200)
+    if Twitter.oauth is None: return response({'tweets': []})
+    tweets = twitter.get_user_timeline(Twitter.oauth, user_id, 200)
     tweets = [twitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
@@ -150,24 +152,15 @@ def get_timelines():
 # タイムラインの状態更新
 @twitter_blueprint.route('/api/timelines', methods = ['POST'])
 def post_timelines():
+    if Twitter.oauth is None: return response()
     timelines = json.loads(request.form['timelines'])
     session['timelines'] = timelines
-    return response()
-
-# ログ
-@twitter_blueprint.route('/api/log', methods = ['POST'])
-def log():
-    oauth = get_oauth()
-    status = request.form['status']
-    if session['user_id'] != OWNER_ID:
-        user = twitter.get_user(oauth, session['user_id'])
-        message = f"{user['name']}\n@{user['screen_name']}\n\n{status}"
-        oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, OWNER_TOKEN, OWNER_SECRET)
-        twitter.direct_message(oauth, OWNER_ID, message)
     return response()
 
 # ログアウト
 @twitter_blueprint.route('/api/logout', methods = ['POST'])
 def logout():
     session.clear()
+    Twitter.oauth = None
+    Twitter.user = None
     return response()

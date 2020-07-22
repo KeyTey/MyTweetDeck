@@ -21,7 +21,7 @@ export default class AddTimelineModal extends Component {
             }
         }
         this.handleClick = (id) => {
-            let timelines = this.props.timelines;
+            const timelines = this.props.timelines;
             if (timelines.find(timeline => id === timeline.id)) {
                 this.props.action.removeTimeline(id);
             }

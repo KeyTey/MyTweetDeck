@@ -12,7 +12,7 @@ export default class SettingModal extends Component {
             }
         }
         this.handleClick = (key) => {
-            let setting = this.props.setting;
+            const setting = this.props.setting;
             setting[key] = Boolean(setting[key] ^ true);
             this.props.action.updateState({ setting: setting });
         }

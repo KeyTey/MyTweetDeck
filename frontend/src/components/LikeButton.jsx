@@ -16,7 +16,7 @@ export default class FavoriteButton extends Component {
                     if(data.status === 200) {
                         const timelineIndex = this.props.timelineIndex;
                         const tweetIndex = this.props.tweetIndex;
-                        let tweet = this.props.tweet;
+                        const tweet = this.props.tweet;
                         tweet.favorite_count++;
                         tweet.favorited = true;
                         this.props.action.setTweet(timelineIndex, tweetIndex, tweet);

@@ -45,9 +45,6 @@ $ docker-compose down (--rmi all)
 ```shell
 $ heroku config:set TWITTER_CONSUMER_KEY="EXAMPLE"
 $ heroku config:set TWITTER_CONSUMER_SECRET="EXAMPLE"
-$ heroku config:set TWITTER_ACCESS_TOKEN="EXAMPLE"
-$ heroku config:set TWITTER_ACCESS_SECRET="EXAMPLE"
-$ heroku config:set TWITTER_OWNER_ID="EXAMPLE"
 $ heroku config:set OAUTH_CALLBACK="https://example.herokuapp.com"
 $ heroku config:add TZ=Asia/Tokyo
 $ git push heroku master

@@ -7,6 +7,14 @@ def get_user_id(oauth):
     user_id = json.loads(res.text)['id_str'] if res.status_code == 200 else ''
     return user_id
 
+# ユーザー取得
+def get_user(oauth, user_id):
+    url = "https://api.twitter.com/1.1/users/lookup.json"
+    params = { 'user_id': user_id }
+    res = oauth.get(url, params = params)
+    user = json.loads(res.text)[0] if res.status_code == 200 else {}
+    return user
+
 # ツイート取得
 def get_tweet(tweet):
     tweet = tweet.get('retweeted_status', tweet)
@@ -28,14 +36,6 @@ def get_tweet(tweet):
     if tweet.get('quoted_status'):
         tweet['quoted_status'] = get_tweet(tweet['quoted_status'])
     return tweet
-
-# ユーザー取得
-def get_user(oauth, user_id):
-    url = "https://api.twitter.com/1.1/users/lookup.json"
-    params = { 'user_id': user_id }
-    res = oauth.get(url, params = params)
-    user = json.loads(res.text)[0] if res.status_code == 200 else {}
-    return user
 
 # ダイレクトメッセージ
 def direct_message(oauth, target, message):

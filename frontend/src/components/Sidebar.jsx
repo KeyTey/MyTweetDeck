@@ -2,21 +2,10 @@ import React, { Component } from 'react';
 import Menu from './Menu';
 
 export default class Sidebar extends Component {
-    constructor(props) {
-        super(props);
-        this.user = {};
-    }
-    componentDidMount() {
-        $.ajax({
-            url: '/api/myself',
-            dataType: 'json'
-        })
-        .then(
-            data => this.user = data,
-            error => console.error(error)
-        );
-    }
     render() {
+        const user = this.props.user;
+        const screen_name = (user === null) ? 'Twitter' : user.screen_name;
+        const profile_image_url = (user === null) ? 'public/img/default.png' : user.profile_image_url;
         return (
             <div className="sidebar">
                 <ul className="sidebar-nav sidebar-top">
@@ -39,8 +28,8 @@ export default class Sidebar extends Component {
                         </button>
                     </li>
                     <li>
-                        <a href={`https://twitter.com/${this.user.screen_name}`} target="_blank">
-                            <img className="rounded-circle w-100" src={this.user.profile_image_url} />
+                        <a href={`https://twitter.com/${screen_name}`} target="_blank">
+                            <img className="rounded-circle w-100" src={profile_image_url} />
                         </a>
                     </li>
                 </ul>

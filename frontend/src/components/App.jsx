@@ -6,6 +6,7 @@ import RetweetModal from './RetweetModal';
 import MediaModal from './MediaModal';
 import AddTimelineModal from './AddTimelineModal';
 import SettingModal from './SettingModal';
+import AuthModal from './AuthModal';
 import Alert from './Alert';
 
 export default class App extends Component {
@@ -20,6 +21,7 @@ export default class App extends Component {
                 resetScrollByClickOuter: false
             }
         };
+        this.user = {};
         this.updateState = (state, callback = () => {}) => {
             this.setState(state, callback);
         }
@@ -145,10 +147,12 @@ export default class App extends Component {
         }
         this.handleClick = (e) => {
             if (e.target !== e.currentTarget) return;
-            if (!this.state.setting.resetScrollByClickOuter) return;
-            $('.tweet-container').each((_, container) => {
-                $(container).scrollTop(0);
-            });
+            if (this.state.setting.resetScrollByClickOuter) {
+                $('.tweet-container').each((_, container) => $(container).scrollTop(0));
+            }
+            if (this.user === null) {
+                $('#authModal').modal('show');
+            }
         }
         this.action = {
             updateState: this.updateState,
@@ -165,6 +169,14 @@ export default class App extends Component {
     }
     componentDidMount() {
         $.ajax({
+            url: '/api/myself',
+            dataType: 'json'
+        })
+        .then(
+            data => this.user = data,
+            error => console.error(error)
+        );
+        $.ajax({
             url: '/api/timelines',
             dataType: 'json'
         })
@@ -178,7 +190,6 @@ export default class App extends Component {
                 });
                 if (timelines.length === 0) {
                     timelines.push(this.createTimeline('HOME', 'Home', '/api/home_timeline', 'fas fa-home'));
-                    timelines.push(this.createTimeline('KAWAII', 'Kawaii', '/api/kawaii', 'fas fa-grin-hearts'));
                 }
                 this.setState({ timelines: timelines }, () => {
                     this.state.timelines.forEach((_, idx) => this.loadTimeline(idx));
@@ -186,17 +197,11 @@ export default class App extends Component {
             },
             error => console.error(error)
         );
-        $.ajax({
-            url: '/api/log',
-            dataType: 'json',
-            type: 'POST',
-            data: { status: 'Access to MyTweetDeck' }
-        });
     }
     render() {
         return (
             <div onClick={this.handleClick}>
-                <Sidebar action={this.action} timelines={this.state.timelines} />
+                <Sidebar action={this.action} user={this.user} timelines={this.state.timelines} />
                 <ul className="timeline-container">
                     {this.state.timelines.map((timeline, idx) => {
                         return <Timeline key={timeline.id} timeline={timeline} timelineIndex={idx} setting={this.state.setting} action={this.action} />;
@@ -207,9 +212,18 @@ export default class App extends Component {
                 <MediaModal modal={this.state.modal} />
                 <AddTimelineModal timelines={this.state.timelines} action={this.action} />
                 <SettingModal setting={this.state.setting} action={this.action} />
-                <div className="notice-container">
-                    {this.state.notices.map((notice, idx) => <Alert notice={notice} key={idx} />)}
-                </div>
+                {(() => {
+                    if (this.user !== null) return;
+                    return <AuthModal />;
+                })()}
+                {(() => {
+                    if (this.user === null) return;
+                    return (
+                        <div className="notice-container">
+                            {this.state.notices.map((notice, idx) => <Alert notice={notice} key={idx} />)}
+                        </div>
+                    );
+                })()}
             </div>
         );
     }

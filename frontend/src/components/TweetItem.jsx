@@ -53,7 +53,8 @@ export default class TweetItem extends Component {
         }
     }
     render() {
-        let newItem = this.props.tweet.new ? 'new-item' : '';
+        const tweet = this.props.tweet;
+        const newItem = tweet.new ? 'new-item' : '';
         return (
             <div
                 className={`tweet-item list-group-item p-1 ${newItem}`}
@@ -63,20 +64,18 @@ export default class TweetItem extends Component {
                 onKeyDown={this.handleKeyDown}
                 onClick={this.handleClick}
             >
-                <TweetHeader tweet={this.props.tweet} action={this.props.action} small={false} />
-                <TweetContent tweet={this.props.tweet} small={false} />
-                <TweetPictures tweet={this.props.tweet} action={this.props.action} />
-                <TweetVideo tweet={this.props.tweet} />
+                <TweetHeader tweet={tweet} action={this.props.action} small={false} />
+                <TweetContent tweet={tweet} small={false} />
+                <TweetPictures tweet={tweet} action={this.props.action} />
+                <TweetVideo tweet={tweet} />
                 {(() => {
-                    if('quoted_status' in this.props.tweet) {
-                        return <QuotedItem
-                            tweet={this.props.tweet.quoted_status}
-                            action={this.props.action}
-                        />;
-                    }
+                    if (tweet.quoted_status === undefined) return;
+                    return (
+                        <QuotedItem tweet={tweet.quoted_status} action={this.props.action} />
+                    );
                 })()}
                 <TweetFooter
-                    tweet={this.props.tweet}
+                    tweet={tweet}
                     timelineIndex={this.props.timelineIndex}
                     tweetIndex={this.props.tweetIndex}
                     action={this.props.action}

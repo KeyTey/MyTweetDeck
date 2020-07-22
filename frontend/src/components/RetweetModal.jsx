@@ -4,7 +4,7 @@ export default class RetweetModal extends Component {
     constructor(props) {
         super(props);
         this.handleClick = () => {
-            let tweet = this.props.modal.tweet;
+            const tweet = this.props.modal.tweet;
             $.ajax({
                 url: '/api/retweet',
                 dataType: 'json',
