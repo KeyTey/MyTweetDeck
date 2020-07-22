@@ -1,12 +1,7 @@
-import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import App from './components/App';
+import ReactDOM from 'react-dom';
+import routes from "./routes";
 
-export default (
-    <BrowserRouter>
-        <Route path='/' component={App} />
-    </BrowserRouter>
-);
+ReactDOM.render(routes, document.getElementById("container"));
 
 // 高さ調整(ロード時)
 $(document).ready(() => {

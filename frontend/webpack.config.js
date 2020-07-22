@@ -3,11 +3,11 @@ const resolve = require('path').resolve;
 
 const config = {
     devtool: 'eval-source-map',
-    entry: __dirname + '/js/index.jsx',
+    entry: resolve('./src/index.jsx'),
     output: {
-        path: resolve('../public'),
+        path: resolve('./public'),
         filename: 'bundle.js',
-        publicPath: resolve('../public')
+        publicPath: resolve('./public')
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css']
@@ -25,4 +25,5 @@ const config = {
             }]
     }
 };
+
 module.exports = config;

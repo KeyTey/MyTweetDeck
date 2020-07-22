@@ -8,10 +8,12 @@ https://mytweetdeck.herokuapp.com
 
 ```shell
 $ pip install -r requirements.txt
-$ python3 server.py
+$ cp .env.example .env
+$ $EDITOR .env
+$ python3 main.py
 ```
 
-#### ~/MyTweetDeck/templates/static
+#### ~/MyTweetDeck/frontend
 
 ```shell
 $ npm install
@@ -39,12 +41,12 @@ $ docker-compose down (--rmi all)
 ### Heroku
 
 ```shell
-$ heroku config:set TWITTER_CONSUMER_KEY="<YOUR CONSUMER KEY>"
-$ heroku config:set TWITTER_CONSUMER_SECRET="<YOUR CONSUMER SECRET>"
-$ heroku config:set TWITTER_ACCESS_TOKEN="<YOUR ACCESS TOKEN>"
-$ heroku config:set TWITTER_ACCESS_SECRET="<YOUR ACCESS SECRET>"
-$ heroku config:set TWITTER_OWNER_ID="<YOUR ID>"
-$ heroku config:set OAUTH_CALLBACK="<CALLBACK URL>"
+$ heroku config:set TWITTER_CONSUMER_KEY="EXAMPLE"
+$ heroku config:set TWITTER_CONSUMER_SECRET="EXAMPLE"
+$ heroku config:set TWITTER_ACCESS_TOKEN="EXAMPLE"
+$ heroku config:set TWITTER_ACCESS_SECRET="EXAMPLE"
+$ heroku config:set TWITTER_OWNER_ID="EXAMPLE"
+$ heroku config:set OAUTH_CALLBACK="https://example.herokuapp.com"
 $ heroku config:add TZ=Asia/Tokyo
 $ git push heroku master
 ```
@@ -55,7 +57,7 @@ $ git push heroku master
 
 ```shell
 # Login
-$ ssh -i ~/.ssh/MyTweetDeck.pem ec2-user@{ELASTIC_IP}
+$ ssh -i ~/.ssh/example.pem ec2-user@{ELASTIC_IP}
 ```
 
 #### EC2
@@ -79,6 +81,7 @@ $ sudo yum install git
 # Deploy
 $ git clone https://github.com/KeyTey/MyTweetDeck.git
 $ cd ~/MyTweetDeck
-$ vim environ.json
+$ cp .env.example .env
+$ $EDITOR .env
 $ docker-compose up -d
 ```
