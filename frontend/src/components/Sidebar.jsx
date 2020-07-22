@@ -8,8 +8,8 @@ export default class Sidebar extends Component {
     }
     componentDidMount() {
         $.ajax({
-            url: "/api/myself",
-            dataType: "json"
+            url: '/api/myself',
+            dataType: 'json'
         })
         .then(
             data => this.user = data,

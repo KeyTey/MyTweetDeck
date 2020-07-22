@@ -3,23 +3,23 @@ import React, { Component } from 'react';
 export default class TweetModal extends Component {
     constructor(props) {
         super(props);
-        this.state = {content: ''};
+        this.state = { content: '' };
         this.handleChange = (e) => {
-            this.setState({content: e.target.value});
+            this.setState({ content: e.target.value });
         }
         this.handleClick = () => {
             $.ajax({
-                url: "/api/tweet",
-                dataType: "json",
-                type: "POST",
-                data: {content: this.state.content}
+                url: '/api/tweet',
+                dataType: 'json',
+                type: 'POST',
+                data: { content: this.state.content }
             })
             .then(
                 data => {
                     const addNotice = this.props.action.addNotice;
-                    if(data.status === 200) addNotice("success", "Tweet succeeded.");
-                    else addNotice("danger", "Tweet failed.");
-                    this.setState({content: ''});
+                    if(data.status === 200) addNotice('success', 'Tweet succeeded.');
+                    else addNotice('danger', 'Tweet failed.');
+                    this.setState({ content: '' });
                 },
                 error => console.error(error)
             );

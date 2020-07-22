@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 export default class TweetContent extends Component {
     render() {
-        return <p className="tweet-content mb-1">{this.props.tweet.full_text}</p>;
+        const tweetContent = this.props.small ? 'tweet-content-small' : 'tweet-content';
+        return <p className={`${tweetContent} mb-1`}>{this.props.tweet.full_text}</p>;
     }
 }

@@ -7,7 +7,7 @@ export default class Menu extends Component {
         super(props);
         this.handleChange = (order) => {
             const timelines = order.map(id => this.props.timelines.find(timeline => id === timeline.id));
-            this.props.action.updateState({timelines: timelines}, this.props.action.saveTimelineState);
+            this.props.action.updateState({ timelines: timelines }, this.props.action.saveTimelineState);
         }
         this.handleMouseEnter = (id) => {
             $(`#${id} .timeline-name`).css('display', 'inline');

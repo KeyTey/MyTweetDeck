@@ -21,7 +21,7 @@ export default class TweetPictures extends Component {
                                 className="picture border mb-1"
                                 data-toggle="modal"
                                 data-target="#mediaModal"
-                                onClick={(e) => { this.handleClick(e, mediaLink) }}
+                                onClick={(e) => this.handleClick(e, mediaLink)}
                             />
                         </div>
                     );

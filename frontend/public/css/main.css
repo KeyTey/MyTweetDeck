@@ -205,12 +205,12 @@ a {
   background-color: rgba(0, 150, 255, 0.2);
 }
 
-.tweet-content {
-  font-size: 13px;
-}
-
 .icon {
   height: 25px;
+}
+
+.icon-small {
+  height: 20px;
 }
 
 .username {
@@ -220,6 +220,20 @@ a {
 
 .text-mute {
   color: #8899a6;
+}
+
+.text-mute-small {
+  color: #8899a6;
+  font-size: 11px;
+}
+
+.tweet-content {
+  font-size: 13px;
+}
+
+.tweet-content-small {
+  color: #657786;
+  font-size: 12px;
 }
 
 .picture {

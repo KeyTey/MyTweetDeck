@@ -11,7 +11,7 @@ export default class Timeline extends Component {
         this.handleClick = (e) => {
             e.stopPropagation();
             const openSetting = Boolean(this.state.openSetting ^ true);
-            this.setState({openSetting: openSetting});
+            this.setState({ openSetting: openSetting });
         }
     }
     render() {

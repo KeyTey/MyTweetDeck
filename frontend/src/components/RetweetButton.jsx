@@ -16,7 +16,7 @@ export default class RetweetButton extends Component {
     }
     render() {
         const tweet = this.props.tweet;
-        const retweetStyle = tweet.retweeted ? { color: "green" } : { color: "gray" };
+        const retweetStyle = tweet.retweeted ? { color: 'green' } : { color: 'gray' };
         return (
             <button
                 className="retweet btn btn-light border w-50 p-0"

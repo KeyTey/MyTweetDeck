@@ -32,17 +32,17 @@ export default class AddTimelineModal extends Component {
         }
     }
     componentDidMount() {
-        this.timelines.push({id: "HOME", name: "Home", url: "/api/home_timeline", icon: "fas fa-home"});
-        this.timelines.push({id: "KAWAII", name: "Kawaii", url: "/api/kawaii", icon: "fas fa-grin-hearts"});
+        this.timelines.push({ id: 'HOME', name: 'Home', url: '/api/home_timeline', icon: 'fas fa-home' });
+        this.timelines.push({ id: 'KAWAII', name: 'Kawaii', url: '/api/kawaii', icon: 'fas fa-grin-hearts' });
         $.ajax({
-            url: "/api/lists",
-            dataType: "json"
+            url: '/api/lists',
+            dataType: 'json'
         })
         .then(
             data => {
                 const lists = data.lists;
                 lists.forEach((list) => {
-                    const timeline = {id: list.id_str, name: list.name, url: `/api/list_timeline/${list.id_str}`, icon: "fas fa-bars"};
+                    const timeline = { id: list.id_str, name: list.name, url: `/api/list_timeline/${list.id_str}`, icon: 'fas fa-bars' };
                     this.timelines.push(timeline);
                 });
             },

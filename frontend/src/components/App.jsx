@@ -49,13 +49,13 @@ export default class App extends Component {
             this.setTimeline(idx, timeline);
             $.ajax({
                 url: timeline.url,
-                dataType: "json"
+                dataType: 'json'
             })
             .then(
                 data => {
                     const defaultTweets = data.tweets;
                     if (defaultTweets.length === 0) {
-                        this.addNotice("danger", "Load failed.");
+                        this.addNotice('danger', 'Load failed.');
                     }
                     else {
                         const tweetIDs = timeline.defaultTweets.map(tweet => tweet.id_str);
@@ -71,12 +71,12 @@ export default class App extends Component {
                 },
                 error => console.error(error)
             );
-            $(".timeline-container").css("width", 280 * this.state.timelines.length);
+            $('.timeline-container').css('width', 280 * this.state.timelines.length);
         }
         this.setTimeline = (timelineIndex, timeline) => {
             const timelines = this.state.timelines;
             timelines[timelineIndex] = timeline;
-            this.setState({timelines: timelines});
+            this.setState({ timelines: timelines });
         }
         this.saveTimelineState = () => {
             const timelines = this.state.timelines.map(timeline => {
@@ -84,23 +84,23 @@ export default class App extends Component {
                 return { id, name, url, icon, setting };
             });
             $.ajax({
-                url: "/api/timelines",
-                dataType: "json",
-                type: "POST",
-                data: {timelines: JSON.stringify(timelines)}
+                url: '/api/timelines',
+                dataType: 'json',
+                type: 'POST',
+                data: { timelines: JSON.stringify(timelines) }
             });
         }
         this.setTweet = (timelineIndex, tweetIndex, tweet) => {
             const timelines = this.state.timelines;
             timelines[timelineIndex][tweetIndex] = tweet;
-            this.setState({timelines: timelines});
+            this.setState({ timelines: timelines });
         }
         this.addTimeline = (id, name, url, icon) => {
             const timelines = this.state.timelines;
             if (timelines.find(timeline => id === timeline.id)) return;
             const timeline = this.createTimeline(id, name, url, icon);
             timelines.push(timeline);
-            this.setState({timelines: timelines}, () => {
+            this.setState({ timelines: timelines }, () => {
                 this.loadTimeline(timelines.length - 1);
                 this.saveTimelineState();
             });
@@ -111,7 +111,7 @@ export default class App extends Component {
                 timelines: timelines.filter(timeline => id !== timeline.id)
             }, () => {
                 this.saveTimelineState();
-                $(".timeline-container").css("width", 280 * this.state.timelines.length);
+                $('.timeline-container').css('width', 280 * this.state.timelines.length);
             });
         }
         this.createTimeline = (id, name, url, icon) => ({
@@ -133,20 +133,20 @@ export default class App extends Component {
             let notices = this.state.notices;
             if (!notices.find(notice => notice.display)) notices = [];
             if (notices.length >= 10) notices = [];
-            this.setState({notices: notices});
-            notices.push({status: status, text: text, display: true});
+            this.setState({ notices: notices });
+            notices.push({ status: status, text: text, display: true });
             const idx = notices.length - 1;
-            this.setState({notices: notices});
+            this.setState({ notices: notices });
             setTimeout(() => {
                 const notices = this.state.notices;
                 notices[idx].display = false;
-                this.setState({notices: notices});
+                this.setState({ notices: notices });
             }, 3000);
         }
         this.handleClick = (e) => {
             if (e.target !== e.currentTarget) return;
             if (!this.state.setting.resetScrollByClickOuter) return;
-            $(".tweet-container").each((_, container) => {
+            $('.tweet-container').each((_, container) => {
                 $(container).scrollTop(0);
             });
         }
@@ -165,8 +165,8 @@ export default class App extends Component {
     }
     componentDidMount() {
         $.ajax({
-            url: "/api/timelines",
-            dataType: "json"
+            url: '/api/timelines',
+            dataType: 'json'
         })
         .then(
             data => {
@@ -177,20 +177,20 @@ export default class App extends Component {
                     return timeline;
                 });
                 if (timelines.length === 0) {
-                    timelines.push(this.createTimeline("HOME", "Home", "/api/home_timeline", "fas fa-home"));
-                    timelines.push(this.createTimeline("KAWAII", "Kawaii", "/api/kawaii", "fas fa-grin-hearts"));
+                    timelines.push(this.createTimeline('HOME', 'Home', '/api/home_timeline', 'fas fa-home'));
+                    timelines.push(this.createTimeline('KAWAII', 'Kawaii', '/api/kawaii', 'fas fa-grin-hearts'));
                 }
-                this.setState({timelines: timelines}, () => {
+                this.setState({ timelines: timelines }, () => {
                     this.state.timelines.forEach((_, idx) => this.loadTimeline(idx));
                 });
             },
             error => console.error(error)
         );
         $.ajax({
-            url: "/api/log",
-            dataType: "json",
-            type: "POST",
-            data: {status: "Access to MyTweetDeck"}
+            url: '/api/log',
+            dataType: 'json',
+            type: 'POST',
+            data: { status: 'Access to MyTweetDeck' }
         });
     }
     render() {

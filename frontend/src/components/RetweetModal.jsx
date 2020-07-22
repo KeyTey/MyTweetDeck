@@ -6,10 +6,10 @@ export default class RetweetModal extends Component {
         this.handleClick = () => {
             let tweet = this.props.modal.tweet;
             $.ajax({
-                url: "/api/retweet",
-                dataType: "json",
-                type: "POST",
-                data: {id: tweet.id_str}
+                url: '/api/retweet',
+                dataType: 'json',
+                type: 'POST',
+                data: { id: tweet.id_str }
             })
             .then(
                 data => {
@@ -19,10 +19,10 @@ export default class RetweetModal extends Component {
                         tweet.retweet_count++;
                         tweet.retweeted = true;
                         this.props.action.setTweet(timelineIndex, tweetIndex, tweet);
-                        this.props.action.addNotice("success", "Retweet succeeded.");
+                        this.props.action.addNotice('success', 'Retweet succeeded.');
                     }
                     else {
-                        this.props.action.addNotice("danger", "Retweet failed.");
+                        this.props.action.addNotice('danger', 'Retweet failed.');
                     }
                 },
                 error => console.error(error)

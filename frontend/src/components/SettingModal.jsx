@@ -14,12 +14,12 @@ export default class SettingModal extends Component {
         this.handleClick = (key) => {
             let setting = this.props.setting;
             setting[key] = Boolean(setting[key] ^ true);
-            this.props.action.updateState({setting: setting});
+            this.props.action.updateState({ setting: setting });
         }
         this.logout = () => {
             $.ajax({
-                url: "/api/logout",
-                type: "POST"
+                url: '/api/logout',
+                type: 'POST'
             })
             .then(
                 data => location.reload(),
