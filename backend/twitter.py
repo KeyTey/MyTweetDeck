@@ -111,20 +111,6 @@ def get_kawaii_timeline(oauth, count):
     ]
     return tweets
 
-# ユーザーのツイート取得
-def get_tweets(oauth, user_id, count):
-    url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-    params = {
-        'user_id': user_id,
-        'exclude_replies': True,
-        'include_rts': False,
-        'count': count,
-        'tweet_mode': 'extended'
-    }
-    res = oauth.get(url, params = params)
-    tweets = json.loads(res.text) if res.status_code == 200 else []
-    return tweets
-
 # リストタイムライン取得
 def get_list_timeline(oauth, list_id, count):
     url = "https://api.twitter.com/1.1/lists/statuses.json"
@@ -151,4 +137,23 @@ def get_user_timeline(oauth, user_id, count):
     }
     res = oauth.get(url, params = params)
     tweets = json.loads(res.text) if res.status_code == 200 else []
+    return tweets
+
+# 検索結果取得
+def get_searched_tweets(oauth, query, count, result_type = 'mixed'):
+    url = "https://api.twitter.com/1.1/search/tweets.json"
+    params = {
+        'q': query,
+        'count': count,
+        'result_type': result_type,
+        'tweet_mode': 'extended'
+    }
+    res = oauth.get(url, params = params)
+    statuses = json.loads(res.text)['statuses'] if res.status_code == 200 else []
+    tweets = []
+    for status in statuses:
+        status = status.get('retweeted_status', status)
+        tweet_ids = [tweet['id_str'] for tweet in tweets]
+        if status['id_str'] in tweet_ids: continue
+        tweets.append(status)
     return tweets

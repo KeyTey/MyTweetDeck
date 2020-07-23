@@ -112,8 +112,14 @@ def lists():
 # ホームタイムライン取得
 @twitter_blueprint.route('/api/home_timeline', methods = ['GET'])
 def home_timeline():
+    tweets = []
     oauth = get_oauth()
-    tweets = twitter.get_home_timeline(oauth, 200)
+    user_id = session.get('user_id', '')
+    if user_id == '':
+        query = '#ハムスター OR #ハムスターのいる生活 OR #ハムスター好きと繋がりたい filter:media'
+        tweets = twitter.get_searched_tweets(oauth, query, 100)
+    else:
+        tweets = twitter.get_home_timeline(oauth, 200)
     tweets = [twitter.get_tweet(tweet) for tweet in tweets]
     return response({'tweets': tweets})
 
