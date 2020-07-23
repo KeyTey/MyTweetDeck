@@ -76,7 +76,7 @@ a {
 
 .sidebar-middle {
   top: 80px;
-  bottom: 80px;
+  bottom: 160px;
   overflow-x: hidden;
   overflow-y: auto;
 }

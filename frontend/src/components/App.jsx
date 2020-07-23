@@ -154,6 +154,35 @@ export default class App extends Component {
                 $('#authModal').modal('show');
             }
         }
+        this.handleKeyDown = (e) => {
+            if($('textarea:focus').length) return;
+            // 矢印キー (ツイートへのフォーカス)
+            if([37, 38, 39, 40].includes(e.keyCode)) {
+                e.preventDefault();
+                if($('.tweet-item:focus').length === 0) {
+                    $('.tweet-item[timeline-index="0"][tweet-index="0"]').focus();
+                }
+            }
+            // 数字キー (タイムラインへのフォーカス)
+            if(48 <= e.keyCode && e.keyCode <= 57) {
+                const num = e.keyCode === 48 ? $('.timeline').length - 1 : e.keyCode - 49;
+                $(`.tweet-item[timeline-index="${num}"][tweet-index="0"]`).focus();
+            }
+            // Nキー (ツイート画面)
+            if(e.keyCode === 78) {
+                $('.tweet-btn').click();
+            }
+            // Escキー (フォーカス解除)
+            if(e.keyCode === 27) {
+                // フォーカスが存在しない場合 -> スクロール位置リセット
+                if ($(':focus').length === 0) {
+                    $('.tweet-container').each((_, container) => {
+                        $(container).scrollTop(0);
+                    });
+                }
+                $(':focus').blur();
+            }
+        }
         this.action = {
             updateState: this.updateState,
             updateTimeline: this.updateTimeline,
@@ -197,6 +226,14 @@ export default class App extends Component {
             },
             error => console.error(error)
         );
+        // 高さ調整
+        const adjustHeight = () => {
+            const height = $(window).height();
+            $('.timeline-container').css('height', height + 'px');
+        };
+        adjustHeight();
+        $(window).resize(adjustHeight);
+        $(window).keydown(this.handleKeyDown);
     }
     render() {
         return (
