@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Sidebar from './Sidebar';
 import Timeline from './Timeline';
-import TweetModal from './TweetModal';
-import RetweetModal from './RetweetModal';
-import MediaModal from './MediaModal';
-import AddTimelineModal from './AddTimelineModal';
-import SettingModal from './SettingModal';
-import AuthModal from './AuthModal';
+import TweetModal from './modal/TweetModal';
+import RetweetModal from './modal/RetweetModal';
+import MediaModal from './modal/MediaModal';
+import AddTimelineModal from './modal/AddTimelineModal';
+import SettingModal from './modal/SettingModal';
+import AuthModal from './modal/AuthModal';
 import Alert from './Alert';
 
 export default class App extends Component {

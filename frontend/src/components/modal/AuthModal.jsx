@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class AuthModal extends Component {
     constructor(props) {
         super(props);
-        this.endpoint = '';
+        this.state = { endpoint: '' };
     }
     componentDidMount() {
         $('#authModal').modal('show');
@@ -12,7 +12,7 @@ export default class AuthModal extends Component {
             dataType: 'json'
         })
         .then(
-            data => this.endpoint = data,
+            data => this.setState({ endpoint: data }),
             error => console.error(error)
         );
     }
@@ -25,7 +25,7 @@ export default class AuthModal extends Component {
                             <h6 className="modal-title">Log in with your Twitter account</h6>
                         </div>
                         <div className="modal-body text-center">
-                            <a href={this.endpoint}>
+                            <a href={this.state.endpoint}>
                                 <button className="btn btn-primary font-weight-bold w-50">Log in</button>
                             </a>
                         </div>
