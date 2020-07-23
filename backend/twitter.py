@@ -12,7 +12,7 @@ def get_user(oauth, user_id):
     url = "https://api.twitter.com/1.1/users/lookup.json"
     params = { 'user_id': user_id }
     res = oauth.get(url, params = params)
-    user = json.loads(res.text)[0] if res.status_code == 200 else {}
+    user = json.loads(res.text)[0] if res.status_code == 200 else None
     return user
 
 # ツイート取得
