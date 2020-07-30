@@ -2,13 +2,13 @@ import axios from 'axios';
 
 const initialState = {
     home: {
-        name: 'Home',
+        name: 'ホーム',
         items: [
-            { type: 'home', name: 'Home', endpoint: '/api/home/timeline', iconClass: 'fas fa-home' }
+            { type: 'home', name: 'ホーム', endpoint: '/api/home/timeline', iconClass: 'fas fa-home' }
         ]
     },
     list: {
-        name: 'List',
+        name: 'リスト',
         items: [
             { type: 'list', name: 'YouTuber', endpoint: '/api/list/timeline/1223193686378303488', iconClass: 'fas fa-bars' },
             { type: 'list', name: '芸能人', endpoint: '/api/list/timeline/1223191519676395522', iconClass: 'fas fa-bars' },
@@ -16,14 +16,14 @@ const initialState = {
         ]
     },
     search: {
-        name: 'Search',
+        name: '検索',
         items: []
     },
     anime: {
-        name: 'Anime',
+        name: 'イラスト',
         items: [
-            { type: 'anime', name: 'Kawaii', endpoint: '/api/anime/kawaii/timeline', iconClass: 'fas fa-grin-hearts' },
-            { type: 'anime', name: 'Hentai', endpoint: '/api/anime/hentai/timeline', iconClass: 'fas fa-venus-mars' }
+            { type: 'anime', name: '一般', endpoint: '/api/anime/kawaii/timeline', iconClass: 'fas fa-grin-hearts' },
+            { type: 'anime', name: 'R-18', endpoint: '/api/anime/hentai/timeline', iconClass: 'fas fa-venus-mars' }
         ]
     }
 };

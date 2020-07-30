@@ -20,7 +20,7 @@ const AddTimelineModal = () => {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Add Timeline</h5>
+                        <h5 className="modal-title">タイムラインを追加する</h5>
                         <button className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -33,7 +33,7 @@ const AddTimelineModal = () => {
                         </ul>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button className="btn btn-secondary" data-dismiss="modal">閉じる</button>
                     </div>
                 </div>
             </div>

@@ -9,17 +9,17 @@ const SettingModal = () => {
     const user = useSelector(state => state.user);
 
     // ログインボタン
-    const loginButton = <button className="btn btn-primary" data-dismiss="modal" onClick={login}>Log in</button>;
+    const loginButton = <button className="btn btn-primary" data-dismiss="modal" onClick={login}>ログイン</button>;
     // ログアウトボタン
     const clickLogout = () => dispatch(logout());
-    const logoutButton = <button className="btn btn-danger" data-dismiss="modal" onClick={clickLogout}>Log out</button>;
+    const logoutButton = <button className="btn btn-danger" data-dismiss="modal" onClick={clickLogout}>ログアウト</button>;
 
     return (
         <div className="modal" id="settingModal" tabIndex="-1" role="dialog">
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Setting</h5>
+                        <h5 className="modal-title">設定</h5>
                         <button className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -30,7 +30,7 @@ const SettingModal = () => {
                     </div>
                     <div className="modal-footer">
                         {(user.status === status.GUEST) ? loginButton : (user.status === status.AUTHORIZED) ? logoutButton : null}
-                        <button className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button className="btn btn-secondary" data-dismiss="modal">閉じる</button>
                     </div>
                 </div>
             </div>
@@ -71,32 +71,32 @@ const KeyShortcuts = () => {
     return (
         <ul className="list-group mt-3">
             <li className="list-group-item">
-                <kbd className="keyboard mr-2">N</kbd>New Tweet
+                <kbd className="keyboard mr-2">N</kbd>ツイート
             </li>
             <li className="list-group-item">
-                <kbd className="keyboard mr-2">F</kbd>Like
+                <kbd className="keyboard mr-2">F</kbd>いいね
             </li>
             <li className="list-group-item">
-                <kbd className="keyboard mr-2">T</kbd>Retweet
+                <kbd className="keyboard mr-2">T</kbd>リツイート
             </li>
             <li className="list-group-item">
                 <kbd className="keyboard mr-1">←</kbd>
                 <kbd className="keyboard mr-1">→</kbd>
                 <kbd className="keyboard mr-1">↑</kbd>
                 <kbd className="keyboard mr-2">↓</kbd>
-                Move focus to Tweet
+                ツイートへのフォーカスを操作する
             </li>
             <li className="list-group-item">
                 <kbd className="keyboard mr-1">1</kbd>
                 ...
                 <kbd className="keyboard ml-1 mr-2">9</kbd>
-                Column 1 - 9
+                １〜９列目のタイムラインへフォーカスする
             </li>
             <li className="list-group-item">
-                <kbd className="keyboard mr-2">0</kbd>Final column
+                <kbd className="keyboard mr-2">0</kbd>最終列のタイムラインへフォーカスする
             </li>
             <li className="list-group-item">
-                <kbd className="keyboard mr-2">Esc</kbd>Release focus
+                <kbd className="keyboard mr-2">Esc</kbd>フォーカスを解除する
             </li>
         </ul>
     );

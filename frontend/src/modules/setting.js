@@ -3,11 +3,11 @@ import { cloneDeep } from 'lodash';
 
 const initialState = {
     resetScrollByDoubleClickOuter: {
-        description: 'Reset scroll by double-clicking on outside',
+        description: '外側をクリックしてスクロールをリセットする',
         enabled: false
     },
     toggleSettingByMouseOverOut: {
-        description: 'Open setting panel by mouse over',
+        description: 'マウスオーバーでタイムラインの設定を開く',
         enabled: false
     }
 };

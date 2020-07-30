@@ -7,10 +7,10 @@ const AuthModal = () => {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h6 className="modal-title">Log in with your Twitter account</h6>
+                        <h6 className="modal-title">ログインして使ってみる</h6>
                     </div>
                     <div className="modal-body text-center">
-                        <button className="btn btn-primary font-weight-bold w-50" onClick={login}>Log in</button>
+                        <button className="btn btn-primary font-weight-bold w-50" onClick={login}>ログイン</button>
                     </div>
                 </div>
             </div>

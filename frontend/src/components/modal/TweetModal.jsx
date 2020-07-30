@@ -32,17 +32,17 @@ const TweetModal = () => {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Tweet</h5>
+                        <h5 className="modal-title">ツイート</h5>
                         <button className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
-                        <textarea className="form-control" rows="5" value={content} onChange={changeContent}></textarea>
+                        <textarea className="form-control" rows="5" placeholder="いまどうしてる？" value={content} onChange={changeContent}></textarea>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button className="btn btn-primary" data-dismiss="modal" onClick={clickTweetButton}>Tweet</button>
+                        <button className="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                        <button className="btn btn-primary" data-dismiss="modal" onClick={clickTweetButton}>ツイート</button>
                     </div>
                 </div>
             </div>

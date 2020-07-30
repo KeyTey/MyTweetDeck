@@ -35,17 +35,17 @@ const RetweetModal = () => {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Confirmation</h5>
+                        <h5 className="modal-title">確認</h5>
                         <button className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
-                        <p>Are you sure you want to RT?</p>
+                        <p>リツイートしますか？</p>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="retweetButton" className="btn btn-primary" data-dismiss="modal" onClick={clickRetweetButton}>Retweet</button>
+                        <button className="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                        <button id="retweetButton" className="btn btn-primary" data-dismiss="modal" onClick={clickRetweetButton}>リツイート</button>
                     </div>
                 </div>
             </div>

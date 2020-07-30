@@ -33,7 +33,7 @@ const TweetItem = (props) => {
                 </div>
             ))}
             <div className="text-center">
-                <button className="btn-remove btn-sm btn-outline-danger" onClick={clickRemoveButton}>Remove</button>
+                <button className="btn-remove btn-sm btn-outline-danger" onClick={clickRemoveButton}>削除</button>
             </div>
         </div>
     );

@@ -7,23 +7,23 @@ const initialState = [];
 
 const initialTimelineSetting = {
     sortByLikedCount: {
-        description: 'Sort by liked count',
+        description: 'いいね数でソートする',
         enabled: false
     },
     trimLikedTweet: {
-        description: 'Trim liked tweet',
+        description: 'いいねしたツイートを除く',
         enabled: false
     },
     showMediaTweet: {
-        description: 'Show media tweet',
+        description: 'メディアツイートのみ表示',
         enabled: false
     },
     makeUserUnique: {
-        description: 'Make user unique',
+        description: '１ユーザーにつき１ツイート',
         enabled: false
     },
     likeByClickTweetPanel: {
-        description: 'Like by clicking on panel',
+        description: 'パネルクリックでいいねする',
         enabled: false
     }
 };
@@ -201,7 +201,7 @@ export const loadTimeline = (timeline, alert) => {
         const tweets = fetchedTweets.map((tweet, index) => getTweetFromAPIData(tweet, index));
         timeline.tweets = getCustomizedTweets(tweets, timeline.setting);
         // 取得失敗
-        if (fetchedTweets.length === 0) alert.error('LOAD FAILED');
+        if (fetchedTweets.length === 0) alert.error('読み込みに失敗しました');
         // ローディング終了
         timeline.isLoading = false;
         dispatch(addDisplayTweets(timeline, 10));
@@ -297,7 +297,7 @@ export const postNotification = (targetId, endpoint, errorHandler) => {
 export const postLike = (tweetId, alert) => {
     return async (dispatch) => {
         const endpoint = '/api/like/create';
-        const errorHandler = () => alert.error('LIKE FAILED');
+        const errorHandler = () => alert.error('いいねに失敗しました');
         dispatch(postNotification(tweetId, endpoint, errorHandler));
     };
 };
@@ -306,7 +306,7 @@ export const postLike = (tweetId, alert) => {
 export const postRetweet = (tweetId, alert) => {
     return async (dispatch) => {
         const endpoint = '/api/retweet/create';
-        const errorHandler = () => alert.error('RETWEET FAILED');
+        const errorHandler = () => alert.error('リツイートに失敗しました');
         dispatch(postNotification(tweetId, endpoint, errorHandler));
     };
 };
@@ -319,8 +319,8 @@ export const postTweet = (content, alert) => {
         const tweetData = await axios.post('/api/tweet/create', formData)
             .then(response => response.data.tweet)
             .catch(error => console.error(error) || null);
-        if (tweetData === null) return alert.error('TWEET FAILED');
-        else alert.success('TWEET SUCCESS');
+        if (tweetData === null) return alert.error('ツイートに失敗しました');
+        else alert.success('ツイートに成功しました');
         const timelines = getState().timelines;
         const dictionary = getState().dictionary;
         const homeEndpoint = dictionary.home.items[0].endpoint;
