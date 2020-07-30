@@ -6,8 +6,16 @@ import { convertToFormData, mergeFormData } from './setting';
 const initialState = [];
 
 const initialTimelineSetting = {
+    sortByRetweetCount: {
+        description: 'リツイート数でソートする',
+        enabled: false
+    },
     sortByLikedCount: {
         description: 'いいね数でソートする',
+        enabled: false
+    },
+    trimRetweet: {
+        description: 'リツイートを除く',
         enabled: false
     },
     trimLikedTweet: {
@@ -123,9 +131,18 @@ export const getCustomizedTweets = (tweets, setting) => {
     // リセット
     tweets.sort((a, b) => a.index - b.index);
     tweets.forEach((_, i) => tweets[i].matched = true);
-    // いいね数の降順でソートする
-    if (setting.sortByLikedCount.enabled) {
-        tweets.sort((a, b) => (b.likeCount - a.likeCount));
+    // いいね数またはリツイート数の降順でソートする
+    const sortLiked = setting.sortByLikedCount.enabled;
+    const sortRetweet = setting.sortByRetweetCount.enabled;
+    if (sortLiked || sortRetweet) {
+        const getCount = (tweet) => (tweet.likeCount * sortLiked + tweet.retweetCount * sortRetweet);
+        tweets.sort((a, b) => (getCount(b) - getCount(a)));
+    }
+    // リツイートを除く
+    if (setting.trimRetweet.enabled) {
+        tweets.forEach((tweet, i) => {
+            if (tweet.retweetUser) tweets[i].matched = false;
+        });
     }
     // いいね済みのツイートを除く
     if (setting.trimLikedTweet.enabled) {
@@ -194,7 +211,7 @@ export const loadTimeline = (timeline, alert) => {
         timeline.isLoading = true;
         dispatch(setTimelineAction(timeline));
         // ツイートリスト取得
-        const params = (timeline.type === 'search') ? { query: timeline.name } : {};
+        const params = (timeline.type === 'trends') ? { query: timeline.name } : {};
         const fetchedTweets = await axios.get(timeline.endpoint, { params })
             .then(response => response.data.tweets)
             .catch(error => console.error(error) || []);

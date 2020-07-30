@@ -15,15 +15,15 @@ const initialState = {
             { type: 'list', name: 'ニュース', endpoint: '/api/list/timeline/1223190130191564800', iconClass: 'fas fa-bars' }
         ]
     },
-    search: {
-        name: '検索',
+    trends: {
+        name: 'トレンド',
         items: []
     },
     anime: {
         name: 'イラスト',
         items: [
-            { type: 'anime', name: '一般', endpoint: '/api/anime/kawaii/timeline', iconClass: 'fas fa-grin-hearts' },
-            { type: 'anime', name: 'R-18', endpoint: '/api/anime/hentai/timeline', iconClass: 'fas fa-venus-mars' }
+            { type: 'anime', name: '一般向けイラスト', endpoint: '/api/anime/kawaii/timeline', iconClass: 'fas fa-grin-hearts' },
+            { type: 'anime', name: '成人向けイラスト', endpoint: '/api/anime/hentai/timeline', iconClass: 'fas fa-venus-mars' }
         ]
     }
 };
@@ -80,8 +80,8 @@ export const loadTrends = () => {
             .then(response => response.data.trends)
             .catch(error => console.error(error) || []);
         const items = trends.map((trend) => (
-            { type: 'search', name: trend.name, endpoint: '/api/search/tweets', iconClass: 'fas fa-search' }
+            { type: 'trends', name: trend.name, endpoint: '/api/search/tweets', iconClass: 'fas fa-fire' }
         ));
-        dispatch(setDictionaryAction('search', items));
+        dispatch(setDictionaryAction('trends', items));
     };
 };

@@ -28,7 +28,7 @@ const TweetHeader = (props) => {
             <a href={profileUrl} target="_blank" onClick={clickProfile}>
                 <img src={tweet.user.profileImageUrl} className="icon rounded-circle border" />
             </a>
-            <p className="px-1 my-auto text-truncate font-weight-bold w-100">
+            <p className="font-weight-bold text-truncate w-100 px-1 my-auto">
                 <a className="username" href={profileUrl} target="_blank" onClick={clickProfile}>
                     {tweet.user.name}
                 </a>

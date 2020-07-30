@@ -69,7 +69,7 @@ def get_list_items(oauth, user_id):
     return items
 
 # リストのタイムラインを取得する
-def get_list_timeline(oauth, list_id, count = 200, exclude_replies = True, include_rts = False):
+def get_list_timeline(oauth, list_id, count = 200, exclude_replies = True, include_rts = True):
     url = "https://api.twitter.com/1.1/lists/statuses.json"
     params = {
         'list_id': list_id,
@@ -84,7 +84,7 @@ def get_list_timeline(oauth, list_id, count = 200, exclude_replies = True, inclu
     return tweets
 
 # ホームタイムラインを取得する
-def get_home_timeline(oauth, count = 200, exclude_replies = True, include_rts = False):
+def get_home_timeline(oauth, count = 200, exclude_replies = True, include_rts = True):
     url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
     params = {
         'count': count,
@@ -112,6 +112,7 @@ def is_anime(tweet, restricted):
     if not restricted:
         for word in restricted_words:
             if word in user['description']: return False
+            if word in user['name']: return False
     # 有効条件 (必要条件)
     for word in required_words:
         if word in user['description']: return True
@@ -131,7 +132,7 @@ def get_anime_timeline(oauth, count = 200, restricted = False):
     return tweets
 
 # ユーザータイムラインを取得する
-def get_user_timeline(oauth, user_id, count = 200, exclude_replies = True, include_rts = False):
+def get_user_timeline(oauth, user_id, count = 200, exclude_replies = True, include_rts = True):
     url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
     params = {
         'user_id': user_id,

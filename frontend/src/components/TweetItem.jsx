@@ -37,10 +37,20 @@ const TweetItem = (props) => {
     const sendRetweetId = () => dispatch(setModalDataAction({ retweetId: tweet.id }));
 
     // 引用ツイート
-    const quotedItem = tweet.quotedStatus ? <QuotedItem tweet={tweet.quotedStatus} /> : null;
+    const quotedItem = (tweet.quotedStatus === null) ? null : <QuotedItem tweet={tweet.quotedStatus} />;
+    // リツイートテキスト
+    const retweetText = (tweet.retweetUser === null) ? null : (
+        <div className="text-truncate mb-1">
+            <small>
+                <i className="fas fa-retweet retweeted mx-1"></i>
+                {tweet.retweetUser.name}さんがリツイート
+            </small>
+        </div>
+    );
 
     return (
         <div className="tweet-item list-group-item p-1" tabIndex="0" onKeyDown={(e) => handleKeyDown(e, postLikeAction, sendRetweetId)} onClick={clickPanel}>
+            {retweetText}
             <TweetHeader tweet={tweet} />
             <TweetContent tweet={tweet} />
             <TweetImages tweet={tweet} />
