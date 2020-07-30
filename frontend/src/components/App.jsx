@@ -50,18 +50,13 @@ const App = () => {
     // 画面外のクリックイベント
     const clickOuter = (e) => {
         if (e.target !== e.currentTarget) return;
+        // スクロールのリセット
+        if (setting.resetScrollByClickOuter.enabled && $(':focus').length === 0) resetScroll();
         // ゲストユーザーの場合 -> 認証モーダル表示
         if (user.status === status.GUEST) {
             $('.modal').modal('hide');
             $('#authModal').modal('show');
         }
-    };
-
-    // 画面外のダブルクリックイベント
-    const doubleClickOuter = (e) => {
-        if (e.target !== e.currentTarget) return;
-        // スクロールのリセット
-        if (setting.resetScrollByDoubleClickOuter.enabled && $(':focus').length === 0) resetScroll();
     };
 
     // タイムラインリストが空でない場合のみ更新する
@@ -77,7 +72,7 @@ const App = () => {
     const timelineItems = timelines.map((timeline) => <Timeline key={timeline.id} timeline={timeline} />);
 
     return (
-        <div onClick={clickOuter} onDoubleClick={doubleClickOuter}>
+        <div onClick={clickOuter} onClick={clickOuter}>
             <Sidebar />
             <ReactSortable className="timeline-container" style={containerStyle} list={timelines} setList={setList} {...options}>
                 {timelineItems}

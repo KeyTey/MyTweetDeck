@@ -2,7 +2,7 @@ import axios from 'axios';
 import { cloneDeep } from 'lodash';
 
 const initialState = {
-    resetScrollByDoubleClickOuter: {
+    resetScrollByClickOuter: {
         description: '外側をクリックしてスクロールをリセットする',
         enabled: false
     },
