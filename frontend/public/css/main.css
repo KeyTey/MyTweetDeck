@@ -1,7 +1,14 @@
+/* 共通 */
+
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
   overscroll-behavior: none;
-  color: #38444d;
-  background-color: rgb(225, 232, 237);
+  color: #38444D;
+  background-color: #E1E8ED;
 }
 
 body::-webkit-scrollbar {
@@ -12,50 +19,63 @@ a {
   text-decoration: none;
 }
 
+#container {
+  height: 100%;
+}
+
+#container > div {
+  height: 100%;
+}
+
 .keyboard {
   padding: 2px 5px;
-  background-color: #e1e8ed;
-  color: #10171e;
-  border: 1px solid #e1e8ed;
+  background-color: #E1E8ED;
+  color: #10171E;
+  border: 1px solid #E1E8ED;
   border-radius: 3px;
-  box-shadow: 0 1px 2px #e1e8ed, inset 0 1px 2px #fff;
+  box-shadow: 0 1px 2px #E1E8ED, inset 0 1px 2px #FFFFFF;
 }
 
 .btn-on {
+  width: 45px;
   margin-right: 10px;
-  color: white;
-  background-color: dodgerblue;
-  border-color: dodgerblue;
+  color: #FFFFFF;
+  background-color: #1E90FF;
+  border-color: #1E90FF;
 }
 
 .btn-off {
+  width: 45px;
   margin-right: 10px;
-  color: dodgerblue;
-  background-color: white;
-  border-color: dodgerblue;
+  color: #1E90FF;
+  background-color: #FFFFFF;
+  border-color: #1E90FF;
 }
 
-#settingModal .btn-on {
-  width: 45px;
+.border-none {
+  border: none;
 }
 
-#settingModal .btn-off {
-  width: 45px;
+.border-top {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.setting-panel .btn-on {
-  width: 45px;
+.drag {
+  opacity: 0;
 }
 
-.setting-panel .btn-off {
-  width: 45px;
+.handle {
+  cursor: all-scroll;
 }
+
+/* サイドバー */
 
 .sidebar {
   position: fixed;
   min-height: 100%;
   min-width: 50px;
-  background-color: rgb(28, 41, 56);
+  background-color: #1C2938;
   z-index: 10;
 }
 
@@ -95,15 +115,18 @@ a {
   padding: 5px 10px;
   margin: 0 0 0 5px;
   font-weight: bold;
-  color: white;
-  background-color: rgb(50, 50, 50);
+  color: #FFFFFF;
+  background-color: #323232;
 }
 
 .sidebar-bottom {
   bottom: 5px;
 }
 
+/* タイムライン */
+
 .timeline-container {
+  height: 100%;
   padding: 0;
   margin: 0 0 0 50px;
 }
@@ -113,7 +136,7 @@ a {
   width: 280px;
   display: inline-block;
   overflow-y: hidden;
-  background-color: white;
+  background-color: #FFFFFF;
 }
 
 .timeline:focus {
@@ -121,13 +144,13 @@ a {
 }
 
 .timeline .navbar {
-  background-color: rgb(250, 250, 250);
+  background-color: #FAFAFA;
   padding: 0 5px 0 8px;
   cursor: pointer;
 }
 
 .timeline .navbar:hover {
-  background-color: rgb(240, 240, 240);
+  background-color: #F0F0F0;
 }
 
 .timeline .navbar i {
@@ -135,11 +158,12 @@ a {
 }
 
 .header {
-  color: #38444d;
+  color: #38444D;
 }
 
 .setting-btn {
-  padding: 4px 10px;
+  padding: 4px 8px;
+  margin-right: 2px;
 }
 
 .timeline .navbar-brand {
@@ -147,28 +171,18 @@ a {
   font-size: 16px;
 }
 
-.tweet-container {
-  height: -webkit-calc(100% - 40px);
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.timeline .spinner-grow {
-  height: 50px;
-  width: 50px;
-  margin: 200px 0 0 100px;
+.timeline .spinner-border {
+  margin: 4px 8px;
+  height: 18px;
+  width: 18px;
 }
 
 .setting-panel {
-  background-color: white;
-  border: 2px solid rgb(200, 200, 200);
-  animation-name: setting-effect;
-  animation-duration: 0.2s;
-}
-
-@keyframes setting-effect {
-  0% {opacity: 0; transform: translate3d(0, -20px, 0);}
-  100% {opacity: 1; transform: translate3d(0, 0, 0);}
+  background-color: #FFFFFF;
+  border-left: 1px solid #DEE2E6;
+  border-right: 1px solid #DEE2E6;
+  overflow: hidden;
+  transition-duration: 0.2s;
 }
 
 .setting-label {
@@ -177,53 +191,50 @@ a {
 }
 
 .btn-remove {
+  background-color: #FFFFFF;
   margin: 10px 0;
   width: 90%;
 }
 
+/* ツイート */
+
+.tweet-container {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition-duration: 0.2s;
+}
+
 .tweet-item:hover {
-  background-color: rgb(245, 245, 245);
-}
-
-.new-item {
-  background-color: rgba(0, 150, 255, 0.05);
-  animation-name: new-effect;
-  animation-duration: 1.5s;
-}
-
-@keyframes new-effect {
-  0% {background-color: rgba(0, 150, 255, 0.3);}
-  100% {background-color: rgba(0, 150, 255, 0.05);}
-}
-
-.new-item:hover {
-  background-color: rgba(0, 150, 255, 0.1);
+  background-color: #F5F5F5;
 }
 
 .tweet-item:focus {
   outline: none;
-  background-color: rgba(0, 150, 255, 0.2);
+  background-color: rgba(0, 150, 255, 0.08);
+}
+
+.quoted {
+  margin-bottom: 5px;
 }
 
 .icon {
   height: 25px;
 }
 
-.icon-small {
+.quoted .icon {
   height: 20px;
 }
 
 .username {
-  color: #38444d;
+  color: #38444D;
   font-size: 14px;
 }
 
 .text-mute {
-  color: #8899a6;
+  color: #8899A6;
 }
 
-.text-mute-small {
-  color: #8899a6;
+.quoted .text-mute {
   font-size: 11px;
 }
 
@@ -231,62 +242,62 @@ a {
   font-size: 13px;
 }
 
-.tweet-content-small {
+.quoted .tweet-content {
   color: #657786;
   font-size: 12px;
 }
 
-.picture {
+.img-preview {
   height: 70px;
   width: 100%;
-  object-fit: cover;
+  border-radius: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   cursor: pointer;
 }
 
-.video {
+.video-preview {
   max-height: 200px;
   max-width: 100%;
+  border-radius: 10px;
 }
 
-.favorite {
+.action {
   height: 20px;
   font-size: 13px;
+  color: #808080;
+  cursor: pointer;
 }
 
-.retweet {
-  height: 20px;
-  font-size: 13px;
+.retweeted {
+  color: #17BF63;
 }
 
-.notice-container {
-  position: fixed;
-  top: 0;
-  right: 0;
+.liked {
+  color: #E0245E;
 }
 
-.notice-container .alert {
-  margin: 0;
-  opacity: 0;
-  font-size: 20px;
-  border: 1px solid;
-  animation-name: alert-effect;
-  animation-duration: 2s;
+.active {
+  animation-name: action-effect;
+  animation-duration: 0.5s;
 }
 
-@keyframes alert-effect {
-  0% {opacity: 0; transform: translate3d(30px, 0, 0);}
-  10% {opacity: 1; transform: translate3d(0, 0, 0);}
-  90% {opacity: 1; transform: translate3d(0, 0, 0);}
-  100% {opacity: 0; transform: translate3d(30px, 0, 0);}
+@keyframes action-effect {
+  0% { transform: none }
+  50% { transform: scale(1.2) }
+  100% { transform: none }
 }
 
-.modal img {
+/* モーダル */
+
+.img-full {
   max-height: 90vh;
   max-width: 90vh;
 }
 
-.top-btn {
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
+.timeline-list {
+  overflow-y: scroll;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
 }

@@ -1,42 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useAlert } from 'react-alert';
+import { postLike } from '../modules/timelines';
+import { status } from '../modules/user';
+import classNames from 'classnames';
 
-export default class FavoriteButton extends Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = (e) => {
-            e.stopPropagation();
-            $.ajax({
-                url: '/api/favorite',
-                dataType: 'json',
-                type: 'POST',
-                data: { id: this.props.tweet.id_str }
-            })
-            .then(
-                data => {
-                    if(data.status === 200) {
-                        const timelineIndex = this.props.timelineIndex;
-                        const tweetIndex = this.props.tweetIndex;
-                        const tweet = this.props.tweet;
-                        tweet.favorite_count++;
-                        tweet.favorited = true;
-                        this.props.action.setTweet(timelineIndex, tweetIndex, tweet);
-                        this.props.action.addNotice('success', 'Like succeeded.');
-                    }
-                    else {
-                        this.props.action.addNotice('danger', 'Like failed.');
-                    }
-                },
-                error => console.error(error)
-            );
+const LikeButton = (props) => {
+    const dispatch = useDispatch();
+    const alert = useAlert();
+    const user = useSelector(state => state.user);
+    const { tweet } = props;
+
+    // いいねボタンのクリックイベント
+    const clickButton = (e) => {
+        e.stopPropagation();
+        // ゲストユーザーの場合 -> 認証モーダル表示
+        if (user.status === status.GUEST) {
+            $('.modal').modal('hide');
+            $('#authModal').modal('show');
+            return;
         }
-    }
-    render() {
-        const tweet = this.props.tweet;
-        const favoriteStyle = tweet.favorited ? { color: 'red' } : { color: 'gray' };
-        return (
-            <button className="favorite btn btn-light border w-50 p-0" onClick={this.handleClick}>
-                <i className="fas fa-heart mr-1" style={favoriteStyle}></i>{tweet.favorite_count}
-            </button>
-        );
-    }
-}
+        // いいね実行
+        dispatch(postLike(tweet.id, alert));
+    };
+
+    // いいねボタンのクラス
+    const buttonClass = classNames('action', { 'liked active': tweet.liked });
+
+    return (
+        <span className={buttonClass} onClick={clickButton}>
+            <i className="fas fa-heart mr-1"></i>
+            {tweet.likeCount}
+        </span>
+    );
+};
+
+export default LikeButton;

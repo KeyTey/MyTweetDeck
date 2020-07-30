@@ -1,86 +1,98 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useAlert } from 'react-alert';
+import { addTimeline } from '../../modules/timelines';
+import { status } from '../../modules/user';
+import { loadTrends } from '../../modules/dictionary';
+import classNames from 'classnames';
 
-export default class AddTimelineModal extends Component {
-    constructor(props) {
-        super(props);
-        this.timelines = [];
-        this.getButton = (id) => {
-            if (this.props.timelines.find(timeline => id === timeline.id)) {
-                return (
-                    <button className="btn-on btn-sm" onClick={() => this.handleClick(id)}>
-                        <i className="fas fa-plus"></i>
-                    </button>
-                );
-            }
-            else {
-                return (
-                    <button className="btn-off btn-sm" onClick={() => this.handleClick(id)}>
-                        <i className="fas fa-minus"></i>
-                    </button>
-                );
-            }
-        }
-        this.handleClick = (id) => {
-            const timelines = this.props.timelines;
-            if (timelines.find(timeline => id === timeline.id)) {
-                this.props.action.removeTimeline(id);
-            }
-            else {
-                const { name, url, icon } = this.timelines.find(timeline => id === timeline.id);
-                this.props.action.addTimeline(id, name, url, icon);
-            }
-        }
-    }
-    componentDidMount() {
-        this.timelines.push({ id: 'HOME', name: 'Home', url: '/api/home_timeline', icon: 'fas fa-home' });
-        this.timelines.push({ id: 'KAWAII', name: 'Kawaii', url: '/api/kawaii', icon: 'fas fa-grin-hearts' });
-        $.ajax({
-            url: '/api/lists',
-            dataType: 'json'
-        })
-        .then(
-            data => {
-                const lists = data.lists;
-                lists.forEach((list) => {
-                    const timeline = { id: list.id_str, name: list.name, url: `/api/list_timeline/${list.id_str}`, icon: 'fas fa-bars' };
-                    this.timelines.push(timeline);
-                });
-            },
-            error => console.error(error)
-        );
-    }
-    render() {
-        return (
-            <div className="modal" id="addModal" tabIndex="-1" role="dialog">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Add Timeline</h5>
-                            <button className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <ul className="list-group">
-                                {this.timelines.map((timeline) => {
-                                    return (
-                                        <li className="list-group-item d-flex justify-content-between align-items-center" key={timeline.id}>
-                                            <span>
-                                                {this.getButton(timeline.id)}
-                                                {timeline.name}
-                                            </span>
-                                            <i className={timeline.icon}></i>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
+const AddTimelineModal = () => {
+    const dispatch = useDispatch();
+    const dictionary = useSelector(state => state.dictionary);
+
+    useEffect(() => {
+        // モーダルオープン時 -> トレンドのロード
+        $('#addTimelineModal').on('show.bs.modal', () => dispatch(loadTrends()));
+    }, []);
+
+    return (
+        <div className="modal" id="addTimelineModal" tabIndex="-1" role="dialog">
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Add Timeline</h5>
+                        <button className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <ul className="list-group">
+                            {Object.entries(dictionary).map(([key, timelineList]) => (
+                                <TimelineGroup key={key} timelineList={timelineList} />
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="modal-footer">
+                        <button className="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
+
+export default AddTimelineModal;
+
+const TimelineGroup = (props) => {
+    const dispatch = useDispatch();
+    const alert = useAlert();
+    const user = useSelector(state => state.user);
+    const [openList, setOpenList] = useState(false);
+    const { timelineList } = props;
+
+    // リストの開閉
+    const toggleOpenList = () => setOpenList(!openList);
+
+    // 追加ボタンのクリックイベント
+    const clickAddButton = (e, timelineItem) => {
+        // ゲストユーザーがホームボタンをクリックした場合 -> 認証モーダル表示
+        if (user.status === status.GUEST && timelineItem.type === 'home') {
+            $('.modal').modal('hide');
+            $('#authModal').modal('show');
+            return;
+        }
+        // タイムラインの追加
+        dispatch(addTimeline(timelineItem, alert));
+        // ボタンのアクション
+        const button = $(e.target).closest('.btn');
+        $(button).addClass('active');
+        $(button).one('animationend', () => $(button).removeClass('active'));
+    };
+
+    const listStyle = {
+        maxHeight: openList ? '40vh' : 0,
+        visibility: openList ? '' : 'hidden'
+    };
+    const timelineItemClass = 'list-group-item d-flex justify-content-between align-items-center border-none';
+
+    return (
+        <li className="list-group-item" onMouseEnter={toggleOpenList} onMouseLeave={toggleOpenList}>
+            <h5>{timelineList.name}</h5>
+            <ul className="timeline-list list-group border" style={listStyle}>
+                {timelineList.items.map((timelineItem, idx) => (
+                    <li className={classNames(timelineItemClass, { 'border-top': idx !== 0 })} key={idx}>
+                        <span>
+                            <span className="btn btn-outline-primary btn-sm mr-3" onClick={(e) => clickAddButton(e, timelineItem)}>
+                                <i className="fas fa-plus"></i>
+                            </span>
+                            <span className="text-truncate mr-2">
+                                {timelineItem.name}
+                            </span>
+                        </span>
+                        <i className={timelineItem.iconClass}></i>
+                    </li>
+                ))}
+            </ul>
+        </li>
+    );
+};

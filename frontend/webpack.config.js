@@ -1,13 +1,12 @@
-const webpack = require('webpack');
-const resolve = require('path').resolve;
+const path = require('path');
 
 const config = {
     devtool: 'eval-source-map',
-    entry: resolve('./src/index.jsx'),
+    entry: path.resolve('./src/index.jsx'),
     output: {
-        path: resolve('./public'),
+        path: path.resolve('./public'),
         filename: 'bundle.js',
-        publicPath: resolve('./public')
+        publicPath: path.resolve('./public')
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css']
@@ -18,11 +17,8 @@ const config = {
                 test: /\.jsx?/,
                 loader: 'babel-loader',
                 exclude: /node_modules/
-            },
-            {
-                test: /\.css$/,
-                loader: 'style-loader!css-loader?modules'
-            }]
+            }
+        ]
     }
 };
 

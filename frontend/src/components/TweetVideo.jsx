@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class TweetVideo extends Component {
-    render() {
-        const videoLink = this.props.tweet.video_link;
-        const videoItem = videoLink ? <video className="video" src={videoLink} onClick={e => e.stopPropagation()} controls /> : '';
-        return <div className="w-100">{videoItem}</div>;
-    }
-}
+const TweetVideo = (props) => {
+    const { tweet } = props;
+    if (tweet.videoUrls.length === 0) return null;
+
+    return (
+        <div className="w-100">
+            <video className="video-preview" src={tweet.videoUrls[0]} onClick={(e) => e.stopPropagation()} controls />
+        </div>
+    );
+};
+
+export default TweetVideo;

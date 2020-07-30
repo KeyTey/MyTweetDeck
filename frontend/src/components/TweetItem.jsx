@@ -1,86 +1,88 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useAlert } from 'react-alert';
+import { postLike } from '../modules/timelines';
+import { setModalDataAction } from '../modules/modal';
+import { status } from '../modules/user';
 import TweetHeader from './TweetHeader';
 import TweetContent from './TweetContent';
-import TweetPictures from './TweetPictures';
+import TweetImages from './TweetImages';
 import TweetVideo from './TweetVideo';
 import TweetFooter from './TweetFooter';
 import QuotedItem from './QuotedItem';
 
-export default class TweetItem extends Component {
-    constructor(props) {
-        super(props);
-        this.handleKeyCode = (keyCode) => {
-            const timelineIndex = this.props.timelineIndex;
-            const tweetIndex = this.props.tweetIndex;
-            const tweetItem = (i, j) => $(`.tweet-item[timeline-index='${i}'][tweet-index='${j}']`);
-            // 左キー (左のタイムラインに移動)
-            if (keyCode === 37) {
-                tweetItem(timelineIndex - 1, 0).focus();
+const TweetItem = (props) => {
+    const dispatch = useDispatch();
+    const alert = useAlert();
+    const user = useSelector(state => state.user);
+    const { timeline, tweet } = props;
+
+    // パネルクリック
+    const clickPanel = () => {
+        if (timeline.setting.likeByClickTweetPanel.enabled) {
+            // ゲストユーザーの場合 -> 認証モーダル表示
+            if (user.status === status.GUEST) {
+                $('.modal').modal('hide');
+                $('#authModal').modal('show');
+                return;
             }
-            // 上キー (上のツイートに移動)
-            else if(keyCode === 38) {
-                tweetItem(timelineIndex, tweetIndex - 1).focus();
-            }
-            // 右キー (右のタイムラインに移動)
-            else if(keyCode === 39) {
-                tweetItem(timelineIndex + 1, 0).focus();
-            }
-            // 下キー (下のツイートに移動)
-            else if(keyCode === 40) {
-                tweetItem(timelineIndex, tweetIndex + 1).focus();
-            }
-            // Fキー (いいね)
-            else if(keyCode === 70) {
-                tweetItem(timelineIndex, tweetIndex).find('button.favorite').click();
-            }
-            // Tキー (リツイート)
-            else if(keyCode === 84) {
-                tweetItem(timelineIndex, tweetIndex).find('button.retweet').click();
-            }
-            // Escキー (フォーカス解除)
-            else if(keyCode === 27) {
-                tweetItem(timelineIndex, 0).focus();
-                $(':focus').blur();
-            }
+            // いいね実行
+            dispatch(postLike(tweet.id, alert));
         }
-        this.handleKeyDown = (e) => {
-            this.handleKeyCode(e.keyCode);
-        }
-        this.handleClick = () => {
-            if(this.props.setting.likeByClickTweetPanel) {
-                this.handleKeyCode(70);
-            }
-        }
+    };
+
+    // いいねアクション
+    const postLikeAction = () => dispatch(postLike(tweet.id, alert));
+    // リツイートアクション
+    const sendRetweetId = () => dispatch(setModalDataAction({ retweetId: tweet.id }));
+
+    // 引用ツイート
+    const quotedItem = tweet.quotedStatus ? <QuotedItem tweet={tweet.quotedStatus} /> : null;
+
+    return (
+        <div className="tweet-item list-group-item p-1" tabIndex="0" onKeyDown={(e) => handleKeyDown(e, postLikeAction, sendRetweetId)} onClick={clickPanel}>
+            <TweetHeader tweet={tweet} />
+            <TweetContent tweet={tweet} />
+            <TweetImages tweet={tweet} />
+            <TweetVideo tweet={tweet} />
+            {quotedItem}
+            <TweetFooter tweet={tweet} />
+        </div>
+    );
+};
+
+export default TweetItem;
+
+// キーハンドル
+const handleKeyDown = (e, postLikeAction, sendRetweetId) => {
+    const [LEFT, UP, RIGHT, DOWN, F, T] = [37, 38, 39, 40, 70, 84];
+    const [timelineClass, tweetClass] = ['.timeline', '.tweet-item'];
+    // 左キー (左のタイムラインへフォーカス)
+    if (e.keyCode === LEFT) {
+        const tweetItems = $(e.target).closest(timelineClass).prev().find(tweetClass);
+        if ($(tweetItems).length > 0) $(tweetItems)[0].focus();
     }
-    render() {
-        const tweet = this.props.tweet;
-        const newItem = tweet.new ? 'new-item' : '';
-        return (
-            <div
-                className={`tweet-item list-group-item p-1 ${newItem}`}
-                timeline-index={this.props.timelineIndex}
-                tweet-index={this.props.tweetIndex}
-                tabIndex="0"
-                onKeyDown={this.handleKeyDown}
-                onClick={this.handleClick}
-            >
-                <TweetHeader tweet={tweet} action={this.props.action} small={false} />
-                <TweetContent tweet={tweet} small={false} />
-                <TweetPictures tweet={tweet} action={this.props.action} />
-                <TweetVideo tweet={tweet} />
-                {(() => {
-                    if (tweet.quoted_status === undefined) return;
-                    return (
-                        <QuotedItem tweet={tweet.quoted_status} action={this.props.action} />
-                    );
-                })()}
-                <TweetFooter
-                    tweet={tweet}
-                    timelineIndex={this.props.timelineIndex}
-                    tweetIndex={this.props.tweetIndex}
-                    action={this.props.action}
-                />
-            </div>
-        );
+    // 右キー (右のタイムラインへフォーカス)
+    else if (e.keyCode === RIGHT) {
+        const tweetItems = $(e.target).closest(timelineClass).next().find(tweetClass);
+        if ($(tweetItems).length > 0) $(tweetItems)[0].focus();
     }
-}
+    // 上キー (上のツイートへフォーカス)
+    else if (e.keyCode === UP) {
+        $(e.target).prev().focus();
+    }
+    // 下キー (下のツイートへフォーカス)
+    else if (e.keyCode === DOWN) {
+        $(e.target).next().focus();
+    }
+    // Fキー (いいね)
+    else if (e.keyCode === F) {
+        postLikeAction();
+    }
+    // Tキー (リツイート)
+    else if (e.keyCode === T) {
+        $('.modal').modal('hide');
+        $('#retweetModal').modal('show');
+        sendRetweetId();
+    }
+};
