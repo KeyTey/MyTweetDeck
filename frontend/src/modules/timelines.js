@@ -175,13 +175,12 @@ export const initTimelines = (alert) => {
         const userId = getState().user.id;
         // 認証済みユーザーが存在しない場合
         if (userId === '') {
-            const setting = { sortByLikedCount: true, showMediaTweet: true };
             // YouTuber
-            timelines.push(createTimeline({ ...dictionary.list.items[0], setting }));
+            timelines.push(createTimeline({ ...dictionary.list.items[0], setting: { trimRetweet: true, showMediaTweet: true } }));
             // 芸能人
-            timelines.push(createTimeline({ ...dictionary.list.items[1], setting }));
+            timelines.push(createTimeline({ ...dictionary.list.items[1], setting: { trimRetweet: true, showMediaTweet: true } }));
             // Kawaii
-            timelines.push(createTimeline({ ...dictionary.anime.items[0], setting }));
+            timelines.push(createTimeline({ ...dictionary.anime.items[0], setting: { sortByLikedCount: true, showMediaTweet: true } }));
         }
         // 認証済みユーザーが存在する場合
         else {

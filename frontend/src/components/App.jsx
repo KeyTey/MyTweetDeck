@@ -72,7 +72,7 @@ const App = () => {
     const timelineItems = timelines.map((timeline) => <Timeline key={timeline.id} timeline={timeline} />);
 
     return (
-        <div onClick={clickOuter} onClick={clickOuter}>
+        <div className="main" onClick={clickOuter} onClick={clickOuter}>
             <Sidebar />
             <ReactSortable className="timeline-container" style={containerStyle} list={timelines} setList={setList} {...options}>
                 {timelineItems}

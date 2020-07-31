@@ -10,8 +10,14 @@ const Timeline = (props) => {
     const dispatch = useDispatch();
     const alert = useAlert();
     const setting = useSelector(state => state.setting);
-    const [openSetting, setOpenSetting] = useState(false);
+    const [panelHeight, setPanelHeight] = useState(0);
     const { timeline } = props;
+
+    // 設定パネルの高さ取得
+    const getPanelHeight = (e) => {
+        const settingPanel = $(e.target).closest('.timeline').find('.setting-panel');
+        return $(settingPanel).get(0).scrollHeight;
+    };
 
     // タイムラインのロード + スクロールのリセット
     const clickNavBar = (e) => {
@@ -22,20 +28,20 @@ const Timeline = (props) => {
     // 設定パネルの開閉
     const toggleSettingPanel = (e) => {
         e.stopPropagation();
-        setOpenSetting(!openSetting);
+        setPanelHeight(panelHeight === 0 ? getPanelHeight(e) : 0);
     };
 
     // 設定パネルを開く (条件付き)
-    const openSettingPanel = () => {
+    const openSettingPanel = (e) => {
         if (setting.toggleSettingByMouseOverOut.enabled) {
-            setOpenSetting(true);
+            setPanelHeight(getPanelHeight(e));
         }
     };
 
     // 設定パネルを閉じる (条件付き)
     const closeSettingPanel = () => {
         if (setting.toggleSettingByMouseOverOut.enabled) {
-            setOpenSetting(false);
+            setPanelHeight(0);
         }
     };
 
@@ -48,7 +54,6 @@ const Timeline = (props) => {
     };
 
     // 高さ調整
-    const panelHeight = openSetting ? (44 * Object.keys(timeline.setting).length + 53) : 0;
     const panelStyle = { height: panelHeight };
     const containerStyle = { height: `calc(100% - 40px - ${panelHeight}px)` };
 
