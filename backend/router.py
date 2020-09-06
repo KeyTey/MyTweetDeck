@@ -9,9 +9,9 @@ twitter_blueprint = Blueprint('twitter', __name__)
 
 load_dotenv()
 
-CONSUMER_KEY = os.getenv('TWITTER_CONSUMER_KEY')
-CONSUMER_SECRET = os.getenv('TWITTER_CONSUMER_SECRET')
-OAUTH_CALLBACK = os.getenv('OAUTH_CALLBACK')
+CONSUMER_KEY = os.environ['TWITTER_CONSUMER_KEY']
+CONSUMER_SECRET = os.environ['TWITTER_CONSUMER_SECRET']
+OAUTH_CALLBACK = os.environ['OAUTH_CALLBACK']
 
 # OAuth認証
 def get_oauth():
