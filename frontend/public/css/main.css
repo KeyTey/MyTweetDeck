@@ -291,9 +291,14 @@ a {
 
 /* モーダル */
 
+#imageModal > .modal-dialog {
+  max-width: 100%;
+}
+
 .img-full {
-  max-height: 90vh;
-  max-width: 90vh;
+  max-height: 80vh;
+  max-width: 80vw;
+  margin: auto;
 }
 
 .timeline-list {

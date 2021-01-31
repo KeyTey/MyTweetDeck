@@ -8,7 +8,7 @@ const ImageModal = () => {
 
     return (
         <div className="modal" id="imageModal" tabIndex="-1" role="dialog">
-            <div className="modal-dialog" role="document">
+            <div className="modal-dialog modal-dialog-centered" role="document">
                 {imageItem}
             </div>
         </div>
