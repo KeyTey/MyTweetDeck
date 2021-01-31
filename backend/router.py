@@ -39,7 +39,7 @@ def index():
     oauth_verifier = request.args.get('oauth_verifier')
     if oauth_token and oauth_verifier:
         oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET, oauth_token, oauth_verifier)
-        url = "https://api.twitter.com/oauth/access_token"
+        url = 'https://api.twitter.com/oauth/access_token'
         res = oauth.post(url, params = {'oauth_verifier': oauth_verifier})
         access_data = dict(parse_qsl(res.content.decode('utf-8')))
         access_token = access_data['oauth_token']
@@ -62,11 +62,11 @@ def index():
 @twitter_blueprint.route('/api/account/authorization', methods = ['GET'])
 def get_account_authorization():
     oauth = OAuth1Session(CONSUMER_KEY, CONSUMER_SECRET)
-    url = "https://api.twitter.com/oauth/request_token"
+    url = 'https://api.twitter.com/oauth/request_token'
     res = oauth.post(url, params = {'oauth_callback': OAUTH_CALLBACK})
     request_token = dict(parse_qsl(res.content.decode('utf-8')))
     oauth_token = request_token['oauth_token']
-    authenticate_endpoint = f"https://api.twitter.com/oauth/authenticate?oauth_token={oauth_token}"
+    authenticate_endpoint = f'https://api.twitter.com/oauth/authenticate?oauth_token={oauth_token}'
     return response({'endpoint': authenticate_endpoint})
 
 # 認証ユーザーを取得する
@@ -121,7 +121,7 @@ def post_account_logout():
 @twitter_blueprint.route('/api/tweet/create', methods = ['POST'])
 def post_tweet_create():
     oauth = get_oauth()
-    url = "https://api.twitter.com/1.1/statuses/update.json"
+    url = 'https://api.twitter.com/1.1/statuses/update.json'
     content = request.form['content']
     params = {'status': content}
     res = oauth.post(url, params = params)
@@ -137,7 +137,7 @@ def post_tweet_create():
 @twitter_blueprint.route('/api/like/create', methods = ['POST'])
 def post_like_create():
     oauth = get_oauth()
-    url = "https://api.twitter.com/1.1/favorites/create.json"
+    url = 'https://api.twitter.com/1.1/favorites/create.json'
     tweet_id = request.form['id']
     params = {'id': tweet_id}
     res = oauth.post(url, params = params)
@@ -154,7 +154,7 @@ def post_like_create():
 def post_retweet_create():
     oauth = get_oauth()
     tweet_id = request.form['id']
-    url = f"https://api.twitter.com/1.1/statuses/retweet/{tweet_id}.json"
+    url = f'https://api.twitter.com/1.1/statuses/retweet/{tweet_id}.json'
     res = oauth.post(url)
     tweet = json.loads(res.text) if res.status_code == 200 else None
     tweet = twitter.get_formed_tweet(tweet)
@@ -226,10 +226,11 @@ def get_search_tweets():
 ########################################
 
 # トレンドを取得する
-@twitter_blueprint.route('/api/trends/<where_id>', methods = ['GET'])
-def get_trends(where_id):
+@twitter_blueprint.route('/api/trends', methods = ['GET'])
+def get_trends():
     oauth = get_oauth()
-    url = "https://api.twitter.com/1.1/trends/place.json"
+    url = 'https://api.twitter.com/1.1/trends/place.json'
+    where_id = request.args.get('id', '23424856')
     params = {'id': where_id}
     res = oauth.get(url, params = params)
     trends = json.loads(res.text)[0]['trends'] if res.status_code == 200 else []

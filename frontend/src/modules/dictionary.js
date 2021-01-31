@@ -64,8 +64,7 @@ export const loadListDictionary = () => {
 // トレンドのロード
 export const loadTrends = () => {
     return async (dispatch) => {
-        const whereId = 23424856
-        const trends = await axios.get(`/api/trends/${whereId}`)
+        const trends = await axios.get('/api/trends')
             .then(response => response.data.trends)
             .catch(error => console.error(error) || []);
         const items = trends.map((trend) => (

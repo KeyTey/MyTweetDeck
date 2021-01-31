@@ -3,17 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { addTimeline } from '../../modules/timelines';
 import { status } from '../../modules/user';
-import { loadTrends } from '../../modules/dictionary';
 import classNames from 'classnames';
 
 const AddTimelineModal = () => {
-    const dispatch = useDispatch();
     const dictionary = useSelector(state => state.dictionary);
-
-    useEffect(() => {
-        // モーダルオープン時 -> トレンドのロード
-        $('#addTimelineModal').on('show.bs.modal', () => dispatch(loadTrends()));
-    }, []);
 
     return (
         <div className="modal" id="addTimelineModal" tabIndex="-1" role="dialog">

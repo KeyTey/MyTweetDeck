@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { addUserTimeline } from '../modules/timelines';
+import { loadTrends } from '../modules/dictionary';
 import Menu from './Menu';
 
 const Sidebar = () => {
@@ -10,6 +11,9 @@ const Sidebar = () => {
     const user = useSelector(state => state.user);
     const profileUrl = `https://twitter.com/${user.screenName}`;
     const profileImageUrl = user.profileImageUrl;
+
+    // タイムライン追加ボタンのクリックイベント -> トレンドのロード
+    const clickAddButton = () => dispatch(loadTrends());
 
     // アイコンのクリックイベント
     const clickProfileIcon = (e) => {
@@ -34,7 +38,7 @@ const Sidebar = () => {
             <Menu />
             <ul className="sidebar-nav sidebar-bottom">
                 <li>
-                    <button className="btn btn-secondary mb-2 w-100" data-toggle="modal" data-target="#addTimelineModal">
+                    <button className="btn btn-secondary mb-2 w-100" data-toggle="modal" data-target="#addTimelineModal" onClick={clickAddButton}>
                         <i className="fas fa-plus"></i>
                     </button>
                 </li>
