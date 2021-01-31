@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { cloneDeep } from 'lodash';
-import { getUserFromAPIData } from './user';
+import { status, getUserFromAPIData } from './user';
 import { convertToFormData, mergeFormData } from './setting';
 
 const initialState = [];
@@ -172,9 +172,9 @@ export const initTimelines = (alert) => {
     return async (dispatch, getState) => {
         const timelines = [];
         const dictionary = getState().dictionary;
-        const userId = getState().user.id;
+        const user = getState().user;
         // 認証済みユーザーが存在する場合
-        if (userId !== '') {
+        if (user.status === status.AUTHORIZED) {
             // タイムライン一覧の取得
             const timelineItems = await axios.get('/api/account/timeline/items')
                 .then(response => response.data.timelines)
