@@ -41,6 +41,7 @@ $ docker-compose down (--rmi all)
 ### Heroku
 
 ```shell
+$ heroku git:remote --app YOUR_APP
 $ heroku config:set TWITTER_CONSUMER_KEY="EXAMPLE"
 $ heroku config:set TWITTER_CONSUMER_SECRET="EXAMPLE"
 $ heroku config:set OAUTH_CALLBACK="https://example.herokuapp.com"
@@ -76,7 +77,7 @@ $ sudo chmod +x /usr/local/bin/docker-compose
 $ sudo yum install git
 
 # Deploy
-$ git clone https://github.com/KeyTey/MyTweetDeck.git
+$ git clone https://github.com/{USERNAME}/MyTweetDeck.git
 $ cd ~/MyTweetDeck
 $ cp .env.example .env
 $ $EDITOR .env

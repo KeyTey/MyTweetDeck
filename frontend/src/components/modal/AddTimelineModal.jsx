@@ -51,7 +51,10 @@ const TimelineGroup = (props) => {
     const { timelineList } = props;
 
     // リストの開閉
-    const toggleOpenList = () => setOpenList(!openList);
+    const toggleOpenList = () => {
+        if (timelineList.items.length === 0) return;
+        setOpenList(!openList);
+    };
 
     // 追加ボタンのクリックイベント
     const clickAddButton = (e, timelineItem) => {
