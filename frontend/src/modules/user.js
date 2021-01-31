@@ -11,8 +11,8 @@ export const status = {
 const initialState = {
     id: '',
     name: '',
-    screenName: 'Twitter',
-    profileImageUrl: 'public/img/default.png',
+    screenName: '',
+    profileImageUrl: '',
     status: status.PENDING,
     logout: 0
 };
@@ -52,19 +52,22 @@ export const getUserFromAPIData = (user) => {
 export const checkAuth = (callback) => {
     return async (dispatch) => {
         // 認証済みユーザーの取得
-        const userData = await axios.get('/api/account/user')
+        let userData = await axios.get('/api/account/user')
             .then(response => response.data.user)
             .catch(error => console.error(error) || null);
-        // 認証済みユーザーが存在する場合
-        if (userData !== null) {
-            const user = getUserFromAPIData(userData);
-            dispatch(setUserAction(user));
-            dispatch(setUserAction({ status: status.AUTHORIZED }));
-        }
         // 認証済みユーザーが存在しない場合
-        else {
+        if (userData === null) {
+            userData = await axios.get('/api/user/783214')
+                .then(response => response.data.user)
+                .catch(error => console.error(error) || null);
             dispatch(setUserAction({ status: status.GUEST }));
         }
+        // 認証済みユーザーが存在する場合
+        else {
+            dispatch(setUserAction({ status: status.AUTHORIZED }));
+        }
+        const user = getUserFromAPIData(userData) || {};
+        dispatch(setUserAction(user));
         callback();
     };
 };

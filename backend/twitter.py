@@ -9,10 +9,10 @@ def get_user_id(oauth):
 
 # 単体のユーザーを取得する
 def get_user(oauth, user_id):
-    url = "https://api.twitter.com/1.1/users/lookup.json"
-    params = { 'user_id': user_id }
+    url = "https://api.twitter.com/1.1/users/show.json"
+    params = {'user_id': user_id}
     res = oauth.get(url, params = params)
-    user = json.loads(res.text)[0] if res.status_code == 200 else None
+    user = json.loads(res.text) if res.status_code == 200 else None
     return user
 
 # ツイートを整形する
@@ -63,7 +63,7 @@ def send_direct_message(oauth, target, message):
 # 対象ユーザーのリスト一覧を取得する
 def get_list_items(oauth, user_id):
     url = "https://api.twitter.com/1.1/lists/list.json"
-    params = { 'user_id': user_id }
+    params = {'user_id': user_id}
     res = oauth.get(url, params = params)
     items = json.loads(res.text) if res.status_code == 200 else []
     return items

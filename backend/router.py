@@ -202,6 +202,13 @@ def get_user_timeline(user_id):
     tweets = twitter.get_user_timeline(oauth, user_id, count = 200)
     return response({'tweets': tweets})
 
+# ユーザーを取得する
+@twitter_blueprint.route('/api/user/<user_id>', methods = ['GET'])
+def get_user(user_id):
+    oauth = get_oauth()
+    user = twitter.get_user(oauth, user_id)
+    return response({'user': user})
+
 ########################################
 # search - 検索
 ########################################

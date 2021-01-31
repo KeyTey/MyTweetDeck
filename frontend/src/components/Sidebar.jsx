@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { addUserTimeline } from '../modules/timelines';
-import { status } from '../modules/user';
 import Menu from './Menu';
 
 const Sidebar = () => {
@@ -17,15 +16,8 @@ const Sidebar = () => {
         // 新しいタブで開く場合
         const isNewTarget = (e.button !== 0 || e.altKey || e.ctrlKey || e.shiftKey || e.metaKey);
         if (isNewTarget) return true;
-        // 認証されていない場合 -> 認証モーダル表示
-        if (user.status !== status.AUTHORIZED) {
-            $('.modal').modal('hide');
-            $('#authModal').modal('show');
-        }
-        else {
-            // ユーザータイムラインの追加
-            dispatch(addUserTimeline(user, alert));
-        }
+        // ユーザータイムラインの追加
+        dispatch(addUserTimeline(user, alert));
         e.preventDefault();
         return false;
     };
