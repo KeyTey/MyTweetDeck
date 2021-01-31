@@ -192,24 +192,6 @@ def get_home_timeline():
     return response({'tweets': tweets})
 
 ########################################
-# anime - Anime
-########################################
-
-# Kawaiiタイムラインを取得する
-@twitter_blueprint.route('/api/anime/kawaii/timeline', methods = ['GET'])
-def get_kawaii_timeline():
-    oauth = get_oauth()
-    tweets = twitter.get_anime_timeline(oauth, count = 200, restricted = False)
-    return response({'tweets': tweets})
-
-# Hentaiタイムラインを取得する
-@twitter_blueprint.route('/api/anime/hentai/timeline', methods = ['GET'])
-def get_hentai_timeline():
-    oauth = get_oauth()
-    tweets = twitter.get_anime_timeline(oauth, count = 200, restricted = True)
-    return response({'tweets': tweets})
-
-########################################
 # user - ユーザー
 ########################################
 

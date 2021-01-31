@@ -9,22 +9,11 @@ const initialState = {
     },
     list: {
         name: 'リスト',
-        items: [
-            { type: 'list', name: 'YouTuber', endpoint: '/api/list/timeline/1223193686378303488', iconClass: 'fas fa-bars' },
-            { type: 'list', name: '芸能人', endpoint: '/api/list/timeline/1223191519676395522', iconClass: 'fas fa-bars' },
-            { type: 'list', name: 'ニュース', endpoint: '/api/list/timeline/1223190130191564800', iconClass: 'fas fa-bars' }
-        ]
+        items: []
     },
     trends: {
         name: 'トレンド',
         items: []
-    },
-    anime: {
-        name: 'イラスト',
-        items: [
-            { type: 'anime', name: '一般向けイラスト', endpoint: '/api/anime/kawaii/timeline', iconClass: 'fas fa-grin-hearts' },
-            { type: 'anime', name: '成人向けイラスト', endpoint: '/api/anime/hentai/timeline', iconClass: 'fas fa-venus-mars' }
-        ]
     }
 };
 

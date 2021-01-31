@@ -97,40 +97,6 @@ def get_home_timeline(oauth, count = 200, exclude_replies = True, include_rts = 
     tweets = get_formed_tweets(tweets)
     return tweets
 
-# Animeチェック
-def is_anime(tweet, restricted):
-    user = tweet['user']
-    required_words = ['アニメーター', 'イラスト', '絵描き', 'pixiv']
-    restricted_words = [
-        '18', 'DLsite', 'FANZA', 'NTR', 'えろ', 'えち', 'えっち', 'おっぱい', 'ふたなり',
-        'エロ', 'エッチ', 'スケベ', '成人', '成年', '以下', '未満', '同人', '性癖', '不健全', '🔞'
-    ]
-    # 無効条件 (十分条件)
-    if bool(tweet.get('possibly_sensitive')) ^ restricted: return False
-    if tweet['image_urls'] == []: return False
-    if tweet['favorite_count'] < 100: return False
-    if not restricted:
-        for word in restricted_words:
-            if word in user['description']: return False
-            if word in user['name']: return False
-    # 有効条件 (必要条件)
-    for word in required_words:
-        if word in user['description']: return True
-    try:
-        if 'pixiv' in user['entities']['url']['urls'][0]['display_url']: return True
-    except:
-        pass
-    for url in user['entities']['description']['urls']:
-        if 'pixiv' in url['display_url']: return True
-    return False
-
-# Animeタイムラインを取得する
-def get_anime_timeline(oauth, count = 200, restricted = False):
-    list_id = '998201788170887169'
-    tweets = get_list_timeline(oauth, list_id, count, exclude_replies = True, include_rts = True)
-    tweets = [tweet for tweet in tweets if is_anime(tweet, restricted)]
-    return tweets
-
 # ユーザータイムラインを取得する
 def get_user_timeline(oauth, user_id, count = 200, exclude_replies = True, include_rts = True):
     url = "https://api.twitter.com/1.1/statuses/user_timeline.json"

@@ -173,28 +173,19 @@ export const initTimelines = (alert) => {
         const timelines = [];
         const dictionary = getState().dictionary;
         const userId = getState().user.id;
-        // 認証済みユーザーが存在しない場合
-        if (userId === '') {
-            // YouTuber
-            timelines.push(createTimeline({ ...dictionary.list.items[0], setting: { trimRetweet: true, showMediaTweet: true } }));
-            // 芸能人
-            timelines.push(createTimeline({ ...dictionary.list.items[1], setting: { trimRetweet: true, showMediaTweet: true } }));
-            // Kawaii
-            timelines.push(createTimeline({ ...dictionary.anime.items[0], setting: { sortByLikedCount: true, showMediaTweet: true } }));
-        }
         // 認証済みユーザーが存在する場合
-        else {
+        if (userId !== '') {
             // タイムライン一覧の取得
             const timelineItems = await axios.get('/api/account/timeline/items')
                 .then(response => response.data.timelines)
                 .catch(error => console.error(error) || []);
             // タイムラインオブジェクトへ変換
             timelineItems.forEach(timelineItem => timelines.push(createTimeline(timelineItem)));
-        }
-        // タイムラインが存在しない場合
-        if (timelines.length === 0) {
-            // Home
-            timelines.push(createTimeline(dictionary.home.items[0]));
+            // タイムラインが存在しない場合
+            if (timelines.length === 0) {
+                // ホームタイムラインの追加
+                timelines.push(createTimeline(dictionary.home.items[0]));
+            }
         }
         // タイムラインの更新
         dispatch(setTimelinesAction(timelines));
