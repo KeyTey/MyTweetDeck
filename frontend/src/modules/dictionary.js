@@ -11,7 +11,7 @@ const initialState = {
         name: 'リスト',
         items: []
     },
-    trends: {
+    trend: {
         name: 'トレンド',
         items: []
     }
@@ -61,15 +61,21 @@ export const loadListDictionary = () => {
     };
 };
 
-// トレンドのロード
-export const loadTrends = () => {
+// トレンドアイテムの取得
+export const getTrendItems = async () => {
+    const trends = await axios.get('/api/trends')
+        .then(response => response.data.trends)
+        .catch(error => console.error(error) || []);
+    const items = trends.map((trend) => (
+        { type: 'trend', name: trend.name, endpoint: '/api/search/tweets', iconClass: 'fas fa-fire' }
+    ));
+    return items;
+};
+
+// トレンドのセット
+export const setTrends = () => {
     return async (dispatch) => {
-        const trends = await axios.get('/api/trends')
-            .then(response => response.data.trends)
-            .catch(error => console.error(error) || []);
-        const items = trends.map((trend) => (
-            { type: 'trends', name: trend.name, endpoint: '/api/search/tweets', iconClass: 'fas fa-fire' }
-        ));
-        dispatch(setDictionaryAction('trends', items));
+        const items = await getTrendItems();
+        dispatch(setDictionaryAction('trend', items));
     };
 };

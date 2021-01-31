@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { cloneDeep } from 'lodash';
+import { getTrendItems } from './dictionary';
 import { status, getUserFromAPIData } from './user';
 import { convertToFormData, mergeFormData } from './setting';
 
@@ -180,12 +181,18 @@ export const initTimelines = (alert) => {
                 .then(response => response.data.timelines)
                 .catch(error => console.error(error) || []);
             // タイムラインオブジェクトへ変換
-            timelineItems.forEach(timelineItem => timelines.push(createTimeline(timelineItem)));
+            timelineItems.forEach(item => timelines.push(createTimeline(item)));
             // タイムラインが存在しない場合
             if (timelines.length === 0) {
                 // ホームタイムラインの追加
                 timelines.push(createTimeline(dictionary.home.items[0]));
             }
+        }
+        // 認証済みユーザーが存在しない場合
+        else {
+            // トレンドの追加
+            const items = await getTrendItems();
+            items.slice(0, 3).forEach(item => timelines.push(createTimeline(item)));
         }
         // タイムラインの更新
         dispatch(setTimelinesAction(timelines));
@@ -201,7 +208,7 @@ export const loadTimeline = (timeline, alert) => {
         timeline.isLoading = true;
         dispatch(setTimelineAction(timeline));
         // ツイートリスト取得
-        const params = (timeline.type === 'trends') ? { query: timeline.name } : {};
+        const params = (timeline.type === 'trend') ? { query: timeline.name } : {};
         const fetchedTweets = await axios.get(timeline.endpoint, { params })
             .then(response => response.data.tweets)
             .catch(error => console.error(error) || []);

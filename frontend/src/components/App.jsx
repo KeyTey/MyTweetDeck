@@ -5,7 +5,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { status, checkAuth } from '../modules/user';
 import { initTimelines, updateTimelines } from '../modules/timelines';
 import { initSetting } from '../modules/setting';
-import { loadListDictionary, loadTrends } from '../modules/dictionary';
+import { loadListDictionary } from '../modules/dictionary';
 import Sidebar from './Sidebar';
 import Timeline from './Timeline';
 import TweetModal from './modal/TweetModal';
@@ -32,8 +32,6 @@ const App = () => {
             dispatch(initSetting());
             // リスト一覧のロード
             dispatch(loadListDictionary());
-            // トレンドのロード
-            dispatch(loadTrends());
         }));
     }, [user.logout]);
 
