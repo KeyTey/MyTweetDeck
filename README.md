@@ -16,7 +16,13 @@ $ python3 main.py
 #### ~/MyTweetDeck/frontend
 
 ```shell
+# Install
 $ npm install
+
+# Build
+$ npm run build
+
+# Watch
 $ npm run watch
 ```
 

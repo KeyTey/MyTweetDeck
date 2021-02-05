@@ -78,7 +78,7 @@ const TimelineGroup = (props) => {
                 {timelineList.items.map((timelineItem, idx) => (
                     <li className={classNames(timelineItemClass, { 'border-top': idx !== 0 })} key={idx}>
                         <span>
-                            <span className="btn btn-outline-primary btn-sm mr-3" onClick={(e) => clickAddButton(e, timelineItem)}>
+                            <span className="btn btn-sm btn-outline-primary mr-3" onClick={(e) => clickAddButton(e, timelineItem)}>
                                 <i className="fas fa-plus"></i>
                             </span>
                             <span className="text-truncate mr-2">

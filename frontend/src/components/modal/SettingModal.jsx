@@ -48,7 +48,7 @@ const SettingList = () => {
     // 切り替えボタンの取得
     const getSwitchButton = (key) => {
         const enabled = setting[key].enabled;
-        const buttonClass = classNames(enabled ? 'btn-on' : 'btn-off', 'btn-sm');
+        const buttonClass = classNames('btn', 'btn-sm', enabled ? 'btn-on' : 'btn-off');
         const buttonText = enabled ? 'ON' : 'OFF';
         const clickButton = () => dispatch(toggleSetting(key));
         return <button className={buttonClass} onClick={clickButton}>{buttonText}</button>;

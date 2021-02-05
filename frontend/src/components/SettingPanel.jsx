@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux';
 import { setTimelineSetting, removeTimeline } from '../modules/timelines';
 import classNames from 'classnames';
 
-const TweetItem = (props) => {
+const SettingPanel = (props) => {
     const dispatch = useDispatch();
     const { timeline, style } = props;
 
     // 切り替えボタンの取得
     const getSwitchButton = (key) => {
         const enabled = timeline.setting[key].enabled;
-        const buttonClass = classNames(enabled ? 'btn-on' : 'btn-off', 'btn-sm');
+        const buttonClass = classNames('btn', 'btn-sm', enabled ? 'btn-on' : 'btn-off');
         const buttonText = enabled ? 'ON' : 'OFF';
         const setting = { [key]: !enabled };
         // 設定の反映 + スクロールの初期化
@@ -33,10 +33,10 @@ const TweetItem = (props) => {
                 </div>
             ))}
             <div className="text-center">
-                <button className="btn-remove btn-sm btn-outline-danger" onClick={clickRemoveButton}>削除</button>
+                <button className="btn btn-sm btn-outline-danger btn-remove" onClick={clickRemoveButton}>削除</button>
             </div>
         </div>
     );
 };
 
-export default TweetItem;
+export default SettingPanel;
